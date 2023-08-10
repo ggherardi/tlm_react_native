@@ -13,6 +13,8 @@ npm i @react-native-community/datetimepicker
 npm i react-native-mmkv
 npm i native-base
 
+npm i --save react-native-swipe-list-view
+
 
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 

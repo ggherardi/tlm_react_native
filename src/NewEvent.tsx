@@ -16,8 +16,9 @@ const NewEvent = ({ navigation }: any) => {
 
   const saveEvent = () => {
     let event: BusinessEvent = new BusinessEvent();
-    // let id = events.
-    event.name = eventName;
+    let id = Math.max(...events.map((e: BusinessEvent) => e.id));
+    event.id = id >= 0 ? id + 1 : 0;
+    event.name = eventName.trim();
     event.startDate = eventStartDate.toString();
     event.endDate = eventEndDate.toString();
     events.push(event);

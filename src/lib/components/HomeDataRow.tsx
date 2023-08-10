@@ -24,7 +24,9 @@ export const HomeDataRow = ({ event, onPress, index }: IHomeDataRow) => {
                     <Text style={[styles.day]}>{Utility.GetDay(event.endDate as string)}</Text>
                     <Text>{Utility.GetMonthShortName(event.endDate as string)}</Text>
                 </VStack>
-                <Text style={[styles.day]}>{event.name}</Text>
+                <VStack>
+                    <Text style={[styles.day]}>{event.name}</Text>
+                </VStack>
             </HStack>
         </Pressable>
     )
