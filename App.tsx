@@ -12,14 +12,14 @@ import Home from './src/Home';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Constants } from './src/lib/Constants';
-
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons/faSquareCheck'
 import { faBeerMugEmpty } from '@fortawesome/free-solid-svg-icons/faBeerMugEmpty'
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar'
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
-// import DataStorage from './src/lib/DataStorage';
+import NewEvent from './src/NewEvent';
+import { ThemeColors } from './src/lib/GlobalStyles';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay)
 
@@ -32,15 +32,13 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  // new DataStorage();
   return (
-    // <Text>test 2</Text>
     <NavigationContainer>
-      <Stack.Navigator>        
+      <Stack.Navigator>
         <Stack.Screen name={Constants.Navigation.Home} component={Home} />
-        {/* <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEvent} /> */}
-      </Stack.Navigator>      
-    </NavigationContainer>    
+        <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEvent} options={{ title: 'Crea nuovo evento', headerTintColor: ThemeColors.primary }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

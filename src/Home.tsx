@@ -7,22 +7,15 @@ import GlobalStyles from './lib/GlobalStyles';
 import NewEvent from './NewEvent';
 
 const Home = ({ navigation }: any) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const goToNewEvent = () => {
+    navigation.navigate('NewEvent');
+  }
+
   return (
     <NativeBaseProvider>
       <ScrollView>
-        <Modal
-          visible={isModalVisible}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={() => {
-            Alert.alert('Closed!');
-            setIsModalVisible(false);
-          }}>
-          <NewEvent onClose={() => setIsModalVisible(false)} />
-        </Modal>
         <Text>Ciao, questa è la home</Text>
-        <Button onPress={() => setIsModalVisible(true)} style={[GlobalStyles.btnPrimary, GlobalStyles.selfCenter, GlobalStyles.mt25]}>Nuovo evento</Button>
+        <Button onPress={() => goToNewEvent()} style={[GlobalStyles.selfCenter, GlobalStyles.mt25]}>Nuovo evento</Button>
       </ScrollView>
     </NativeBaseProvider>
   );

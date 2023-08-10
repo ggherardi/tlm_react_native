@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const ThemeColors = {
+export const ThemeColors = {
   primary: '#E22E2D',
   secondary: 'blue'
 };
@@ -17,18 +17,6 @@ const GlobalStyles = StyleSheet.create({
   iconPrimary: {
     color: ThemeColors.primary,
     padding: 10
-  },
-  // Buttons
-  btnPrimary: {
-    // width: '50%',
-    // height: '100%',
-    color: '#fff',
-    backgroundColor: ThemeColors.primary
-  },
-  btnSecondary: {
-    width: '50%',
-    color: '#fff',
-    backgroundColor: ThemeColors.secondary
   },
   // Positioning
   selfCenter: {

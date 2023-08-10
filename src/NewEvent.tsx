@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, Input, NativeBaseProvider, Button, HStack, Alert } from 'native-base';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Pressable, TouchableNativeFeedback, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Pressable, TouchableNativeFeedback, TouchableHighlight, ScrollView } from 'react-native';
 import { InputSideButton } from './lib/components/GenericComponents';
 import DataStorage, { SaveConstants, Storage } from './lib/DataStorage';
 import GlobalStyles from './lib/GlobalStyles';
@@ -10,11 +10,7 @@ import { BusinessEvent } from './lib/models/Event';
 import { Utility } from './lib/Utility';
 import { TLMButton, TLMButtonType } from './lib/components/TLMButton';
 
-interface INewEventProps {
-  onClose: Function;
-}
-
-const NewEvent = ({ onClose }: INewEventProps) => {
+const NewEvent = ({ navigation }: any) => {
   let formData: any = {};
 
   const handleEventNameChange = (e: any) => {
@@ -26,14 +22,20 @@ const NewEvent = ({ onClose }: INewEventProps) => {
     event.name = eventName;
     event.startDate = eventStartDate;
     event.endDate = eventEndDate;
-    Storage.save(SaveConstants.events.key, JSON.stringify(event));
+    setFeedback(events);
+    // events.push(event);
+    // Storage.save(SaveConstants.events.key, JSON.stringify(events));
   };
 
   const test = () => {
-    setEvents(Storage.load(SaveConstants.events.key));
+    setFeedback(Storage.load(SaveConstants.events.key));
   }
 
-  const [events, setEvents] = useState('')
+  const clean = () => {
+    Storage.save(SaveConstants.events.key, JSON.stringify([]))
+  }
+
+  const [events, setEvents] = useState(Storage.load(SaveConstants.events.key))
   const [eventName, setEventName] = useState('');
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
   const [eventStartDate, setEventStartDate] = useState('');
@@ -43,8 +45,7 @@ const NewEvent = ({ onClose }: INewEventProps) => {
 
   return (
     <NativeBaseProvider>
-      <View style={styles.container}>
-        <Text style={[styles.title, GlobalStyles.mt25, GlobalStyles.colorPrimary]}>Crea nuovo evento</Text>
+      <ScrollView contentContainerStyle={styles.container}>
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Nome dell'evento</FormControl.Label>
           <Input placeholder="Nome evento" onChange={handleEventNameChange}></Input>
@@ -99,14 +100,15 @@ const NewEvent = ({ onClose }: INewEventProps) => {
         )}
         <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
           <TLMButton title='Salva' buttonType={TLMButtonType.Primary} onPress={saveEvent}></TLMButton>
-          <TLMButton title='Annulla' buttonType={TLMButtonType.Primary} onPress={onClose}></TLMButton>
         </HStack>
-        <Button onPress={() => test()} style={[GlobalStyles.btnPrimary, GlobalStyles.selfCenter, GlobalStyles.mt25]}>
-          Annulla
+        <Button onPress={() => test()} style={[GlobalStyles.selfCenter, GlobalStyles.mt25]}>
+          Check
         </Button>
-        <Text>{events}</Text>
+        <Button onPress={() => clean()} style={[GlobalStyles.selfCenter, GlobalStyles.mt25]}>
+          Clean
+        </Button>
         <Text>{feedback}</Text>
-      </View>
+      </ScrollView>
     </NativeBaseProvider>
   );
 };
@@ -116,9 +118,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    margin: 10,
-    marginTop: 100,
-    marginBottom: 100,
     padding: 20,
     backgroundColor: 'white',
   },
