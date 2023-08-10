@@ -2,12 +2,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, Input, NativeBaseProvider, Button, HStack, Alert } from 'native-base';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Pressable, TouchableNativeFeedback, TouchableHighlight } from 'react-native';
 import { InputSideButton } from './lib/components/GenericComponents';
 import DataStorage, { SaveConstants, Storage } from './lib/DataStorage';
 import GlobalStyles from './lib/GlobalStyles';
 import { BusinessEvent } from './lib/models/Event';
 import { Utility } from './lib/Utility';
+import { TLMButton, TLMButtonType } from './lib/components/TLMButton';
 
 interface INewEventProps {
   onClose: Function;
@@ -38,6 +39,7 @@ const NewEvent = ({ onClose }: INewEventProps) => {
   const [eventStartDate, setEventStartDate] = useState('');
   const [eventEndDate, setEventEndDate] = useState('');
   const [setDateFunction, setSetDateFunction] = useState('');
+  const [feedback, setFeedback] = useState('Feedback original state');
 
   return (
     <NativeBaseProvider>
@@ -96,17 +98,14 @@ const NewEvent = ({ onClose }: INewEventProps) => {
           />
         )}
         <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
-          <Button onPress={() => saveEvent()} style={[GlobalStyles.btnPrimary, GlobalStyles.selfCenter, GlobalStyles.mt25]}>
-            Salva
-          </Button>
-          <Button onPress={() => onClose()} style={[GlobalStyles.btnPrimary, GlobalStyles.selfCenter, GlobalStyles.mt25]}>
-            Annulla
-          </Button>
+          <TLMButton title='Salva' buttonType={TLMButtonType.Primary} onPress={saveEvent}></TLMButton>
+          <TLMButton title='Annulla' buttonType={TLMButtonType.Primary} onPress={onClose}></TLMButton>
         </HStack>
         <Button onPress={() => test()} style={[GlobalStyles.btnPrimary, GlobalStyles.selfCenter, GlobalStyles.mt25]}>
           Annulla
         </Button>
         <Text>{events}</Text>
+        <Text>{feedback}</Text>
       </View>
     </NativeBaseProvider>
   );
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-  },
+  }
 });
 
 export default NewEvent;

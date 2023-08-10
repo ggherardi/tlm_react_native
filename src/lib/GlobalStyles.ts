@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native';
 
 const ThemeColors = {
-  primary: '#E22E2D'
+  primary: '#E22E2D',
+  secondary: 'blue'
 };
 
 const GlobalStyles = StyleSheet.create({
@@ -19,14 +20,23 @@ const GlobalStyles = StyleSheet.create({
   },
   // Buttons
   btnPrimary: {
-    width: '50%',
+    // width: '50%',
+    // height: '100%',
     color: '#fff',
     backgroundColor: ThemeColors.primary
   },
+  btnSecondary: {
+    width: '50%',
+    color: '#fff',
+    backgroundColor: ThemeColors.secondary
+  },
   // Positioning
   selfCenter: {
-    alignSelf: 'center'
-  },
+    alignSelf: 'center',
+    // alignContent: 'center',
+    // verticalAlign: 'middle',
+    // textAlignVertical: 'center'    
+  },  
   // Padding
   p1: {
     padding: 1
