@@ -1,15 +1,45 @@
+import React from "react";
+
 export const Utility = {
-  FormatDateDDMMYYYY: (date?: Date) => {
-    let dateString = '';
-    if (date) {
+  FormatDateDDMMYYYY: (dateString: string): string => {
+    let formattedDate = '';
+    let date = new Date(dateString);
+    if (date && !isNaN(date.getDate())) {
       const day = date.getDate();
       const month = date.getMonth();
       const year = date.getFullYear();
-      dateString = `${day < 10 ? `0${day}` : day}/${month < 10 ? `0${month}` : month}/${year}`;
+      formattedDate = `${day < 10 ? `0${day}` : day}/${month < 10 ? `0${month}` : month}/${year}`;
     } else {
-      dateString = '';
+      formattedDate = '';
+    }    
+    return formattedDate;
+  },
+
+  GetDay: (dateString: string): string => {
+    let dayString = '';
+    let date = new Date(dateString);
+    if (date && !isNaN(date.getDate())) {
+      const day = date.getDate();
+      dayString = `${day < 10 ? `0${day}` : day}`;
     }
-    
-    return dateString;
+    return dayString;
+  },
+
+  GetMonthShortName: (dateString: string): string => {    
+    let returnValue = '';
+    let date = new Date(dateString);
+    if (date && !isNaN(date.getDate())) {
+      returnValue = date.toLocaleDateString("it-it", { month: 'short' });
+    }
+    return returnValue;
+  },
+
+  RefreshScreen: ({ navigation, refreshFunc }: any) => {
+    React.useEffect(() => {
+      const focusHandler = navigation.addListener('focus', () => {
+        refreshFunc();    
+      });
+      return focusHandler;
+    }, [navigation]);
   }
 }

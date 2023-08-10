@@ -25,25 +25,23 @@ export const TLMButton = ({ title, onPress, buttonType }: ITLMButtonProps) => {
 const primaryStyles = StyleSheet.create({
     // Buttons
     btn: {
-      // width: '50%',
-      // height: '100%',
-      borderRadius: 10,
-      padding: 20,
-      color: '#fff',
-      backgroundColor: ThemeColors.primary
+        borderRadius: 10,
+        padding: 20,
+        color: '#fff',
+        backgroundColor: ThemeColors.primary
     },
     btnText: {
-      color: '#fff'
+        color: '#fff'
     },
-  });
+});
 
 const secondaryStyles = StyleSheet.create({
-  btn: {
-    width: '50%',
-    color: '#fff',
-    backgroundColor: ThemeColors.secondary
-  },
-  btnText: {
-    color: '#fff'
-  },
+    btn: {
+        width: '50%',
+        color: '#fff',
+        backgroundColor: ThemeColors.secondary
+    },
+    btnText: {
+        color: '#fff'
+    },
 });

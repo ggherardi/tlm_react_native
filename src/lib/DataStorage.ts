@@ -12,11 +12,15 @@ export default class DataStorage {
 
   load = (key: string): any => {
     let returnValue;
-    const saveConstant = SaveConstants[key];
+    const saveConstant = (SaveConstants as any)[key];
     if (saveConstant) {
       switch (saveConstant.dataType) {
         case 'string':
           returnValue = this.storage.getString(key);
+          break;
+        case 'array':
+          const json = this.storage.getString(key);          
+          returnValue = json ? JSON.parse(json) : [];
           break;
         case 'buffer':
           returnValue = this.storage.getBuffer(key);
@@ -35,14 +39,9 @@ export default class DataStorage {
 
 export const Storage = new DataStorage();
 
-interface ISaveConstant {
-  key: string;
-  dataType: string;
-}
-
-export const SaveConstants: Record<string, ISaveConstant> = {
+export const SaveConstants = {
   events: {
     key: 'events',
-    dataType: 'string',
+    dataType: 'array',
   },
 };

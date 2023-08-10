@@ -1,34 +1,31 @@
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FormControl, Input, NativeBaseProvider, Button, HStack, Alert } from 'native-base';
+import { FormControl, Input, NativeBaseProvider, Button, HStack } from 'native-base';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Pressable, TouchableNativeFeedback, TouchableHighlight, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { InputSideButton } from './lib/components/GenericComponents';
-import DataStorage, { SaveConstants, Storage } from './lib/DataStorage';
+import { SaveConstants, Storage } from './lib/DataStorage';
 import GlobalStyles from './lib/GlobalStyles';
 import { BusinessEvent } from './lib/models/Event';
 import { Utility } from './lib/Utility';
 import { TLMButton, TLMButtonType } from './lib/components/TLMButton';
 
 const NewEvent = ({ navigation }: any) => {
-  let formData: any = {};
-
   const handleEventNameChange = (e: any) => {
     setEventName(e.nativeEvent.text);
   };
 
   const saveEvent = () => {
     let event: BusinessEvent = new BusinessEvent();
+    // let id = events.
     event.name = eventName;
-    event.startDate = eventStartDate;
-    event.endDate = eventEndDate;
-    setFeedback(events);
-    // events.push(event);
-    // Storage.save(SaveConstants.events.key, JSON.stringify(events));
+    event.startDate = eventStartDate.toString();
+    event.endDate = eventEndDate.toString();
+    events.push(event);
+    Storage.save(SaveConstants.events.key, JSON.stringify(events));
   };
 
   const test = () => {
-    setFeedback(Storage.load(SaveConstants.events.key));
+    setFeedback(JSON.stringify(Storage.load(SaveConstants.events.key)));
   }
 
   const clean = () => {
@@ -38,8 +35,8 @@ const NewEvent = ({ navigation }: any) => {
   const [events, setEvents] = useState(Storage.load(SaveConstants.events.key))
   const [eventName, setEventName] = useState('');
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
-  const [eventStartDate, setEventStartDate] = useState('');
-  const [eventEndDate, setEventEndDate] = useState('');
+  const [eventStartDate, setEventStartDate] = useState(new Date());
+  const [eventEndDate, setEventEndDate] = useState(new Date());
   const [setDateFunction, setSetDateFunction] = useState('');
   const [feedback, setFeedback] = useState('Feedback original state');
 
@@ -54,8 +51,7 @@ const NewEvent = ({ navigation }: any) => {
           <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
           <Input
             placeholder="gg/mm/aaaa"
-            value={eventStartDate}
-            onChange={handleEventNameChange}
+            value={Utility.FormatDateDDMMYYYY(eventStartDate.toString())}
             InputLeftElement={
               <InputSideButton
                 icon="calendar-day"
@@ -72,8 +68,7 @@ const NewEvent = ({ navigation }: any) => {
           <FormControl.Label>Data di fine dell'evento</FormControl.Label>
           <Input
             placeholder="gg/mm/aaaa"
-            value={eventEndDate}
-            onChange={handleEventNameChange}
+            value={Utility.FormatDateDDMMYYYY(eventEndDate.toString())}
             InputLeftElement={
               <InputSideButton
                 icon="calendar-day"
@@ -93,7 +88,7 @@ const NewEvent = ({ navigation }: any) => {
             value={new Date()}
             onChange={(event, date) => {
               const func = setDateFunction == 'setEventEndDate' ? setEventEndDate : setEventStartDate;
-              func(Utility.FormatDateDDMMYYYY(date));
+              func(date as Date);
               setShowDateTimePicker(false);
             }}
           />
