@@ -9,7 +9,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Text, useColorScheme } from 'react-native';
 import React from 'react';
 import Home from './src/Home';
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Constants } from './src/lib/Constants';
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -32,8 +32,16 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const TLMTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: '#fff'
+    },
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={TLMTheme}>
       <Stack.Navigator>
         <Stack.Screen name={Constants.Navigation.Home} component={Home} />
         <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEvent} options={{ title: 'Crea nuovo evento', headerTintColor: ThemeColors.primary }} />

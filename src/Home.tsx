@@ -6,6 +6,7 @@ import { SaveConstants, Storage } from './lib/DataStorage';
 import { BusinessEvent } from './lib/models/Event';
 import { HomeDataRow } from './lib/components/HomeDataRow';
 import { Utility } from './lib/Utility';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 const Home = ({ navigation }: any) => {
   const goToNewEvent = () => {
@@ -18,7 +19,7 @@ const Home = ({ navigation }: any) => {
 
   return (
     <NativeBaseProvider>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ backgroundColor: 'white' }}>
         {events && events.length ? events.map((event: BusinessEvent, index: number) => (
           <HomeDataRow event={event} onPress={() => { }} index={index} />
         )) : (
@@ -27,6 +28,18 @@ const Home = ({ navigation }: any) => {
       </ScrollView>
     </NativeBaseProvider>
   );
+  // return (
+  //   <NativeBaseProvider>
+  //     <ScrollView>
+  //       <SwipeListView 
+  //       data={events}
+  //       renderItem={() => (<Text style={{padding: 20}}>test</Text>)}
+  //       renderHiddenItem={() => (<Text style={{padding: 20}}>test2</Text>)}
+
+  //         />
+  //     </ScrollView>
+  //   </NativeBaseProvider>
+  // );
 };
 
 export default Home;
