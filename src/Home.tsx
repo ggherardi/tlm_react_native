@@ -14,10 +14,14 @@ const Home = ({ navigation }: any) => {
     navigation.navigate('NewEvent');
   }
 
+  const refreshData = () => {
+    dataContext.Events.refreshData();
+    setEvents(dataContext.Events.getAllData());
+  };
+
   Utility.RefreshScreen({
     navigation: navigation, refreshFunc: () => {
-      dataContext.Events.refreshData();
-      setEvents(dataContext.Events.getAllData());
+      refreshData();
     }
   });
 
@@ -27,7 +31,7 @@ const Home = ({ navigation }: any) => {
     <NativeBaseProvider>
       <ScrollView contentContainerStyle={{ backgroundColor: 'white' }}>
         {events && events.length ? events.map((event: BusinessEvent, index: number) => (
-          <HomeDataRow event={event} onPress={() => { /* Go to event here */ }} index={index} />
+          <HomeDataRow key={`homedatarow_${index}`} event={event} onDelete={refreshData} onPress={() => { /* Go to event here */ }} index={index} />
         )) : (
           <Text>Nessun evento trovato</Text>)}
         <Button onPress={() => goToNewEvent()} style={[GlobalStyles.selfCenter, GlobalStyles.mt25]}>Nuovo evento</Button>

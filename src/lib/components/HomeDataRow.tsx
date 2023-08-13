@@ -13,10 +13,11 @@ import dataContext from '../models/DataContext';
 interface IHomeDataRow {
     event: BusinessEvent;
     onPress: Function;
+    onDelete: Function;
     index: number;
 }
 
-export const HomeDataRow = ({ event, onPress, index }: IHomeDataRow) => {
+export const HomeDataRow = ({ event, onPress, onDelete, index }: IHomeDataRow) => {
     const [feedback, setFeedback] = useState('');
     const renderRightActions = (
         //@ts-ignore
@@ -34,8 +35,11 @@ export const HomeDataRow = ({ event, onPress, index }: IHomeDataRow) => {
         );
     };
     const deleteEvent = () => {
-        let res = dataContext.Events.delete(event.id);
-        setFeedback(res);
+        // setFeedback("Delete?");
+        // Alert.prompt("Conferma cancellazione", "Sicuro di voler cancellare?");
+        dataContext.Events.deleteWhere(event.id);
+        onDelete();
+        // setFeedback(res.toString());
     };
     return (
         <GestureHandlerRootView>
