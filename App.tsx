@@ -8,7 +8,7 @@
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Text, useColorScheme } from 'react-native';
 import React from 'react';
-import Home from './src/Home';
+import HomeScreen from './src/Screens/HomeScreen';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Constants } from './src/lib/Constants';
@@ -18,9 +18,10 @@ import { faSquareCheck } from '@fortawesome/free-solid-svg-icons/faSquareCheck'
 import { faBeerMugEmpty } from '@fortawesome/free-solid-svg-icons/faBeerMugEmpty'
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar'
 import { faCalendarDay, faTrash } from '@fortawesome/free-solid-svg-icons';
-import NewEvent from './src/NewEvent';
+import NewEventScreen from './src/Screens/NewEventScreen';
 import { ThemeColors } from './src/lib/GlobalStyles';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import EventScreen from './src/Screens/EventScreent';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash)
 
@@ -41,11 +42,16 @@ function App(): JSX.Element {
     },
   };
 
+  const TLMHeaderTheme = {
+
+  }
+
   return (
     <NavigationContainer theme={TLMTheme}>
       <Stack.Navigator>
-        <Stack.Screen name={Constants.Navigation.Home} component={Home} />
-        <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEvent} options={{ title: 'Crea nuovo evento', headerTintColor: ThemeColors.primary }} />
+        <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} />
+        <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEventScreen} />
+        <Stack.Screen name={Constants.Navigation.Event} component={EventScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -4,19 +4,23 @@ import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity } 
 import { HStack, VStack } from 'native-base';
 import { Utility } from '../Utility';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
-import { InputSideButton } from './GenericComponents';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { InputSideButton } from './InputSideButtonComponent';
 import dataContext from '../models/DataContext';
 import GlobalStyles from '../GlobalStyles';
+import { Constants } from '../Constants';
 
 interface IHomeDataRow {
-    event: BusinessEvent;
-    onPress: Function;
+    event: BusinessEvent;    
     onDelete: Function;
     index: number;
+    navigation: any;
 }
 
-export const HomeDataRow = ({ event, onPress, onDelete, index }: IHomeDataRow) => {
+export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHomeDataRow) => {
+    const goToEvent = () => {
+        navigation.navigate(Constants.Navigation.Event, { event: event });
+    };
+
     const renderRightActions = (
         //@ts-ignore
         progress: Animated.AnimatedInterpolation,
@@ -45,7 +49,7 @@ export const HomeDataRow = ({ event, onPress, onDelete, index }: IHomeDataRow) =
     return (
         <GestureHandlerRootView>
             <Swipeable renderRightActions={renderRightActions}>
-                <Pressable key={`${index}`} onPress={() => { onPress() }} style={({ pressed }) => [styles.container, { backgroundColor: 'white', opacity: pressed ? 1 : 1 }]}>
+                <Pressable key={`${index}`} onPress={goToEvent} style={({ pressed }) => [styles.container, { backgroundColor: 'white', opacity: pressed ? 1 : 1 }]}>
                     <HStack space={1}>
                         <VStack space={2}>
                             <Text>{Utility.GetMonthShortName(event.startDate as string)}</Text>

@@ -2,7 +2,8 @@ import { StyleSheet } from 'react-native';
 
 export const ThemeColors = {
   primary: '#E22E2D',
-  secondary: 'blue'
+  secondary: 'blue',
+  white: '#fff'
 };
 
 const GlobalStyles = StyleSheet.create({
@@ -12,6 +13,9 @@ const GlobalStyles = StyleSheet.create({
   },
   colorBgPrimary: {
     backgroundColor: ThemeColors.primary
+  },
+  colorWhite: {
+    color: '#fff'
   },
   // Icons
   iconPrimary: {

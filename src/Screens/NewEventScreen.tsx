@@ -2,15 +2,18 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, Input, NativeBaseProvider, Button, HStack, TextArea } from 'native-base';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { InputSideButton } from './lib/components/GenericComponents';
-import { SaveConstants, Storage } from './lib/DataStorage';
-import GlobalStyles from './lib/GlobalStyles';
-import { BusinessEvent } from './lib/models/BusinessEvent';
-import { Utility } from './lib/Utility';
-import { TLMButton, TLMButtonType } from './lib/components/TLMButton';
-import dataContext from './lib/models/DataContext';
+import { InputSideButton } from '../lib/components/InputSideButtonComponent';
+import { SaveConstants, Storage } from '../lib/DataStorage';
+import GlobalStyles from '../lib/GlobalStyles';
+import { BusinessEvent } from '../lib/models/BusinessEvent';
+import { Utility } from '../lib/Utility';
+import { TLMButtonComponent, TLMButtonType } from '../lib/components/TLMButtonComponent';
+import dataContext from '../lib/models/DataContext';
+import useCustomHeader from '../lib/components/CustomHeaderComponent';
 
-const NewEvent = ({ navigation }: any) => {
+const NewEventScreen = ({ navigation }: any) => {
+  useCustomHeader(navigation, "Crea nuovo evento");
+  
   const handleEventNameChange = (e: any) => {
     setEventName(e.nativeEvent.text);
   };
@@ -105,7 +108,7 @@ const NewEvent = ({ navigation }: any) => {
           />
         )}
         <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
-          <TLMButton title='Salva' buttonType={TLMButtonType.Primary} onPress={saveEvent}></TLMButton>
+          <TLMButtonComponent title='Salva' buttonType={TLMButtonType.Primary} onPress={saveEvent}></TLMButtonComponent>
         </HStack>
         <Button onPress={() => test()} style={[GlobalStyles.selfCenter, GlobalStyles.mt25]}>
           Check
@@ -132,4 +135,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default NewEvent;
+export default NewEventScreen;

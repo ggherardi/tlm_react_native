@@ -7,7 +7,6 @@ export class BusinessEvent extends BusinessDataTypeBase {
   startDate?: string;
   endDate?: string;
 
-  //@override
   static primaryKeyWhereCondition = (element: BusinessEvent, id: number) => {
     return element.id == id;
   }

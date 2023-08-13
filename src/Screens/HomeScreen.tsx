@@ -1,16 +1,20 @@
 import { Button, NativeBaseProvider } from 'native-base';
 import React, { useState } from 'react';
 import { Text, ScrollView } from 'react-native';
-import GlobalStyles from './lib/GlobalStyles';
-import { BusinessEvent } from './lib/models/BusinessEvent';
-import { HomeDataRow } from './lib/components/HomeDataRow';
-import { Utility } from './lib/Utility';
-import dataContext from './lib/models/DataContext';
+import GlobalStyles from '../lib/GlobalStyles';
+import { BusinessEvent } from '../lib/models/BusinessEvent';
+import { HomeDataRowComponent } from '../lib/components/HomeDataRowComponent';
+import { Utility } from '../lib/Utility';
+import dataContext from '../lib/models/DataContext';
+import { Constants } from '../lib/Constants';
+import useCustomHeader from '../lib/components/CustomHeaderComponent';
 
-const Home = ({ navigation }: any) => {
+const HomeScreen = ({ navigation }: any) => {
+  useCustomHeader(navigation, "Tutti gli eventi");
+  
   const goToNewEvent = () => {
-    navigation.navigate('NewEvent');
-  }
+    navigation.navigate(Constants.Navigation.NewEvent);
+  };
 
   const refreshData = () => {
     dataContext.Events.refreshData();
@@ -29,7 +33,7 @@ const Home = ({ navigation }: any) => {
     <NativeBaseProvider>
       <ScrollView contentContainerStyle={{ backgroundColor: 'white' }}>
         {events && events.length ? events.map((event: BusinessEvent, index: number) => (
-          <HomeDataRow key={`homedatarow_${index}`} event={event} onDelete={refreshData} onPress={() => { /* Go to event here */ }} index={index} />
+          <HomeDataRowComponent key={`homedatarow_${index}`} event={event} onDelete={refreshData} navigation={navigation} index={index} />
         )) : (
           <Text>Nessun evento trovato</Text>)}
         <Button onPress={() => goToNewEvent()} style={[GlobalStyles.selfCenter, GlobalStyles.mt25]}>Nuovo evento</Button>
@@ -38,4 +42,4 @@ const Home = ({ navigation }: any) => {
   );
 };
 
-export default Home;
+export default HomeScreen;

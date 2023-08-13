@@ -13,7 +13,7 @@ export enum TLMButtonType {
     Secondary
 }
 
-export const TLMButton = ({ title, onPress, buttonType }: ITLMButtonProps) => {
+export const TLMButtonComponent = ({ title, onPress, buttonType }: ITLMButtonProps) => {
     let buttonStyle = buttonType == TLMButtonType.Primary ? primaryStyles : secondaryStyles;
     return (
         <Pressable onPress={() => { onPress() }} style={({ pressed }) => [buttonStyle.btn, { opacity: pressed ? 0.2 : 1 }]}>
