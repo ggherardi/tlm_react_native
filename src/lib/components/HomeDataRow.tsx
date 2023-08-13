@@ -3,12 +3,11 @@ import { BusinessEvent } from '../models/BusinessEvent';
 import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity } from 'react-native';
 import { HStack, VStack } from 'native-base';
 import { Utility } from '../Utility';
-import GlobalStyles from '../GlobalStyles';
-import { SwipeRow } from 'react-native-swipe-list-view';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 import { InputSideButton } from './GenericComponents';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import dataContext from '../models/DataContext';
+import GlobalStyles from '../GlobalStyles';
 
 interface IHomeDataRow {
     event: BusinessEvent;
@@ -18,7 +17,6 @@ interface IHomeDataRow {
 }
 
 export const HomeDataRow = ({ event, onPress, onDelete, index }: IHomeDataRow) => {
-    const [feedback, setFeedback] = useState('');
     const renderRightActions = (
         //@ts-ignore
         progress: Animated.AnimatedInterpolation,
@@ -35,29 +33,37 @@ export const HomeDataRow = ({ event, onPress, onDelete, index }: IHomeDataRow) =
         );
     };
     const deleteEvent = () => {
-        // setFeedback("Delete?");
-        // Alert.prompt("Conferma cancellazione", "Sicuro di voler cancellare?");
-        dataContext.Events.deleteWhere(event.id);
-        onDelete();
-        // setFeedback(res.toString());
+        const onDeleteConfirm = () => {
+            dataContext.Events.deleteWhere(event.id);
+            onDelete();
+        }
+        Alert.alert("Conferma cancellazione", "Tutti i dati legati all'evento verranno rimossi dal dispositivo.", [
+            { text: "Ok", onPress: onDeleteConfirm },
+            { text: "Annulla", style: "cancel" }
+        ]);
     };
     return (
         <GestureHandlerRootView>
             <Swipeable renderRightActions={renderRightActions}>
                 <Pressable key={`${index}`} onPress={() => { onPress() }} style={({ pressed }) => [styles.container, { backgroundColor: 'white', opacity: pressed ? 1 : 1 }]}>
-                    <HStack space={4}>
+                    <HStack space={1}>
                         <VStack space={2}>
                             <Text>{Utility.GetMonthShortName(event.startDate as string)}</Text>
                             <Text style={[styles.day]}>{Utility.GetDay(event.startDate as string)}</Text>
                         </VStack>
                         <Text style={{ textAlignVertical: 'center' }}>-</Text>
-                        <VStack space={2}>                            
+                        <VStack space={2}>
                             <Text>{Utility.GetMonthShortName(event.endDate as string)}</Text>
                             <Text style={[styles.day]}>{Utility.GetDay(event.endDate as string)}</Text>
                         </VStack>
-                        <VStack>
-                            <Text style={[styles.day]}>{event.name} + {feedback}</Text>
-                        </VStack>
+                        {event.description != undefined && event.description.length ? (
+                            <VStack style={styles.eventNameContainer}>
+                                <Text style={[styles.eventName]}>{event.name}</Text>
+                                <Text style={[styles.eventDescription]} numberOfLines={1}>{event.description}</Text>
+                            </VStack>
+                        ) : (
+                            <Text style={[styles.eventName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{event.name}</Text>
+                        )}
                     </HStack>
                 </Pressable>
             </Swipeable>
@@ -69,9 +75,21 @@ const styles = StyleSheet.create({
     container: {
         padding: 20
     },
+    eventNameContainer: {
+        paddingLeft: 10,
+        paddingTop: 5
+    },
     day: {
         alignSelf: 'center',
         fontSize: 20
+    },
+    eventName: {
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    eventDescription: {
+        maxWidth: '95%',
+        // overflow: 'hidden'
     },
     swipedRow: {
         flexDirection: 'row',

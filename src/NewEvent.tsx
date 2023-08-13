@@ -1,5 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FormControl, Input, NativeBaseProvider, Button, HStack } from 'native-base';
+import { FormControl, Input, NativeBaseProvider, Button, HStack, TextArea } from 'native-base';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { InputSideButton } from './lib/components/GenericComponents';
@@ -14,12 +14,16 @@ const NewEvent = ({ navigation }: any) => {
   const handleEventNameChange = (e: any) => {
     setEventName(e.nativeEvent.text);
   };
+  const handleEventDescriptionChange = (e: any) => {
+    setEventDescription(e.nativeEvent.text);
+  };
 
   const saveEvent = () => {
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
     event.name = eventName.trim();
+    event.description = eventDescription.trim();
     event.startDate = eventStartDate.toString();
     event.endDate = eventEndDate.toString();
     events.push(event);
@@ -36,6 +40,7 @@ const NewEvent = ({ navigation }: any) => {
   
   const [events, setEvents] = useState(dataContext.Events.getAllData())
   const [eventName, setEventName] = useState('');
+  const [eventDescription, setEventDescription] = useState('');
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
   const [eventStartDate, setEventStartDate] = useState(new Date());
   const [eventEndDate, setEventEndDate] = useState(new Date());
@@ -48,6 +53,10 @@ const NewEvent = ({ navigation }: any) => {
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Nome dell'evento</FormControl.Label>
           <Input placeholder="Nome evento" onChange={handleEventNameChange}></Input>
+        </FormControl>
+        <FormControl style={GlobalStyles.mt15}>
+          <FormControl.Label>Descrizione dell'evento</FormControl.Label>
+          <TextArea placeholder="Descrizione breve dell'evento" onChange={handleEventDescriptionChange} autoCompleteType={true}></TextArea>
         </FormControl>
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Data di inizio dell'evento</FormControl.Label>

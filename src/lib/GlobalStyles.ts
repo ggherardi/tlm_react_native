@@ -26,20 +26,35 @@ const GlobalStyles = StyleSheet.create({
     // textAlignVertical: 'center'    
   },  
   // Padding
-  p1: {
-    padding: 1
+  pl5: {
+    paddingLeft: 5
   },
-  p2: {
-    padding: 2
+  pl10: {
+    paddingLeft: 10
   },
-  p3: {
-    padding: 3
+  pl15: {
+    paddingLeft: 15
   },
-  p4: {
-    padding: 4
+  pl20: {
+    paddingLeft: 20
   },
-  p5: {
-    padding: 5
+  pl25: {
+    paddingLeft: 25
+  },
+  pt5: {
+    paddingTop: 5
+  },
+  pt10: {
+    paddingTop: 10
+  },
+  pt15: {
+    paddingTop: 15
+  },
+  pt20: {
+    paddingTop: 20
+  },
+  pt25: {
+    paddingTop: 25
   },
   mt5: {
     marginTop: 5

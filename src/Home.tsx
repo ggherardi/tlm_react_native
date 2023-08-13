@@ -1,12 +1,10 @@
 import { Button, NativeBaseProvider } from 'native-base';
 import React, { useState } from 'react';
-import { Text, ScrollView, Modal, Alert } from 'react-native';
+import { Text, ScrollView } from 'react-native';
 import GlobalStyles from './lib/GlobalStyles';
-import { SaveConstants, Storage } from './lib/DataStorage';
 import { BusinessEvent } from './lib/models/BusinessEvent';
 import { HomeDataRow } from './lib/components/HomeDataRow';
 import { Utility } from './lib/Utility';
-import { SwipeListView } from 'react-native-swipe-list-view';
 import dataContext from './lib/models/DataContext';
 
 const Home = ({ navigation }: any) => {
