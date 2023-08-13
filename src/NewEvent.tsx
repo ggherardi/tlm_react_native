@@ -5,9 +5,10 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { InputSideButton } from './lib/components/GenericComponents';
 import { SaveConstants, Storage } from './lib/DataStorage';
 import GlobalStyles from './lib/GlobalStyles';
-import { BusinessEvent } from './lib/models/Event';
+import { BusinessEvent } from './lib/models/BusinessEvent';
 import { Utility } from './lib/Utility';
 import { TLMButton, TLMButtonType } from './lib/components/TLMButton';
+import dataContext from './lib/models/DataContext';
 
 const NewEvent = ({ navigation }: any) => {
   const handleEventNameChange = (e: any) => {
@@ -32,8 +33,8 @@ const NewEvent = ({ navigation }: any) => {
   const clean = () => {
     Storage.save(SaveConstants.events.key, JSON.stringify([]))
   }
-
-  const [events, setEvents] = useState(Storage.load(SaveConstants.events.key))
+  
+  const [events, setEvents] = useState(dataContext.Events.getAllData())
   const [eventName, setEventName] = useState('');
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
   const [eventStartDate, setEventStartDate] = useState(new Date());

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { BusinessEvent } from '../models/Event';
+import { BusinessEvent } from '../models/BusinessEvent';
 import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity } from 'react-native';
 import { HStack, VStack } from 'native-base';
 import { Utility } from '../Utility';
 import GlobalStyles from '../GlobalStyles';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
+import { InputSideButton } from './GenericComponents';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import dataContext from '../models/DataContext';
 
 interface IHomeDataRow {
     event: BusinessEvent;
@@ -15,106 +18,70 @@ interface IHomeDataRow {
 
 export const HomeDataRow = ({ event, onPress, index }: IHomeDataRow) => {
     const [feedback, setFeedback] = useState('');
+    const renderRightActions = (
+        //@ts-ignore
+        progress: Animated.AnimatedInterpolation,
+        //@ts-ignore
+        dragAnimatedValue: Animated.AnimatedInterpolation,
+    ) => {
+        return (
+            <View style={styles.swipedRow}>
+                <View style={styles.swipedConfirmationContainer}>
+                    <Text style={styles.deleteConfirmationText}>Vuoi cancellare l'evento?</Text>
+                </View>
+                <InputSideButton icon="trash" pressFunction={deleteEvent} iconStyle={{ color: "#fff" }} stretchHeight={true} />
+            </View>
+        );
+    };
+    const deleteEvent = () => {
+        let res = dataContext.Events.delete(event.id);
+        setFeedback(res);
+    };
     return (
         <GestureHandlerRootView>
-            <Swipeable>
-                <Swipeable renderRightActions={renderRightActions}>
+            <Swipeable renderRightActions={renderRightActions}>
                 <Pressable key={`${index}`} onPress={() => { onPress() }} style={({ pressed }) => [styles.container, { backgroundColor: 'white', opacity: pressed ? 1 : 1 }]}>
-                 <HStack space={4}>
-                     <VStack space={2}>
-                         <Text style={[styles.day]}>{Utility.GetDay(event.startDate as string)}</Text>
-                         <Text>{Utility.GetMonthShortName(event.startDate as string)}</Text>
-                     </VStack>
-                     <Text style={{ textAlignVertical: 'center' }}>-</Text>
-                     <VStack space={2}>
-                         <Text style={[styles.day]}>{Utility.GetDay(event.endDate as string)}</Text>
-                         <Text>{Utility.GetMonthShortName(event.endDate as string)}</Text>
-                     </VStack>
-                     <VStack>
-                         <Text style={[styles.day]}>{event.name} + {feedback}</Text>
-                     </VStack>
-                 </HStack>
-             </Pressable>
-                </Swipeable>
+                    <HStack space={4}>
+                        <VStack space={2}>
+                            <Text>{Utility.GetMonthShortName(event.startDate as string)}</Text>
+                            <Text style={[styles.day]}>{Utility.GetDay(event.startDate as string)}</Text>
+                        </VStack>
+                        <Text style={{ textAlignVertical: 'center' }}>-</Text>
+                        <VStack space={2}>                            
+                            <Text>{Utility.GetMonthShortName(event.endDate as string)}</Text>
+                            <Text style={[styles.day]}>{Utility.GetDay(event.endDate as string)}</Text>
+                        </VStack>
+                        <VStack>
+                            <Text style={[styles.day]}>{event.name} + {feedback}</Text>
+                        </VStack>
+                    </HStack>
+                </Pressable>
             </Swipeable>
         </GestureHandlerRootView>
-        // @ts-ignore
-        // <SwipeRow key={`swiperow_${index}`} leftActivationValue={10} onSwipeValueChange={(swipeData) => setFeedback(swipeData.key)}>
-        //     <Pressable key={`${index}_hidden`} onPress={() => { onPress() }} style={({ pressed }) => [styles.container, { backgroundColor: 'red', opacity: pressed ? 0.2 : 1 }]}>
-        //         <HStack space={4}>
-        //             <VStack space={2}>
-        //                 <Text style={[styles.day]}>{Utility.GetDay(event.startDate as string)}</Text>
-        //                 <Text>{Utility.GetMonthShortName(event.startDate as string)}</Text>
-        //             </VStack>
-        //             <Text style={{ textAlignVertical: 'center' }}>-</Text>
-        //             <VStack space={2}>
-        //                 <Text style={[styles.day]}>{Utility.GetDay(event.endDate as string)}</Text>
-        //                 <Text>{Utility.GetMonthShortName(event.endDate as string)}</Text>
-        //             </VStack>
-        //             <VStack>
-        //                 <Text style={[styles.day]}>{event.name}</Text>
-        //             </VStack>
-        //         </HStack>
-        //     </Pressable>
-        //     <Pressable key={`${index}`} onPress={() => { onPress() }} style={({ pressed }) => [styles.container, { backgroundColor: 'white', opacity: pressed ? 1 : 1 }]}>
-        //         <HStack space={4}>
-        //             <VStack space={2}>
-        //                 <Text style={[styles.day]}>{Utility.GetDay(event.startDate as string)}</Text>
-        //                 <Text>{Utility.GetMonthShortName(event.startDate as string)}</Text>
-        //             </VStack>
-        //             <Text style={{ textAlignVertical: 'center' }}>-</Text>
-        //             <VStack space={2}>
-        //                 <Text style={[styles.day]}>{Utility.GetDay(event.endDate as string)}</Text>
-        //                 <Text>{Utility.GetMonthShortName(event.endDate as string)}</Text>
-        //             </VStack>
-        //             <VStack>
-        //                 <Text style={[styles.day]}>{event.name} + {feedback}</Text>
-        //             </VStack>
-        //         </HStack>
-        //     </Pressable>
-        // </SwipeRow>
     )
 }
 
-// const styles = StyleSheet.create({
-//     container: {
-//         padding: 20
-//     },
-//     day: {
-//         alignSelf: 'center',
-//         fontSize: 20
-//     }
-// });
-
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        minHeight: 300,
+        padding: 20
     },
-    row: {
-        flexDirection: 'row',
-        flex: 1,
-        alignItems: 'center',
-        paddingLeft: 5,
-        backgroundColor: '#efefef',
-        margin: 20,
-        minHeight: 50,
+    day: {
+        alignSelf: 'center',
+        fontSize: 20
     },
     swipedRow: {
         flexDirection: 'row',
         flex: 1,
         alignItems: 'center',
         paddingLeft: 5,
-        backgroundColor: '#818181',
+        backgroundColor: '#d0342c',
         margin: 20,
         minHeight: 50,
-    },
-    swipedConfirmationContainer: {
-        flex: 1,
     },
     deleteConfirmationText: {
         color: '#fcfcfc',
         fontWeight: 'bold',
+        alignSelf: 'center'
     },
     deleteButton: {
         backgroundColor: '#b60000',
@@ -127,27 +94,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         padding: 3,
     },
+    swipedConfirmationContainer: {
+        flex: 1,
+    },
 });
-
-const renderRightActions = (
-    progress: Animated.AnimatedInterpsolation,
-    dragAnimatedValue: Animated.AnimatedInterpolation,
-) => {
-    const opacity = dragAnimatedValue.interpolate({
-        inputRange: [-150, 0],
-        outputRange: [1, 0],
-        extrapolate: 'clamp',
-    });
-    return (
-        <View style={styles.swipedRow}>
-            <View style={styles.swipedConfirmationContainer}>
-                <Text style={styles.deleteConfirmationText}>Are you sure?</Text>
-            </View>
-            <Animated.View style={[styles.deleteButton, { opacity }]}>
-                <TouchableOpacity>
-                    <Text style={styles.deleteButtonText}>Delete</Text>
-                </TouchableOpacity>
-            </Animated.View>
-        </View>
-    );
-};

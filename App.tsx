@@ -17,11 +17,12 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons/faSquareCheck'
 import { faBeerMugEmpty } from '@fortawesome/free-solid-svg-icons/faBeerMugEmpty'
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar'
-import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDay, faTrash } from '@fortawesome/free-solid-svg-icons';
 import NewEvent from './src/NewEvent';
 import { ThemeColors } from './src/lib/GlobalStyles';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay)
+library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash)
 
 const Stack = createNativeStackNavigator();
 
