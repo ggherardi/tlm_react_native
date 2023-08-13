@@ -21,7 +21,7 @@ import { faCalendarDay, faTrash } from '@fortawesome/free-solid-svg-icons';
 import NewEventScreen from './src/Screens/NewEventScreen';
 import { ThemeColors } from './src/lib/GlobalStyles';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import EventScreen from './src/Screens/EventScreent';
+import EventScreen from './src/Screens/EventScreen';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash)
 
