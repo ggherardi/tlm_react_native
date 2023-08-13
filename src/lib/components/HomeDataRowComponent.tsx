@@ -10,7 +10,7 @@ import GlobalStyles from '../GlobalStyles';
 import { Constants } from '../Constants';
 
 interface IHomeDataRow {
-    event: BusinessEvent;    
+    event: BusinessEvent;
     onDelete: Function;
     index: number;
     navigation: any;
@@ -52,13 +52,13 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                 <Pressable key={`${index}`} onPress={goToEvent} style={({ pressed }) => [styles.container, { backgroundColor: 'white', opacity: pressed ? 1 : 1 }]}>
                     <HStack space={1}>
                         <VStack space={2}>
-                            <Text>{Utility.GetMonthShortName(event.startDate as string)}</Text>
                             <Text style={[styles.day]}>{Utility.GetDay(event.startDate as string)}</Text>
+                            <Text>{Utility.GetMonthShortName(event.startDate as string)}</Text>
                         </VStack>
                         <Text style={{ textAlignVertical: 'center' }}>-</Text>
                         <VStack space={2}>
-                            <Text>{Utility.GetMonthShortName(event.endDate as string)}</Text>
                             <Text style={[styles.day]}>{Utility.GetDay(event.endDate as string)}</Text>
+                            <Text>{Utility.GetMonthShortName(event.endDate as string)}</Text>
                         </VStack>
                         {event.description != undefined && event.description.length ? (
                             <VStack style={styles.eventNameContainer}>

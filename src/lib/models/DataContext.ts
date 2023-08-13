@@ -1,9 +1,15 @@
 import { SaveConstants, Storage } from "../DataStorage";
 import { BusinessDataTypeBase } from "./BusinessDataTypeBase";
 import { BusinessEvent } from "./BusinessEvent";
+import { ExpenseReport } from "./ExpenseReport";
 
 class DataContext {
     Events: DataSet<BusinessEvent> = new DataSet<BusinessEvent>(SaveConstants.events.key, BusinessEvent);
+    ExpenseReports!: DataSet<ExpenseReport>;
+
+    setExpenseReportsKey = (eventKey: string) => {
+        this.ExpenseReports = new DataSet<ExpenseReport>(`event-${eventKey}-reports-${SaveConstants.expenseReport.key}`, BusinessEvent);
+    }
 }
 
 class DataSet<T extends BusinessDataTypeBase> {

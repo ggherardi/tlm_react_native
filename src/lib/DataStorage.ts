@@ -44,4 +44,8 @@ export const SaveConstants = {
     key: 'events',
     dataType: 'array',
   },
+  expenseReport: {
+    key: 'expenseReport',
+    dataType: 'array'
+  }
 };
