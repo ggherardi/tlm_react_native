@@ -5,17 +5,19 @@ import useCustomHeader from '../lib/components/CustomHeaderComponent';
 import dataContext from '../lib/models/DataContext';
 import { useState } from 'react';
 
-const EventScreen = ({ navigation, route }: any) => {
-    const event = route.params.event;
+const EventScreen = ({ route }: any) => {
+    const event = route.params[0].params.event;
+    const navigation = route.params[1];
     useCustomHeader(navigation, event.name, event.description);
-    dataContext.setExpenseReportsKey(`${event.id}_${event.name}`);
+    dataContext.setExpenseReportsKey(`${event?.id}_${event?.name}`);
     
     const [reports, setReports] = useState(dataContext.ExpenseReports.getAllData());
 
     return (
         <GestureHandlerRootView>
             <ScrollView>
-                <Text>{event?.name || JSON.stringify(route.params)}</Text>
+                <Text>{event?.name || JSON.stringify(route.params.params.event.name)}</Text>
+                <Text>{JSON.stringify(Object.keys(route.params[0].params))}</Text>
             </ScrollView>
         </GestureHandlerRootView>
     )

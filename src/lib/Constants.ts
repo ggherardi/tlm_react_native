@@ -2,6 +2,9 @@ export class Constants {
   static Navigation = {
     Home: 'Home',
     NewEvent: 'NewEvent',
-    Event: 'Event'
+    EventHome: 'EventHome',
+    Event: 'Nota spese',
+    NewExpenseReport: 'Nuova spesa',
+    EventHistoryScreen: 'History',
   }
 }

@@ -3,7 +3,8 @@ import { StyleSheet } from 'react-native';
 export const ThemeColors = {
   primary: '#E22E2D',
   secondary: 'blue',
-  white: '#fff'
+  white: '#fff',
+  inactive: 'gray'
 };
 
 const GlobalStyles = StyleSheet.create({

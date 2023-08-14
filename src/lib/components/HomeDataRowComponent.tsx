@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { BusinessEvent } from '../models/BusinessEvent';
-import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity } from 'react-native';
+import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { HStack, VStack } from 'native-base';
 import { Utility } from '../Utility';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 import { InputSideButton } from './InputSideButtonComponent';
 import dataContext from '../models/DataContext';
-import GlobalStyles from '../GlobalStyles';
+import GlobalStyles, { ThemeColors } from '../GlobalStyles';
 import { Constants } from '../Constants';
 
 interface IHomeDataRow {
@@ -18,7 +18,7 @@ interface IHomeDataRow {
 
 export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHomeDataRow) => {
     const goToEvent = () => {
-        navigation.navigate(Constants.Navigation.Event, { event: event });
+        navigation.navigate(Constants.Navigation.EventHome, { event: event });
     };
 
     const renderRightActions = (
@@ -32,7 +32,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                 <View style={styles.swipedConfirmationContainer}>
                     <Text style={styles.deleteConfirmationText}>Vuoi cancellare l'evento?</Text>
                 </View>
-                <InputSideButton icon="trash" pressFunction={deleteEvent} iconStyle={{ color: "#fff" }} stretchHeight={true} />
+                <InputSideButton icon="trash" pressFunction={deleteEvent} iconStyle={{ color: ThemeColors.white }} stretchHeight={true} />
             </View>
         );
     };
@@ -49,7 +49,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
     return (
         <GestureHandlerRootView>
             <Swipeable renderRightActions={renderRightActions}>
-                <Pressable key={`${index}`} onPress={goToEvent} style={({ pressed }) => [styles.container, { backgroundColor: 'white', opacity: pressed ? 1 : 1 }]}>
+                <Pressable key={`${index}`} onPress={goToEvent} style={({ pressed }) => [styles.container, { opacity: pressed ? 1 : 1 }]}>
                     <HStack space={1}>
                         <VStack space={2}>
                             <Text style={[styles.day]}>{Utility.GetDay(event.startDate as string)}</Text>
@@ -77,7 +77,8 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20
+        padding: 20,
+        backgroundColor: ThemeColors.white
     },
     eventNameContainer: {
         paddingLeft: 10,
