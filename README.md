@@ -16,6 +16,7 @@ npm i native-base
 npm i --save react-native-swipe-list-view
 npm i react-native-gesture-handler
 npm i --save '@react-navigation/bottom-tabs'
+npm i --save react-native-vision-camera
 
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 

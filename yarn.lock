@@ -6790,6 +6790,11 @@ react-native-swipe-list-view@^3.2.9:
   resolved "https://registry.npmjs.org/react-native-swipe-list-view/-/react-native-swipe-list-view-3.2.9.tgz"
   integrity sha512-SjAEuHc/D6ovp+RjDUhfNmw6NYOntdT7+GFhfMGfP/BSLMuMWynpzJy9GKQeyB8sI78T6Lzip21TVbongOg1Mw==
 
+react-native-vision-camera@^2.15.5:
+  version "2.15.5"
+  resolved "https://registry.npmjs.org/react-native-vision-camera/-/react-native-vision-camera-2.15.5.tgz"
+  integrity sha512-EtC3mlAOBgPTYa0AeTrp2wJCe6bnUlIMJe7rx9N2VxWQA7prOq+xb7Qdx7GPTep+YTgqnN6HoGobdDSJo0Dt5A==
+
 react-native@*, "react-native@>= 0.67", react-native@>=0.23.1, react-native@>=0.71.0, react-native@0.72.3:
   version "0.72.3"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.72.3.tgz"

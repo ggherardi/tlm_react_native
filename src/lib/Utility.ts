@@ -15,6 +15,22 @@ export const Utility = {
     return formattedDate;
   },
 
+  FormatDateDDMMYYYYhhmm: (dateString: string): string => {
+    let formattedDate = '';
+    let date = new Date(dateString);
+    if (date && !isNaN(date.getDate())) {
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      const hour = date.getHours();
+      const minute = date.getMinutes();
+      formattedDate = `${day < 10 ? `0${day}` : day}/${month < 10 ? `0${month}` : month}/${year} ${hour < 10 ? `0${hour}` : hour}:${minute < 10 ? `0${minute}` : minute}`;
+    } else {
+      formattedDate = '';
+    }    
+    return formattedDate;
+  },
+
   GetDay: (dateString: string): string => {
     let dayString = '';
     let date = new Date(dateString);

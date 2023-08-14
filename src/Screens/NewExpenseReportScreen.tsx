@@ -8,10 +8,10 @@ import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import { TLMButtonComponent, TLMButtonType } from '../lib/components/TLMButtonComponent';
 
 const NewExpenseReportScreen = () => {
-    const handleEventNameChange = (e: any) => {
+    const handleExpenseNameChange = (e: any) => {
         setExpenseName(e.nativeEvent.text);
     };
-    const handleEventDescriptionChange = (e: any) => {
+    const handleExpenseDescriptionChange = (e: any) => {
         setExpenseDescription(e.nativeEvent.text);
     };
 
@@ -39,25 +39,24 @@ const NewExpenseReportScreen = () => {
         <NativeBaseProvider>
             <ScrollView contentContainerStyle={styles.container}>
                 <FormControl style={GlobalStyles.mt15} isRequired>
-                    <FormControl.Label>Nome dell'evento</FormControl.Label>
-                    <Input placeholder="Nome evento" onChange={handleEventNameChange}></Input>
+                    <FormControl.Label>Titolo spesa</FormControl.Label>
+                    <Input placeholder="Titolo spesa" onChange={handleExpenseNameChange}></Input>
                 </FormControl>
                 <FormControl style={GlobalStyles.mt15}>
-                    <FormControl.Label>Descrizione dell'evento</FormControl.Label>
-                    <TextArea placeholder="Descrizione breve dell'evento" onChange={handleEventDescriptionChange} autoCompleteType={true}></TextArea>
+                    <FormControl.Label>Descrizione della spesa</FormControl.Label>
+                    <TextArea placeholder="Descrizione della spesa" onChange={handleExpenseDescriptionChange} autoCompleteType={true}></TextArea>
                 </FormControl>
                 <FormControl style={GlobalStyles.mt15} isRequired>
-                    <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
+                    <FormControl.Label>Data della spesa</FormControl.Label>
                     <Input
                         placeholder="gg/mm/aaaa"
-                        value={Utility.FormatDateDDMMYYYY(expenseDate.toString())}
+                        value={Utility.FormatDateDDMMYYYYhhmm(expenseDate.toString())}
                         InputLeftElement={
                             <InputSideButton
                                 icon="calendar-day"
                                 iconStyle={GlobalStyles.iconPrimary}
                                 pressFunction={() => {
                                     setShowDateTimePicker(true);
-                                    setSetDateFunction('setEventStartDate');
                                 }}
                             />
                         }
