@@ -1,7 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from 'native-base';
 import { useState } from 'react';
-import React, { Button, ScrollView, StyleSheet, Text } from 'react-native';
+import React, { Button, ScrollView, StyleSheet, Text, View } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
@@ -14,6 +14,7 @@ const NewExpenseReportScreen = () => {
     const [expenseAmount, setExpenseAmount] = useState('');
     const [showDateTimePicker, setShowDateTimePicker] = useState(false);
     const [setDateFunction, setSetDateFunction] = useState('');
+    const [photo, setPhoto] = useState(false);
     const [feedback, setFeedback] = useState('Feedback original state');
 
     const handleExpenseNameChange = (value: any) => {
@@ -46,55 +47,61 @@ const NewExpenseReportScreen = () => {
                     <HStack>
                         <Input placeholder="Foto" onChange={handleExpenseNameChange} width={"88%"}></Input>
 
-                        <InputSideButton icon={"camera"} pressFunction={() => {}} />
-                    </HStack>                    
+                        <InputSideButton icon={"camera"} pressFunction={() => { }} />
+                    </HStack>
                 </FormControl>
-                <FormControl style={GlobalStyles.mt15} isRequired>
-                    <FormControl.Label>Titolo spesa</FormControl.Label>
-                </FormControl>
-                <Select width={"100%"} onValueChange={handleExpenseNameChange}>
-                    <Select.Item label="Pranzo" value="Pranzo" />
-                    <Select.Item label="Cena" value="Cena" />
-                    <Select.Item label="Taxi" value="Taxi" />
-                </Select>
-                <FormControl style={GlobalStyles.mt15}>
-                    <FormControl.Label>Descrizione della spesa</FormControl.Label>
-                    <TextArea placeholder="Descrizione della spesa" onChange={handleExpenseDescriptionChange} autoCompleteType={true}></TextArea>
-                </FormControl>
-                <FormControl style={GlobalStyles.mt15}>
-                    <FormControl.Label>Importo della spesa</FormControl.Label>
-                    <Input placeholder="Importo" onChange={handleExpenseAmount}></Input>
-                </FormControl>
-                <FormControl style={GlobalStyles.mt15} isRequired>
-                    <FormControl.Label>Data della spesa</FormControl.Label>
-                    <Input
-                        placeholder="gg/mm/aaaa"
-                        value={Utility.FormatDateDDMMYYYYhhmm(expenseDate.toString())}
-                        InputLeftElement={
-                            <InputSideButton
-                                icon="calendar-day"
-                                iconStyle={GlobalStyles.iconPrimary}
-                                pressFunction={() => {
-                                    setShowDateTimePicker(true);
+                {photo ? (
+                    <View>
+                        <FormControl style={GlobalStyles.mt15} isRequired>
+                            <FormControl.Label>Titolo spesa</FormControl.Label>
+                        </FormControl>
+                        <Select width={"100%"} onValueChange={handleExpenseNameChange}>
+                            <Select.Item label="Pranzo" value="Pranzo" />
+                            <Select.Item label="Cena" value="Cena" />
+                            <Select.Item label="Taxi" value="Taxi" />
+                        </Select>
+                        <FormControl style={GlobalStyles.mt15}>
+                            <FormControl.Label>Descrizione della spesa</FormControl.Label>
+                            <TextArea placeholder="Descrizione della spesa" onChange={handleExpenseDescriptionChange} autoCompleteType={true}></TextArea>
+                        </FormControl>
+                        <FormControl style={GlobalStyles.mt15}>
+                            <FormControl.Label>Importo della spesa</FormControl.Label>
+                            <Input placeholder="Importo" onChange={handleExpenseAmount}></Input>
+                        </FormControl>
+                        <FormControl style={GlobalStyles.mt15} isRequired>
+                            <FormControl.Label>Data della spesa</FormControl.Label>
+                            <Input
+                                placeholder="gg/mm/aaaa"
+                                value={Utility.FormatDateDDMMYYYYhhmm(expenseDate.toString())}
+                                InputLeftElement={
+                                    <InputSideButton
+                                        icon="calendar-day"
+                                        iconStyle={GlobalStyles.iconPrimary}
+                                        pressFunction={() => {
+                                            setShowDateTimePicker(true);
+                                        }}
+                                    />
+                                }
+                            />
+                        </FormControl>
+                        {showDateTimePicker && (
+                            <DateTimePicker
+                                mode="date"
+                                display="spinner"
+                                value={new Date()}
+                                onChange={(event, date) => {
+                                    setExpenseDate(expenseDate);
+                                    setShowDateTimePicker(false);
                                 }}
                             />
-                        }
-                    />
-                </FormControl>
-                {showDateTimePicker && (
-                    <DateTimePicker
-                        mode="date"
-                        display="spinner"
-                        value={new Date()}
-                        onChange={(event, date) => {
-                            setExpenseDate(expenseDate);
-                            setShowDateTimePicker(false);
-                        }}
-                    />
+                        )}
+                        <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
+                            <TLMButtonComponent title='Salva' buttonType={TLMButtonType.Primary} onPress={saveEvent}></TLMButtonComponent>
+                        </HStack>
+                    </View>
+                ) : (
+                    <Text></Text>
                 )}
-                <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
-                    <TLMButtonComponent title='Salva' buttonType={TLMButtonType.Primary} onPress={saveEvent}></TLMButtonComponent>
-                </HStack>
                 <Text>{feedback}</Text>
             </ScrollView>
         </NativeBaseProvider>
