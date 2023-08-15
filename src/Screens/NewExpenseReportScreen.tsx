@@ -1,5 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FormControl, HStack, Input, NativeBaseProvider, TextArea } from 'native-base';
+import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from 'native-base';
 import { useState } from 'react';
 import React, { Button, ScrollView, StyleSheet, Text } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
@@ -8,11 +8,22 @@ import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import { TLMButtonComponent, TLMButtonType } from '../lib/components/TLMButtonComponent';
 
 const NewExpenseReportScreen = () => {
-    const handleExpenseNameChange = (e: any) => {
-        setExpenseName(e.nativeEvent.text);
+    const [expenseName, setExpenseName] = useState('');
+    const [expenseDescription, setExpenseDescription] = useState('');
+    const [expenseDate, setExpenseDate] = useState(new Date());
+    const [expenseAmount, setExpenseAmount] = useState('');
+    const [showDateTimePicker, setShowDateTimePicker] = useState(false);
+    const [setDateFunction, setSetDateFunction] = useState('');
+    const [feedback, setFeedback] = useState('Feedback original state');
+
+    const handleExpenseNameChange = (value: any) => {
+        setExpenseName(value);
     };
     const handleExpenseDescriptionChange = (e: any) => {
         setExpenseDescription(e.nativeEvent.text);
+    };
+    const handleExpenseAmount = (e: any) => {
+        setExpenseAmount(e.nativeEvent.text);
     };
 
     const saveEvent = () => {
@@ -27,24 +38,32 @@ const NewExpenseReportScreen = () => {
         // Storage.save(SaveConstants.events.key, JSON.stringify(events));
     };
 
-    const [expenseName, setExpenseName] = useState('');
-    const [expenseDescription, setExpenseDescription] = useState('');
-    const [expenseDate, setExpenseDate] = useState(new Date());
-    const [expenseAmount, setExpenseAmount] = useState('');
-    const [showDateTimePicker, setShowDateTimePicker] = useState(false);
-    const [setDateFunction, setSetDateFunction] = useState('');
-    const [feedback, setFeedback] = useState('Feedback original state');
-
     return (
         <NativeBaseProvider>
             <ScrollView contentContainerStyle={styles.container}>
                 <FormControl style={GlobalStyles.mt15} isRequired>
-                    <FormControl.Label>Titolo spesa</FormControl.Label>
-                    <Input placeholder="Titolo spesa" onChange={handleExpenseNameChange}></Input>
+                    <FormControl.Label>Foto</FormControl.Label>
+                    <HStack>
+                        <Input placeholder="Foto" onChange={handleExpenseNameChange} width={"88%"}></Input>
+
+                        <InputSideButton icon={"camera"} pressFunction={() => {}} />
+                    </HStack>                    
                 </FormControl>
+                <FormControl style={GlobalStyles.mt15} isRequired>
+                    <FormControl.Label>Titolo spesa</FormControl.Label>
+                </FormControl>
+                <Select width={"100%"} onValueChange={handleExpenseNameChange}>
+                    <Select.Item label="Pranzo" value="Pranzo" />
+                    <Select.Item label="Cena" value="Cena" />
+                    <Select.Item label="Taxi" value="Taxi" />
+                </Select>
                 <FormControl style={GlobalStyles.mt15}>
                     <FormControl.Label>Descrizione della spesa</FormControl.Label>
                     <TextArea placeholder="Descrizione della spesa" onChange={handleExpenseDescriptionChange} autoCompleteType={true}></TextArea>
+                </FormControl>
+                <FormControl style={GlobalStyles.mt15}>
+                    <FormControl.Label>Importo della spesa</FormControl.Label>
+                    <Input placeholder="Importo" onChange={handleExpenseAmount}></Input>
                 </FormControl>
                 <FormControl style={GlobalStyles.mt15} isRequired>
                     <FormControl.Label>Data della spesa</FormControl.Label>
@@ -84,7 +103,7 @@ const NewExpenseReportScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
         padding: 20,

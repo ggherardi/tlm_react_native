@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Text, View } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
+import { useRef, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { Camera, CameraDevice, parsePhysicalDeviceTypes, useCameraDevices } from "react-native-vision-camera"
 
 const CameraComponent = () => {
     const [authorized, setAuthorized] = useState(false);
-    const [device, setDevice] = useState();
 
     const managePermissions = async () => {
         let cameraPermission = await Camera.getCameraPermissionStatus()
@@ -22,30 +22,33 @@ const CameraComponent = () => {
                 // Restricted on IOS (i.e. parental control)
                 break;
         }
-        console.log(cameraPermission);
-        console.log("authorized: ", authorized);
-        if (authorized) {
-            const devices = await Camera.getAvailableCameraDevices();
-            // const deviceType = parsePhysicalDeviceTypes(devices);
-            console.log(devices);
-            // const devices = useCameraDevices();
-            // console.log("DEVICE: ", devices.back);
-            // setDevice(devices.back);
-            // console.log("DEVICE: ", device);
-        }       
     }
 
     managePermissions();
-    
-    return (
-        <View>
-            {authorized ? (
-                <Text></Text>
-                // <Camera device={device as CameraDevice} isActive={true}></Camera>
-            ) : (
-                <Text></Text>
-            )}
-        </View>);
+    const devices = useCameraDevices();
+    const device = devices.back;
+    const camera = useRef<Camera>(null)
+    const isFocused = useIsFocused();
+    if (authorized && device) {
+        return (
+            <View style={StyleSheet.absoluteFill}>
+                <Camera
+                    ref={camera}
+                    style={{ flex: 1 }}
+                    device={device as CameraDevice}
+                    isActive={isFocused}
+                    photo={true} />
+            </View>
+        );
+    } else if (!authorized) {
+        return (
+            <Text>Per utilizzare la fotocamera, fornire le autorizzazioni dal menu delle impostazioni del dispositivo</Text>
+        )
+    } else {
+        return (
+            <Text>Caricamento..</Text>
+        )
+    }
 }
 
 export default CameraComponent;

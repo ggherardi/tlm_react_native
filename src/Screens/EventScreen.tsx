@@ -16,8 +16,8 @@ const EventScreen = ({ route }: any) => {
     return (
         <GestureHandlerRootView>
             <ScrollView>
-                <Text>{event?.name || JSON.stringify(route.params.params.event.name)}</Text>
-                <Text>{JSON.stringify(Object.keys(route.params[0].params))}</Text>
+                {/* <Text>{event?.name || JSON.stringify(route.params.params.event.name)}</Text> */}
+                {/* <Text>{JSON.stringify(Object.keys(route.params[0].params))}</Text> */}
             </ScrollView>
         </GestureHandlerRootView>
     )

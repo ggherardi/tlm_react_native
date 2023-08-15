@@ -10,7 +10,7 @@ import { Constants } from '../lib/Constants';
 import useCustomHeader from '../lib/components/CustomHeaderComponent';
 
 const HomeScreen = ({ navigation }: any) => {
-  useCustomHeader(navigation, "Tutti gli eventi");
+  // useCustomHeader(navigation, "Tutti gli eventi");
   
   const goToNewEvent = () => {
     navigation.navigate(Constants.Navigation.NewEvent);

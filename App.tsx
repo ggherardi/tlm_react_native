@@ -17,13 +17,13 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons/faSquareCheck'
 import { faBeerMugEmpty } from '@fortawesome/free-solid-svg-icons/faBeerMugEmpty'
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar'
-import { faCalendarDay, faCalendarWeek, faPlus, faTable, faTableCells, faTableCellsLarge, faTableColumns, faTableList, faTableTennis, faTimeline, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDay, faCalendarWeek, faCamera, faPlus, faTable, faTableCells, faTableCellsLarge, faTableColumns, faTableList, faTableTennis, faTimeline, faTrash } from '@fortawesome/free-solid-svg-icons';
 import NewEventScreen from './src/Screens/NewEventScreen';
 import EventHomeScreen from './src/Screens/EventHomeScreen';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis, 
-  faTimeline)
+  faTimeline, faCamera)
 
 const Stack = createNativeStackNavigator();
 
