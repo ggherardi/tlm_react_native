@@ -42,10 +42,10 @@ const NewExpenseReportScreen = () => {
     return (
         <NativeBaseProvider>
             <ScrollView contentContainerStyle={styles.container}>
-                <FormControl style={GlobalStyles.mt15} isRequired>
+                <FormControl style={GlobalStyles.mt15} isRequired isDisabled>
                     <FormControl.Label>Foto</FormControl.Label>
                     <HStack>
-                        <Input placeholder="Foto" onChange={handleExpenseNameChange} width={"88%"}></Input>
+                        <Input placeholder="Foto" onChange={handleExpenseNameChange} width={"88%"} isDisabled isReadOnly></Input>
 
                         <InputSideButton icon={"camera"} pressFunction={() => { }} />
                     </HStack>
