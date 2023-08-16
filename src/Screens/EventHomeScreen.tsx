@@ -10,7 +10,8 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const Tab = createBottomTabNavigator();
 
-const EventHomeScreen = ({ navigation, route }: any) => {
+const EventHomeScreen = ({ navigation, route }: any) => {   
+    console.log(navigation); 
     return (
         <Tab.Navigator screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
@@ -34,7 +35,7 @@ const EventHomeScreen = ({ navigation, route }: any) => {
             <Tab.Screen
                 name={"Nota spese"}
                 component={EventScreen}
-                initialParams={[route, navigation]}
+                initialParams={[route.params.event]}
                 options={commonTabOptions}></Tab.Screen>
             <Tab.Screen 
                 name={Constants.Navigation.NewExpenseReport} 

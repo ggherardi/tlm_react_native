@@ -5,10 +5,9 @@ import useCustomHeader from '../lib/components/CustomHeaderComponent';
 import dataContext from '../lib/models/DataContext';
 import { useState } from 'react';
 
-const EventScreen = ({ route }: any) => {
-    const event = route.params[0].params.event;
-    const navigation = route.params[1];
-    useCustomHeader(navigation, event.name, event.description);
+const EventScreen = ({ route, navigation }: any) => {
+    const event = route.params[0];
+        useCustomHeader(navigation.getParent(), event.name, event.description);
     dataContext.setExpenseReportsKey(`${event?.id}_${event?.name}`);
     
     const [reports, setReports] = useState(dataContext.ExpenseReports.getAllData());
