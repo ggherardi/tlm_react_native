@@ -1,5 +1,5 @@
 import { Button, NativeBaseProvider } from 'native-base';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, ScrollView } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
@@ -10,8 +10,10 @@ import { Constants } from '../lib/Constants';
 import useCustomHeader from '../lib/components/CustomHeaderComponent';
 
 const HomeScreen = ({ navigation }: any) => {
-  // useCustomHeader(navigation, "Tutti gli eventi");
-  
+  useEffect(() => {
+    useCustomHeader(navigation, "Tutti gli eventi");
+  }, []);
+
   const goToNewEvent = () => {
     navigation.navigate(Constants.Navigation.NewEvent);
   };

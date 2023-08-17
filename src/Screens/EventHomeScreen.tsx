@@ -11,7 +11,6 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 const Tab = createBottomTabNavigator();
 
 const EventHomeScreen = ({ navigation, route }: any) => {   
-    console.log(navigation); 
     return (
         <Tab.Navigator screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {

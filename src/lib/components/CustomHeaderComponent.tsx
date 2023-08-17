@@ -15,7 +15,7 @@ const CustomHeaderComponent = ({ title, subtitle }: ICustomHeaderComponent) => {
                 {subtitle != undefined && subtitle != "" ? (
                     <VStack>
                         <Text style={[styles.eventName, GlobalStyles.colorWhite]}>{title}</Text>
-                        <Text style={[GlobalStyles.colorWhite, { maxWidth: "70%" }]} numberOfLines={1}>{subtitle} pluto pippo paperino</Text>
+                        <Text style={[GlobalStyles.colorWhite, { maxWidth: "70%" }]} numberOfLines={1}>{subtitle}</Text>
                     </VStack>
                 ) : (
                     <Text style={[styles.eventName, GlobalStyles.colorWhite]}>{title}</Text>

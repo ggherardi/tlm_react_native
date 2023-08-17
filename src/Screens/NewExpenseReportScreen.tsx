@@ -6,6 +6,7 @@ import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import { TLMButtonComponent, TLMButtonType } from '../lib/components/TLMButtonComponent';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 const NewExpenseReportScreen = () => {
     const [expenseName, setExpenseName] = useState('');
@@ -27,6 +28,18 @@ const NewExpenseReportScreen = () => {
         setExpenseAmount(e.nativeEvent.text);
     };
 
+    const onSelectImagePress = () => launchImageLibrary({ mediaType: "photo" }, onImageSelect);
+
+    const onTakePhoto = () => launchCamera({ mediaType: "photo" }, onImageSelect);
+
+    const onImageSelect = async (media) => {
+        console.log(media);
+
+        if (!media.didCancel) {
+          // Text Recognition Process
+        }
+      };
+
     const saveEvent = () => {
         // let event: BusinessEvent = new BusinessEvent();
         // let id = Math.max(...events.map((e: BusinessEvent) => e.id));
@@ -45,9 +58,9 @@ const NewExpenseReportScreen = () => {
                 <FormControl style={GlobalStyles.mt15} isRequired isDisabled>
                     <FormControl.Label>Foto</FormControl.Label>
                     <HStack>
-                        <Input placeholder="Foto" onChange={handleExpenseNameChange} width={"88%"} isDisabled isReadOnly></Input>
-
-                        <InputSideButton icon={"camera"} pressFunction={() => { }} />
+                        <Input placeholder="Foto" onChange={handleExpenseNameChange} width={"70%"} isDisabled isReadOnly></Input>
+                        <InputSideButton icon={"camera"} pressFunction={onTakePhoto} />
+                        <InputSideButton icon={"upload"} pressFunction={onSelectImagePress} />
                     </HStack>
                 </FormControl>
                 {photo ? (

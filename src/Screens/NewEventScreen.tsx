@@ -1,6 +1,6 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, Input, NativeBaseProvider, Button, HStack, TextArea } from 'native-base';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import { SaveConstants, Storage } from '../lib/DataStorage';
@@ -12,8 +12,10 @@ import dataContext from '../lib/models/DataContext';
 import useCustomHeader from '../lib/components/CustomHeaderComponent';
 
 const NewEventScreen = ({ navigation }: any) => {
-  useCustomHeader(navigation, "Crea nuovo evento");
-  
+  useEffect(() => {
+    useCustomHeader(navigation, "Crea nuovo evento");
+  });
+
   const handleEventNameChange = (e: any) => {
     setEventName(e.nativeEvent.text);
   };

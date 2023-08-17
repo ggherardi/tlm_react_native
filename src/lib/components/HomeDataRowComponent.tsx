@@ -63,7 +63,9 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                         {event.description != undefined && event.description.length ? (
                             <VStack style={styles.eventNameContainer}>
                                 <Text style={[styles.eventName]}>{event.name}</Text>
-                                <Text style={[styles.eventDescription]} numberOfLines={1}>{event.description}</Text>
+                                <View style={{ }}>
+                                    <Text style={[styles.eventDescription]} numberOfLines={1}>{event.description}</Text>
+                                </View>
                             </VStack>
                         ) : (
                             <Text style={[styles.eventName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{event.name}</Text>
@@ -76,7 +78,8 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
 }
 
 const styles = StyleSheet.create({
-    container: {
+    container: {        
+        maxWidth: '90%',
         padding: 20,
         backgroundColor: ThemeColors.white
     },
@@ -93,7 +96,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     eventDescription: {
-        maxWidth: '95%',
+        maxWidth: '100%',
+        flex: 1
         // overflow: 'hidden'
     },
     swipedRow: {
