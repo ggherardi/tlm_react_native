@@ -4,6 +4,7 @@ export class ExpenseReport extends BusinessDataTypeBase {
   id!: number;
   name!: string;
   date!: string;
+  timeStamp!: string;
   amount!: number;
   description?: string;    
 

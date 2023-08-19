@@ -35,6 +35,10 @@ class DataSet<T extends BusinessDataTypeBase> {
     }
 
     getAllData = (): T[] => this.allData;
+
+    saveData = (value: any) => {
+        Storage.save(this.storageKey, value)
+    }
 }
 
 const dataContext = new DataContext();

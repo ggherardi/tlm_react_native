@@ -12,6 +12,15 @@ import dataContext from '../lib/models/DataContext';
 import useCustomHeader from '../lib/components/CustomHeaderComponent';
 
 const NewEventScreen = ({ navigation }: any) => {
+  const [events, setEvents] = useState(dataContext.Events.getAllData())
+  const [eventName, setEventName] = useState('');
+  const [eventDescription, setEventDescription] = useState('');
+  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
+  const [eventStartDate, setEventStartDate] = useState(new Date());
+  const [eventEndDate, setEventEndDate] = useState(new Date());
+  const [setDateFunction, setSetDateFunction] = useState('');
+  const [feedback, setFeedback] = useState('Feedback original state');
+  
   useEffect(() => {
     useCustomHeader(navigation, "Crea nuovo evento");
   });
@@ -32,7 +41,7 @@ const NewEventScreen = ({ navigation }: any) => {
     event.startDate = eventStartDate.toString();
     event.endDate = eventEndDate.toString();
     events.push(event);
-    Storage.save(SaveConstants.events.key, JSON.stringify(events));
+    dataContext.Events.saveData(events);
   };
 
   const test = () => {
@@ -42,15 +51,6 @@ const NewEventScreen = ({ navigation }: any) => {
   const clean = () => {
     Storage.save(SaveConstants.events.key, JSON.stringify([]))
   }
-  
-  const [events, setEvents] = useState(dataContext.Events.getAllData())
-  const [eventName, setEventName] = useState('');
-  const [eventDescription, setEventDescription] = useState('');
-  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
-  const [eventStartDate, setEventStartDate] = useState(new Date());
-  const [eventEndDate, setEventEndDate] = useState(new Date());
-  const [setDateFunction, setSetDateFunction] = useState('');
-  const [feedback, setFeedback] = useState('Feedback original state');
 
   return (
     <NativeBaseProvider>

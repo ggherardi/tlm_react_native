@@ -6,7 +6,17 @@ export default class DataStorage {
     // path: `Documents`
   });
 
-  save = (key: string, value: string) => {
+  save = (key: string, value: any) => {
+    const saveConstant = (SaveConstants as any)[key];
+    if (saveConstant) {
+      switch (saveConstant.dataType) {
+        case 'array':
+          value = JSON.stringify(value);
+          break;
+        default:
+          break;
+      }
+    }
     this.storage.set(key, value);
   };
 

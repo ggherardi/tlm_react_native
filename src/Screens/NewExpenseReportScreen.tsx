@@ -1,21 +1,25 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from 'native-base';
 import { useState } from 'react';
-import React, { Button, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import { TLMButtonComponent, TLMButtonType } from '../lib/components/TLMButtonComponent';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { ExpenseReport } from '../lib/models/ExpenseReport';
+import dataContext from '../lib/models/DataContext';
+import { SaveConstants } from '../lib/DataStorage';
 
 const NewExpenseReportScreen = () => {
+    const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
     const [expenseName, setExpenseName] = useState('');
     const [expenseDescription, setExpenseDescription] = useState('');
     const [expenseDate, setExpenseDate] = useState(new Date());
     const [expenseAmount, setExpenseAmount] = useState('');
     const [showDateTimePicker, setShowDateTimePicker] = useState(false);
     const [setDateFunction, setSetDateFunction] = useState('');
-    const [photo, setPhoto] = useState(false);
+    const [photo, setPhoto] = useState<any>();
     const [feedback, setFeedback] = useState('Feedback original state');
 
     const handleExpenseNameChange = (value: any) => {
@@ -32,24 +36,29 @@ const NewExpenseReportScreen = () => {
 
     const onTakePhoto = () => launchCamera({ mediaType: "photo" }, onImageSelect);
 
-    const onImageSelect = async (media) => {
+    const deletePhoto = () => setPhoto(undefined);
+
+    const onImageSelect = async (media: any) => {
         console.log(media);
 
-        if (!media.didCancel) {
-          // Text Recognition Process
+        if (!media.didCancel && media.assets[0]) {
+            const photo = media.assets[0];
+            console.log("photo: ", photo.uri);
+            setPhoto(photo);
         }
-      };
+    };
 
     const saveEvent = () => {
-        // let event: BusinessEvent = new BusinessEvent();
-        // let id = Math.max(...events.map((e: BusinessEvent) => e.id));
-        // event.id = id >= 0 ? id + 1 : 0;
-        // event.name = eventName.trim();
-        // event.description = eventDescription.trim();
-        // event.startDate = eventStartDate.toString();
-        // event.endDate = eventEndDate.toString();
-        // events.push(event);
-        // Storage.save(SaveConstants.events.key, JSON.stringify(events));
+        let expense: ExpenseReport = new ExpenseReport();
+        let id = Math.max(...expenses.map((e: ExpenseReport) => e.id));
+        expense.id = id >= 0 ? id + 1 : 0;
+        expense.name = expenseName.trim();
+        expense.description = expenseDescription.trim();
+        // expense.amount = expenseAmount.toString();
+        expense.date = expenseDate.toString();
+        expense.timeStamp = new Date().toString();
+        expenses.push(expense);
+        dataContext.ExpenseReports.saveData(expenses);
     };
 
     return (
@@ -58,17 +67,22 @@ const NewExpenseReportScreen = () => {
                 <FormControl style={GlobalStyles.mt15} isRequired isDisabled>
                     <FormControl.Label>Foto</FormControl.Label>
                     <HStack>
-                        <Input placeholder="Foto" onChange={handleExpenseNameChange} width={"70%"} isDisabled isReadOnly></Input>
+                        {photo != undefined && photo != null && (
+                            <HStack>
+                                <Image source={{ uri: `${photo.uri}` }} style={styles.image} resizeMode="contain"></Image>
+                                <InputSideButton icon={"x"} pressFunction={deletePhoto} />
+                            </HStack>
+                        )}
                         <InputSideButton icon={"camera"} pressFunction={onTakePhoto} />
                         <InputSideButton icon={"upload"} pressFunction={onSelectImagePress} />
                     </HStack>
                 </FormControl>
                 {photo ? (
-                    <View>
+                    <View style={{ width: "100%" }}>
                         <FormControl style={GlobalStyles.mt15} isRequired>
                             <FormControl.Label>Titolo spesa</FormControl.Label>
                         </FormControl>
-                        <Select width={"100%"} onValueChange={handleExpenseNameChange}>
+                        <Select width={"100%"} onValueChange={handleExpenseNameChange} selectedValue={expenseName}>
                             <Select.Item label="Pranzo" value="Pranzo" />
                             <Select.Item label="Cena" value="Cena" />
                             <Select.Item label="Taxi" value="Taxi" />
@@ -131,7 +145,14 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 30,
-    }
+    },
+    image: {
+        height: 30,
+        width: 30,
+        marginRight: 10
+        // marginTop: 30,
+        // borderRadius: 10,
+    },
 });
 
 export default NewExpenseReportScreen;
