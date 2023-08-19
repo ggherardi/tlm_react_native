@@ -6,8 +6,8 @@ export default class DataStorage {
     // path: `Documents`
   });
 
-  save = (key: string, value: any) => {
-    const saveConstant = (SaveConstants as any)[key];
+  save = (key: string, dataContextKey: string, value: any) => {    
+    const saveConstant = (SaveConstants as any)[dataContextKey];
     if (saveConstant) {
       switch (saveConstant.dataType) {
         case 'array':
@@ -16,20 +16,20 @@ export default class DataStorage {
         default:
           break;
       }
+      this.storage.set(key, value);
     }
-    this.storage.set(key, value);
   };
 
-  load = (key: string): any => {
+  load = (key: string, dataContextKey: string): any => {
     let returnValue;
-    const saveConstant = (SaveConstants as any)[key];
+    const saveConstant = (SaveConstants as any)[dataContextKey];
     if (saveConstant) {
       switch (saveConstant.dataType) {
         case 'string':
           returnValue = this.storage.getString(key);
           break;
-        case 'array':
-          const json = this.storage.getString(key);          
+        case 'array':          
+          const json = this.storage.getString(key);                    
           returnValue = json ? JSON.parse(json) : [];
           break;
         case 'buffer':

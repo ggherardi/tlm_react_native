@@ -8,21 +8,21 @@ class DataContext {
     ExpenseReports!: DataSet<ExpenseReport>;
 
     setExpenseReportsKey = (eventKey: string) => {
-        this.ExpenseReports = new DataSet<ExpenseReport>(`event-${eventKey}-reports-${SaveConstants.expenseReport.key}`, BusinessEvent);
+        this.ExpenseReports = new DataSet<ExpenseReport>(`event-${eventKey}-reports-${SaveConstants.expenseReport.key}`, ExpenseReport);
     }
 }
 
 class DataSet<T extends BusinessDataTypeBase> {
-    private storageKey: string;
-    private allData: T[];
+    public storageKey: string;
+    private allData: T[] = [];
 
     constructor(storageKey: string, private classRef: typeof BusinessDataTypeBase) {
         this.storageKey = storageKey;
-        this.allData = Storage.load(storageKey);
+        this.allData = Storage.load(storageKey, this.classRef.getDataContextKey());
     }
 
     refreshData = () => {
-        this.allData = Storage.load(this.storageKey);
+        this.allData = Storage.load(this.storageKey, this.classRef.getDataContextKey());
     }
 
     deleteWhere = (primaryKeyValue: any) => {
@@ -30,14 +30,17 @@ class DataSet<T extends BusinessDataTypeBase> {
         if (indexToDelete > -1) {
             this.allData.splice(indexToDelete, 1);
         }
-        Storage.save(this.storageKey, JSON.stringify(this.allData));
+        Storage.save(this.storageKey, this.classRef.getDataContextKey(), this.allData);
         this.refreshData();
     }
 
-    getAllData = (): T[] => this.allData;
+    getAllData = (): T[] => { 
+        this.refreshData();
+        return this.allData ?? [];
+    }
 
     saveData = (value: any) => {
-        Storage.save(this.storageKey, value)
+        Storage.save(this.storageKey, this.classRef.getDataContextKey(), value)
     }
 }
 

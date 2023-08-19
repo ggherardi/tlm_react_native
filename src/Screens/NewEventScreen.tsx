@@ -44,14 +44,6 @@ const NewEventScreen = ({ navigation }: any) => {
     dataContext.Events.saveData(events);
   };
 
-  const test = () => {
-    setFeedback(JSON.stringify(Storage.load(SaveConstants.events.key)));
-  }
-
-  const clean = () => {
-    Storage.save(SaveConstants.events.key, JSON.stringify([]))
-  }
-
   return (
     <NativeBaseProvider>
       <ScrollView contentContainerStyle={styles.container}>
@@ -112,12 +104,6 @@ const NewEventScreen = ({ navigation }: any) => {
         <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
           <TLMButtonComponent title='Salva' buttonType={TLMButtonType.Primary} onPress={saveEvent}></TLMButtonComponent>
         </HStack>
-        <Button onPress={() => test()} style={[GlobalStyles.selfCenter, GlobalStyles.mt25]}>
-          Check
-        </Button>
-        <Button onPress={() => clean()} style={[GlobalStyles.selfCenter, GlobalStyles.mt25]}>
-          Clean
-        </Button>
         <Text>{feedback}</Text>
       </ScrollView>
     </NativeBaseProvider>

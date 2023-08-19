@@ -1,6 +1,6 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from 'native-base';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React, { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
@@ -21,6 +21,10 @@ const NewExpenseReportScreen = () => {
     const [setDateFunction, setSetDateFunction] = useState('');
     const [photo, setPhoto] = useState<any>();
     const [feedback, setFeedback] = useState('Feedback original state');
+    console.log("Expenses first time:", expenses, typeof expenses);
+    useEffect(() => {
+        setFeedback(JSON.stringify(expenses));
+    }, []);
 
     const handleExpenseNameChange = (value: any) => {
         setExpenseName(value);
@@ -48,25 +52,33 @@ const NewExpenseReportScreen = () => {
         }
     };
 
-    const saveEvent = () => {
+    const saveExpenseReport = () => {
         let expense: ExpenseReport = new ExpenseReport();
-        let id = Math.max(...expenses.map((e: ExpenseReport) => e.id));
-        expense.id = id >= 0 ? id + 1 : 0;
-        expense.name = expenseName.trim();
-        expense.description = expenseDescription.trim();
-        // expense.amount = expenseAmount.toString();
-        expense.date = expenseDate.toString();
-        expense.timeStamp = new Date().toString();
-        expenses.push(expense);
-        dataContext.ExpenseReports.saveData(expenses);
+        if (expenses && expenses.map) {
+            let id = Math.max(...expenses.map((e: ExpenseReport) => e.id));
+            expense.id = id >= 0 ? id + 1 : 0;
+            expense.name = expenseName.trim();
+            expense.description = expenseDescription.trim();
+            expense.amount = Number(expenseAmount);
+            expense.date = expenseDate.toString();
+            expense.timeStamp = new Date().toString();
+            expenses.push(expense);
+            dataContext.ExpenseReports.saveData(expenses);
+            setExpenses(dataContext.ExpenseReports.getAllData());
+            setFeedback(JSON.stringify(expenses));
+        }
     };
+
+    const clear = () => {
+        dataContext.ExpenseReports.saveData([]);
+    }
 
     return (
         <NativeBaseProvider>
             <ScrollView contentContainerStyle={styles.container}>
                 <FormControl style={GlobalStyles.mt15} isRequired isDisabled>
                     <FormControl.Label>Foto</FormControl.Label>
-                    <HStack>
+                    <HStack style={[GlobalStyles.pt15]}>
                         {photo != undefined && photo != null && (
                             <HStack>
                                 <Image source={{ uri: `${photo.uri}` }} style={styles.image} resizeMode="contain"></Image>
@@ -123,12 +135,13 @@ const NewExpenseReportScreen = () => {
                             />
                         )}
                         <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
-                            <TLMButtonComponent title='Salva' buttonType={TLMButtonType.Primary} onPress={saveEvent}></TLMButtonComponent>
+                            <TLMButtonComponent title='Salva' buttonType={TLMButtonType.Primary} onPress={saveExpenseReport}></TLMButtonComponent>
                         </HStack>
                     </View>
                 ) : (
                     <Text></Text>
                 )}
+                <InputSideButton icon={"trash"} pressFunction={clear}></InputSideButton>
                 <Text>{feedback}</Text>
             </ScrollView>
         </NativeBaseProvider>
@@ -147,8 +160,8 @@ const styles = StyleSheet.create({
         fontSize: 30,
     },
     image: {
-        height: 30,
-        width: 30,
+        height: 50,
+        width: 50,
         marginRight: 10
         // marginTop: 30,
         // borderRadius: 10,

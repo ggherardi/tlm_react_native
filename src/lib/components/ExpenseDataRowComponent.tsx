@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { BusinessEvent } from '../models/BusinessEvent';
+import React, { useState } from 'react';
+import { ExpenseReport } from '../models/ExpenseReport';
 import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { HStack, VStack } from 'native-base';
 import { Utility } from '../Utility';
@@ -9,16 +9,16 @@ import dataContext from '../models/DataContext';
 import GlobalStyles, { ThemeColors } from '../GlobalStyles';
 import { Constants } from '../Constants';
 
-interface IHomeDataRow {
-    event: BusinessEvent;
+interface IExpenseDataRow {
+    expense: ExpenseReport;
     onDelete: Function;
     index: number;
     navigation: any;
 }
 
-export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHomeDataRow) => {
-    const goToEvent = () => {
-        navigation.navigate(Constants.Navigation.EventHome, { event: event });
+export const ExpenseDataRowComponent = ({ expense: expense, onDelete, index, navigation }: IExpenseDataRow) => {
+    const goToExpense = () => {
+        // navigation.navigate(Constants.Navigation.EventHome, { expense: expense });
     };
 
     const renderRightActions = (
@@ -30,46 +30,40 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
         return (
             <View style={styles.swipedRow}>
                 <View style={styles.swipedConfirmationContainer}>
-                    <Text style={styles.deleteConfirmationText}>Vuoi cancellare l'evento?</Text>
+                    <Text style={styles.deleteConfirmationText}>Vuoi cancellare la spesa?</Text>
                 </View>
-                <InputSideButton icon="trash" pressFunction={deleteEvent} iconStyle={{ color: ThemeColors.white }} stretchHeight={true} />
+                <InputSideButton icon="trash" pressFunction={deleteExpense} iconStyle={{ color: ThemeColors.white }} stretchHeight={true} />
             </View>
         );
     };
-    const deleteEvent = () => {
+    const deleteExpense = () => {
         const onDeleteConfirm = () => {
-            dataContext.Events.deleteWhere(event.id);
+            dataContext.ExpenseReports.deleteWhere(expense.id);
             onDelete();
         }
-        Alert.alert("Conferma cancellazione", "Tutti i dati legati all'evento verranno rimossi dal dispositivo.", [
+        Alert.alert("Conferma cancellazione", "Tutti i dati legati alla spesa verranno rimossi dal dispositivo.", [
             { text: "Ok", onPress: onDeleteConfirm },
             { text: "Annulla", style: "cancel" }
         ]);
     };
-
     return (
         <GestureHandlerRootView>
-            <Swipeable key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions} >
-                <Pressable key={`pressable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} onPress={goToEvent} style={({ pressed }) => [styles.container, { opacity: pressed ? 1 : 1 }]}>
+            <Swipeable renderRightActions={renderRightActions}>
+                <Pressable key={`${index}`} onPress={goToExpense} style={({ pressed }) => [styles.container, { opacity: pressed ? 1 : 1 }]}>
                     <HStack space={1}>
                         <VStack space={2}>
-                            <Text style={[styles.day]}>{Utility.GetDay(event.startDate as string)}</Text>
-                            <Text>{Utility.GetMonthShortName(event.startDate as string)}</Text>
+                            <Text style={[styles.day]}>{Utility.GetDay(expense.date as string)}</Text>
+                            <Text>{Utility.GetMonthShortName(expense.date as string)}</Text>
                         </VStack>
-                        <Text style={{ textAlignVertical: 'center' }}>-</Text>
-                        <VStack space={2}>
-                            <Text style={[styles.day]}>{Utility.GetDay(event.endDate as string)}</Text>
-                            <Text>{Utility.GetMonthShortName(event.endDate as string)}</Text>
-                        </VStack>
-                        {event.description != undefined && event.description.length ? (
-                            <VStack style={styles.eventNameContainer}>
-                                <Text style={[styles.eventName]}>{event.name}</Text>
-                                <View style={{}}>
-                                    <Text style={[styles.eventDescription]} numberOfLines={1}>{event.description}</Text>
+                        {expense.description != undefined && expense.description.length ? (
+                            <VStack style={styles.expenseNameContainer}>
+                                <Text style={[styles.expenseName]}>{expense.name}</Text>
+                                <View style={{ }}>
+                                    <Text style={[styles.expenseDescription]} numberOfLines={1}>{expense.description}</Text>
                                 </View>
                             </VStack>
                         ) : (
-                            <Text style={[styles.eventName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{event.name}</Text>
+                            <Text style={[styles.expenseName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{expense.name}</Text>
                         )}
                     </HStack>
                 </Pressable>
@@ -79,12 +73,12 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
 }
 
 const styles = StyleSheet.create({
-    container: {
+    container: {        
         maxWidth: '90%',
         padding: 20,
         backgroundColor: ThemeColors.white
     },
-    eventNameContainer: {
+    expenseNameContainer: {
         paddingLeft: 10,
         paddingTop: 5
     },
@@ -92,11 +86,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         fontSize: 20
     },
-    eventName: {
+    expenseName: {
         fontSize: 20,
         fontWeight: 'bold'
     },
-    eventDescription: {
+    expenseDescription: {
         maxWidth: '100%',
         flex: 1
     },

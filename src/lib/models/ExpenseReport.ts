@@ -1,4 +1,5 @@
 import { BusinessDataTypeBase } from './BusinessDataTypeBase';
+import { SaveConstants } from '../DataStorage';
 
 export class ExpenseReport extends BusinessDataTypeBase {  
   id!: number;
@@ -7,6 +8,8 @@ export class ExpenseReport extends BusinessDataTypeBase {
   timeStamp!: string;
   amount!: number;
   description?: string;    
+
+  static getDataContextKey = () => SaveConstants.expenseReport.key;
 
   static primaryKeyWhereCondition = (element: ExpenseReport, id: number) => {
     return element.id == id;

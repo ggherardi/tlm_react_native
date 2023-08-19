@@ -11,7 +11,7 @@ export const Utility = {
       formattedDate = `${day < 10 ? `0${day}` : day}/${month < 10 ? `0${month}` : month}/${year}`;
     } else {
       formattedDate = '';
-    }    
+    }
     return formattedDate;
   },
 
@@ -27,7 +27,7 @@ export const Utility = {
       formattedDate = `${day < 10 ? `0${day}` : day}/${month < 10 ? `0${month}` : month}/${year} ${hour < 10 ? `0${hour}` : hour}:${minute < 10 ? `0${minute}` : minute}`;
     } else {
       formattedDate = '';
-    }    
+    }
     return formattedDate;
   },
 
@@ -41,7 +41,7 @@ export const Utility = {
     return dayString;
   },
 
-  GetMonthShortName: (dateString: string): string => {    
+  GetMonthShortName: (dateString: string): string => {
     let returnValue = '';
     let date = new Date(dateString);
     if (date && !isNaN(date.getDate())) {
@@ -53,9 +53,18 @@ export const Utility = {
   RefreshScreen: ({ navigation, refreshFunc }: any) => {
     React.useEffect(() => {
       const focusHandler = navigation.addListener('focus', () => {
-        refreshFunc();    
+        refreshFunc();
       });
       return focusHandler;
     }, [navigation]);
+  },
+
+  GenerateRandomGuid: () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+      .replace(/[xy]/g, function (c) {
+        const r = Math.random() * 16 | 0,
+          v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
   }
 }

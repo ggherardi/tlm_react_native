@@ -19,22 +19,23 @@ const HomeScreen = ({ navigation }: any) => {
   };
 
   const refreshData = () => {
-    dataContext.Events.refreshData();
-    setEvents(dataContext.Events.getAllData());
+    setEvents(dataContext.Events.getAllData());    
   };
 
-  Utility.RefreshScreen({
-    navigation: navigation, refreshFunc: () => {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
       refreshData();
-    }
-  });
+    });
+    return unsubscribe;
+  }, [navigation]);
+
 
   const [events, setEvents] = useState(dataContext.Events.getAllData());
 
   return (
     <NativeBaseProvider>
       <ScrollView contentContainerStyle={{ backgroundColor: 'white' }}>
-        {events && events.length ? events.map((event: BusinessEvent, index: number) => (
+        {events && events.length && events.map ? events.map((event: BusinessEvent, index: number) => (
           <HomeDataRowComponent key={`homedatarow_${index}`} event={event} onDelete={refreshData} navigation={navigation} index={index} />
         )) : (
           <Text>Nessun evento trovato</Text>)}
