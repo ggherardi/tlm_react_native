@@ -8,6 +8,7 @@ import { Utility } from '../lib/Utility';
 import dataContext from '../lib/models/DataContext';
 import { Constants } from '../lib/Constants';
 import useCustomHeader from '../lib/components/CustomHeaderComponent';
+import { Storage } from '../lib/DataStorage';
 
 const HomeScreen = ({ navigation }: any) => {
   useEffect(() => {
@@ -22,13 +23,7 @@ const HomeScreen = ({ navigation }: any) => {
     setEvents(dataContext.Events.getAllData());    
   };
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      refreshData();
-    });
-    return unsubscribe;
-  }, [navigation]);
-
+  Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
   const [events, setEvents] = useState(dataContext.Events.getAllData());
 
@@ -40,6 +35,7 @@ const HomeScreen = ({ navigation }: any) => {
         )) : (
           <Text>Nessun evento trovato</Text>)}
         <Button onPress={() => goToNewEvent()} style={[GlobalStyles.selfCenter, GlobalStyles.mt25]}>Nuovo evento</Button>
+        <Button onPress={() => Storage.clearAll()} style={[GlobalStyles.selfCenter, GlobalStyles.mt25]}>Delete all data</Button>
       </ScrollView>
     </NativeBaseProvider>
   );

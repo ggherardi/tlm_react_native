@@ -6,6 +6,14 @@ export default class DataStorage {
     // path: `Documents`
   });
 
+  getAll = () => {
+    return this.storage.getAllKeys();
+  }
+
+  clearAll = () => {
+    this.storage.clearAll();
+  }
+
   save = (key: string, dataContextKey: string, value: any) => {    
     const saveConstant = (SaveConstants as any)[dataContextKey];
     if (saveConstant) {

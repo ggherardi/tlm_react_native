@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { BusinessEvent } from '../models/BusinessEvent';
 import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity, TouchableHighlight } from 'react-native';
-import { HStack, VStack } from 'native-base';
+import { HStack, Row, VStack } from 'native-base';
 import { Utility } from '../Utility';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 import { InputSideButton } from './InputSideButtonComponent';
@@ -47,11 +47,22 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
         ]);
     };
 
+    // let isPressed: Boolean = false;
+    // const handlePress = (pressed: Boolean) => {
+    //     isPressed = pressed;        
+    // };
+    // const pressableStyle = StyleSheet.create({ fontColor: { color: isPressed ? 'white' : 'gray' } });
+    const pressableStyle = StyleSheet.create({ });
+
     return (
         <GestureHandlerRootView>
-            <Swipeable key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions} >
-                <Pressable key={`pressable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} onPress={goToEvent} style={({ pressed }) => [styles.container, { opacity: pressed ? 1 : 1 }]}>
-                    <HStack space={1}>
+            <Swipeable key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions}>
+                <Pressable key={`pressable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`}
+                    // onPressIn={() => handlePress(true)}
+                    // onPressOut={() => handlePress(false)}
+                    onPress={goToEvent} style={({ pressed }) => [
+                        styles.container, { backgroundColor: pressed ? ThemeColors.primary : ThemeColors.white }]}>
+                    <Row>
                         <VStack space={2}>
                             <Text style={[styles.day]}>{Utility.GetDay(event.startDate as string)}</Text>
                             <Text>{Utility.GetMonthShortName(event.startDate as string)}</Text>
@@ -63,15 +74,16 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                         </VStack>
                         {event.description != undefined && event.description.length ? (
                             <VStack style={styles.eventNameContainer}>
-                                <Text style={[styles.eventName]}>{event.name}</Text>
-                                <View style={{}}>
-                                    <Text style={[styles.eventDescription]} numberOfLines={1}>{event.description}</Text>
-                                </View>
+                                <Text style={[styles.eventName, pressableStyle.fontColor]}>{event.name}</Text>
+                                <Text style={[styles.eventDescription, pressableStyle.fontColor, { flex: 1 }]} numberOfLines={1}>{event.description}</Text>
+                                {/* <View style={{ flexGrow: 1, flex: 1, width: 0 }}>
+                                    <Text style={[styles.eventDescription, { flex: 1 }]} numberOfLines={1}>{event.description}</Text>
+                                </View> */}
                             </VStack>
                         ) : (
                             <Text style={[styles.eventName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{event.name}</Text>
                         )}
-                    </HStack>
+                    </Row>
                 </Pressable>
             </Swipeable>
         </GestureHandlerRootView>
@@ -80,7 +92,8 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
 
 const styles = StyleSheet.create({
     container: {
-        maxWidth: '90%',
+        flex: 1, flexWrap: 'wrap',
+        maxWidth: '100%',
         padding: 20,
         backgroundColor: ThemeColors.white
     },

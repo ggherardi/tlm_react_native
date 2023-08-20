@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { ExpenseReport } from '../models/ExpenseReport';
 import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity, TouchableHighlight } from 'react-native';
-import { HStack, VStack } from 'native-base';
+import { HStack, Image, VStack } from 'native-base';
 import { Utility } from '../Utility';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 import { InputSideButton } from './InputSideButtonComponent';
 import dataContext from '../models/DataContext';
 import GlobalStyles, { ThemeColors } from '../GlobalStyles';
-import { Constants } from '../Constants';
 
 interface IExpenseDataRow {
     expense: ExpenseReport;
@@ -36,6 +35,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, onDelete, index, nav
             </View>
         );
     };
+
     const deleteExpense = () => {
         const onDeleteConfirm = () => {
             dataContext.ExpenseReports.deleteWhere(expense.id);
@@ -46,19 +46,25 @@ export const ExpenseDataRowComponent = ({ expense: expense, onDelete, index, nav
             { text: "Annulla", style: "cancel" }
         ]);
     };
+
+    const imageUri = `data:image/jpeg;base64,${expense.receiptPhotoBase64}`;
+
     return (
         <GestureHandlerRootView>
-            <Swipeable renderRightActions={renderRightActions}>
+            <Swipeable key={`swipable_${expense.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions}>
                 <Pressable key={`${index}`} onPress={goToExpense} style={({ pressed }) => [styles.container, { opacity: pressed ? 1 : 1 }]}>
-                    <HStack space={1}>
+                    <HStack space={5}>
                         <VStack space={2}>
                             <Text style={[styles.day]}>{Utility.GetDay(expense.date as string)}</Text>
                             <Text>{Utility.GetMonthShortName(expense.date as string)}</Text>
                         </VStack>
+                        {Utility.IsNotNullOrUndefined(expense.receiptPhotoBase64) && (
+                            <Image alt='noimage' source={{ uri: imageUri }} style={[styles.image]} />
+                        )}
                         {expense.description != undefined && expense.description.length ? (
                             <VStack style={styles.expenseNameContainer}>
                                 <Text style={[styles.expenseName]}>{expense.name}</Text>
-                                <View style={{ }}>
+                                <View style={{}}>
                                     <Text style={[styles.expenseDescription]} numberOfLines={1}>{expense.description}</Text>
                                 </View>
                             </VStack>
@@ -73,13 +79,13 @@ export const ExpenseDataRowComponent = ({ expense: expense, onDelete, index, nav
 }
 
 const styles = StyleSheet.create({
-    container: {        
+    container: {
         maxWidth: '90%',
         padding: 20,
         backgroundColor: ThemeColors.white
     },
     expenseNameContainer: {
-        paddingLeft: 10,
+        // paddingLeft: 10,
         paddingTop: 5
     },
     day: {
@@ -121,5 +127,14 @@ const styles = StyleSheet.create({
     },
     swipedConfirmationContainer: {
         flex: 1,
+    },
+    image: {
+        height: 50,
+        width: 50,
+        marginRight: 10,
+        alignSelf: 'center',
+        // marginLeft: 20
+        // marginTop: 30,
+        // borderRadius: 10,
     },
 });

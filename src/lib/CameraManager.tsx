@@ -43,7 +43,6 @@ const CameraComponent = ({ assignPhoto }: ICameraComponentProps) => {
         if (photo) {
             assignPhoto(photo);
             setImageSource(photo.path);
-            // console.log(photo.path);
         }
     }
 

@@ -12,27 +12,25 @@ import { useIsFocused } from '@react-navigation/native';
 const EventScreen = ({ route, navigation }: any) => {
     const event = route.params[0];
     dataContext.setExpenseReportsKey(`${event?.id}_${event?.name}`);
-    const [feedback, setFeedback] = useState('Feedback original state');
-    const [reports, setReports] = useState(dataContext.ExpenseReports.getAllData());
-    const isFocused = useIsFocused();
+
     useEffect(() => {
+        dataContext.setExpenseReportsKey(`${event?.id}_${event?.name}`);
         useCustomHeader(navigation.getParent(), event.name, event.description);
         navigation.getParent().setOptions
-        setFeedback(JSON.stringify(reports));
+        // setFeedback(JSON.stringify(reports));
     }, []);
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            refreshData();
-        });
-        return unsubscribe;
-    }, [navigation]);
+    const [feedback, setFeedback] = useState('Feedback original state');
+    const [reports, setReports] = useState(dataContext.ExpenseReports.getAllData());
 
     const refreshData = () => {
+        console.log("Focused");
         setReports(dataContext.ExpenseReports.getAllData());
     };
+    Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
-    console.log("Reports: ", JSON.stringify(reports));
+    console.log(reports.length)
+
     return (
         <NativeBaseProvider>
             <GestureHandlerRootView>
@@ -42,7 +40,7 @@ const EventScreen = ({ route, navigation }: any) => {
                     )) : (
                         <Text>Nessuna spesa trovata</Text>)}
                     <Text>
-                        {feedback}
+                        {/* {feedback} */}
                     </Text>
                 </ScrollView>
             </GestureHandlerRootView>

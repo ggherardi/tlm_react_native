@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 export const Utility = {
   FormatDateDDMMYYYY: (dateString: string): string => {
@@ -59,6 +59,15 @@ export const Utility = {
     }, [navigation]);
   },
 
+  OnFocus: ({ navigation, onFocusAction }: any) => {
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        onFocusAction();
+      });
+      return unsubscribe;
+    }, [navigation]);
+  },
+
   GenerateRandomGuid: () => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
       .replace(/[xy]/g, function (c) {
@@ -66,5 +75,9 @@ export const Utility = {
           v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
       });
+  },
+
+  IsNotNullOrUndefined: (value: any) => {
+    return value != undefined && value != null && value != '';
   }
 }

@@ -9,9 +9,9 @@ import { TLMButtonComponent, TLMButtonType } from '../lib/components/TLMButtonCo
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { ExpenseReport } from '../lib/models/ExpenseReport';
 import dataContext from '../lib/models/DataContext';
-import { SaveConstants } from '../lib/DataStorage';
+import { MediaType } from 'react-native-image-picker/lib/typescript/types'
 
-const NewExpenseReportScreen = () => {
+const NewExpenseReportScreen = ({ navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
     const [expenseName, setExpenseName] = useState('');
     const [expenseDescription, setExpenseDescription] = useState('');
@@ -21,7 +21,7 @@ const NewExpenseReportScreen = () => {
     const [setDateFunction, setSetDateFunction] = useState('');
     const [photo, setPhoto] = useState<any>();
     const [feedback, setFeedback] = useState('Feedback original state');
-    console.log("Expenses first time:", expenses, typeof expenses);
+    // console.log("Expenses first time:", expenses, typeof expenses);
     useEffect(() => {
         setFeedback(JSON.stringify(expenses));
     }, []);
@@ -36,10 +36,12 @@ const NewExpenseReportScreen = () => {
         setExpenseAmount(e.nativeEvent.text);
     };
 
-    const onSelectImagePress = () => launchImageLibrary({ mediaType: "photo" }, onImageSelect);
 
-    const onTakePhoto = () => launchCamera({ mediaType: "photo" }, onImageSelect);
-
+    const imagePickerCommonOptions =  { mediaType: "photo", maxWidth: 800, maxHeight: 600, includeBase64: true };
+    //@ts-ignore
+    const onSelectImagePress = () => launchImageLibrary(imagePickerCommonOptions, onImageSelect);
+    //@ts-ignore
+    const onTakePhoto = () => launchCamera(imagePickerCommonOptions, onImageSelect);
     const deletePhoto = () => setPhoto(undefined);
 
     const onImageSelect = async (media: any) => {
@@ -47,7 +49,6 @@ const NewExpenseReportScreen = () => {
 
         if (!media.didCancel && media.assets[0]) {
             const photo = media.assets[0];
-            console.log("photo: ", photo.uri);
             setPhoto(photo);
         }
     };
@@ -62,12 +63,20 @@ const NewExpenseReportScreen = () => {
             expense.amount = Number(expenseAmount);
             expense.date = expenseDate.toString();
             expense.timeStamp = new Date().toString();
+            expense.receiptPhotoBase64 = photo.base64;
             expenses.push(expense);
             dataContext.ExpenseReports.saveData(expenses);
             setExpenses(dataContext.ExpenseReports.getAllData());
             setFeedback(JSON.stringify(expenses));
         }
     };
+
+    const refreshData = () => {
+        console.log("Refreshing data");
+        setExpenses(dataContext.ExpenseReports.getAllData());
+    }
+
+    Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
     const clear = () => {
         dataContext.ExpenseReports.saveData([]);
@@ -142,7 +151,7 @@ const NewExpenseReportScreen = () => {
                     <Text></Text>
                 )}
                 <InputSideButton icon={"trash"} pressFunction={clear}></InputSideButton>
-                <Text>{feedback}</Text>
+                {/* <Text>{feedback}</Text> */}
             </ScrollView>
         </NativeBaseProvider>
     )

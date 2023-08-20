@@ -7,7 +7,8 @@ export class ExpenseReport extends BusinessDataTypeBase {
   date!: string;
   timeStamp!: string;
   amount!: number;
-  description?: string;    
+  description?: string;
+  receiptPhotoBase64!: string;
 
   static getDataContextKey = () => SaveConstants.expenseReport.key;
 
