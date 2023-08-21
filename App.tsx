@@ -20,9 +20,10 @@ import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar'
 import { faCalendarDay, faCalendarWeek, faCamera, faPlus, faTable, faTableCells, faTableCellsLarge, faTableColumns, faTableList, faTableTennis, faTimeline, faTrash, faUpload, faX } from '@fortawesome/free-solid-svg-icons';
 import NewEventScreen from './src/Screens/NewEventScreen';
 import EventHomeScreen from './src/Screens/EventHomeScreen';
+import { ThemeColors } from './src/lib/GlobalStyles';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
-  faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis, 
+  faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
   faTimeline, faCamera, faUpload, faX)
 
 const Stack = createNativeStackNavigator();
@@ -47,10 +48,19 @@ function App(): JSX.Element {
       <Stack.Navigator>
         <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} />
         <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEventScreen} />
-        <Stack.Screen name={Constants.Navigation.EventHome} component={EventHomeScreen} />
+        <Stack.Screen name={Constants.Navigation.EventHome} component={EventHomeScreen} options={commonOptions} />
       </Stack.Navigator>
     </NavigationContainer>
   );
+}
+
+const commonOptions = {
+  headerStyle: { 
+    backgroundColor: ThemeColors.primary 
+  },
+  backgroundColor: ThemeColors.primary,
+  statusBarColor: ThemeColors.primary,
+  headerTintColor: ThemeColors.white     
 }
 
 export default App;

@@ -30,6 +30,9 @@ const GlobalStyles = StyleSheet.create({
     // verticalAlign: 'middle',
     // textAlignVertical: 'center'    
   },  
+  flexRow: {
+    flexDirection: 'row'
+  },
   // Padding
   pl5: {
     paddingLeft: 5

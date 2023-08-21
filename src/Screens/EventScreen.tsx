@@ -11,32 +11,34 @@ import { useIsFocused } from '@react-navigation/native';
 
 const EventScreen = ({ route, navigation }: any) => {
     const event = route.params[0];
-    dataContext.setExpenseReportsKey(`${event?.id}_${event?.name}`);
 
     useEffect(() => {
-        dataContext.setExpenseReportsKey(`${event?.id}_${event?.name}`);
         useCustomHeader(navigation.getParent(), event.name, event.description);
+        dataContext.setExpenseReportsKey(`${event?.id}_${event?.name}`);    
         navigation.getParent().setOptions
         // setFeedback(JSON.stringify(reports));
     }, []);
 
     const [feedback, setFeedback] = useState('Feedback original state');
-    const [reports, setReports] = useState(dataContext.ExpenseReports.getAllData());
+    const [reports, setReports] = useState<ExpenseReport[]>();
 
-    const refreshData = () => {
+    const refreshData = async () => {
         console.log("Focused");
         setReports(dataContext.ExpenseReports.getAllData());
     };
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
-    console.log(reports.length)
+    console.log(reports?.length)
 
     return (
         <NativeBaseProvider>
             <GestureHandlerRootView>
                 <ScrollView>
                     {reports && reports.length && reports.map ? reports.map((report: ExpenseReport, index: number) => (
-                        <ExpenseDataRowComponent key={`homedatarow_${index}`} expense={report} onDelete={refreshData} navigation={navigation} index={index} />
+                        <View>
+
+                            <ExpenseDataRowComponent key={`homedatarow_${index}`} expense={report} onDelete={refreshData} navigation={navigation} index={index} />
+                        </View>
                     )) : (
                         <Text>Nessuna spesa trovata</Text>)}
                     <Text>

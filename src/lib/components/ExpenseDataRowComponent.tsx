@@ -53,25 +53,37 @@ export const ExpenseDataRowComponent = ({ expense: expense, onDelete, index, nav
         <GestureHandlerRootView>
             <Swipeable key={`swipable_${expense.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions}>
                 <Pressable key={`${index}`} onPress={goToExpense} style={({ pressed }) => [styles.container, { opacity: pressed ? 1 : 1 }]}>
-                    <HStack space={5}>
-                        <VStack space={2}>
-                            <Text style={[styles.day]}>{Utility.GetDay(expense.date as string)}</Text>
-                            <Text>{Utility.GetMonthShortName(expense.date as string)}</Text>
-                        </VStack>
-                        {Utility.IsNotNullOrUndefined(expense.receiptPhotoBase64) && (
-                            <Image alt='noimage' source={{ uri: imageUri }} style={[styles.image]} />
-                        )}
-                        {expense.description != undefined && expense.description.length ? (
-                            <VStack style={styles.expenseNameContainer}>
-                                <Text style={[styles.expenseName]}>{expense.name}</Text>
-                                <View style={{}}>
-                                    <Text style={[styles.expenseDescription]} numberOfLines={1}>{expense.description}</Text>
-                                </View>
+                    {/* <HStack space={0}> */}
+                    <View style={[GlobalStyles.flexRow, { flex: 1 }]}>
+                        <View style={[GlobalStyles.flexRow, { flex: 1 }]}>
+                            <VStack space={2}>
+                                <Text style={[styles.day]}>{Utility.GetDay(expense.date as string)}</Text>
+                                <Text>{Utility.GetMonthShortName(expense.date as string)}</Text>
                             </VStack>
-                        ) : (
-                            <Text style={[styles.expenseName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{expense.name}</Text>
-                        )}
-                    </HStack>
+                        </View>
+                        <View style={[GlobalStyles.flexRow, { flex: 1 }]}>
+                            {Utility.IsNotNullOrUndefined(expense.receiptPhotoBase64) && (
+                                <Image alt='noimage' source={{ uri: imageUri }} style={[styles.image]} />
+                            )}
+                        </View>
+                        <View style={[GlobalStyles.flexRow, { flex: 3 }]}>
+                            {expense.description != undefined && expense.description.length ? (
+                                <VStack style={styles.expenseNameContainer}>
+                                    <Text style={[styles.expenseName]}>{expense.name}</Text>
+                                    <View style={{}}>
+                                        <Text style={[styles.expenseDescription]} numberOfLines={1}>{expense.description}</Text>
+                                    </View>
+                                </VStack>
+                            ) : (
+                                <Text style={[styles.expenseName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{expense.name}</Text>
+                            )}
+                        </View>
+                        <View style={[GlobalStyles.flexRow, GlobalStyles.selfCenter, { flex: 1 }]}>
+                            <Text style={{ fontSize: 20 }}>{expense.amount}</Text>
+                        </View>
+                    </View>
+
+                    {/* </HStack> */}
                 </Pressable>
             </Swipeable>
         </GestureHandlerRootView>
@@ -80,8 +92,8 @@ export const ExpenseDataRowComponent = ({ expense: expense, onDelete, index, nav
 
 const styles = StyleSheet.create({
     container: {
-        maxWidth: '90%',
-        padding: 20,
+        maxWidth: '100%',
+        padding: 10,
         backgroundColor: ThemeColors.white
     },
     expenseNameContainer: {
@@ -129,8 +141,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     image: {
-        height: 50,
-        width: 50,
+        height: 25,
+        width: 25,
         marginRight: 10,
         alignSelf: 'center',
         // marginLeft: 20

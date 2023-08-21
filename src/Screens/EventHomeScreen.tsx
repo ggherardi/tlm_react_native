@@ -49,6 +49,7 @@ const EventHomeScreen = ({ navigation, route }: any) => {
 }
 
 const commonTabOptions: BottomTabNavigationOptions = {
+    lazy: true,
     headerShown: false,    
 }
 
