@@ -1,5 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FormControl, Input, NativeBaseProvider, Button, HStack, TextArea } from 'native-base';
+import { FormControl, Input, NativeBaseProvider, Button, HStack, TextArea, Select } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
@@ -10,6 +10,7 @@ import { Utility } from '../lib/Utility';
 import { TLMButtonComponent, TLMButtonType } from '../lib/components/TLMButtonComponent';
 import dataContext from '../lib/models/DataContext';
 import useCustomHeader from '../lib/components/CustomHeaderComponent';
+import { Currencies, Currency } from '../lib/data/Currencies';
 
 const NewEventScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData())
@@ -19,8 +20,9 @@ const NewEventScreen = ({ navigation }: any) => {
   const [eventStartDate, setEventStartDate] = useState(new Date());
   const [eventEndDate, setEventEndDate] = useState(new Date());
   const [setDateFunction, setSetDateFunction] = useState('');
+  const [currencies, setCurrencies] = useState<string[]>([]);
   const [feedback, setFeedback] = useState('Feedback original state');
-  
+
   useEffect(() => {
     useCustomHeader(navigation, "Crea nuovo evento");
   });
@@ -31,6 +33,10 @@ const NewEventScreen = ({ navigation }: any) => {
   const handleEventDescriptionChange = (e: any) => {
     setEventDescription(e.nativeEvent.text);
   };
+  const handleCurrencyAdd = (value: string) => {
+    currencies.push(value);
+    setCurrencies(currencies);
+  }
 
   const saveEvent = () => {
     let event: BusinessEvent = new BusinessEvent();
@@ -101,6 +107,16 @@ const NewEventScreen = ({ navigation }: any) => {
             }}
           />
         )}
+        <FormControl style={GlobalStyles.mt15}>
+          <FormControl.Label>Valute aggiuntive</FormControl.Label>
+        </FormControl>
+        <Select width={"100%"} onValueChange={handleCurrencyAdd}>
+          {Currencies && Currencies.length && Currencies.map(currency => {
+            return (
+              <Select.Item value={currency.code} label={`${currency.name} - ${currency.code} - ${currency.symbol}`} />
+            );
+          })}
+        </Select>
         <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
           <TLMButtonComponent title='Salva' buttonType={TLMButtonType.Primary} onPress={saveEvent}></TLMButtonComponent>
         </HStack>
