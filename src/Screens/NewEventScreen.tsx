@@ -11,6 +11,10 @@ import { TLMButtonComponent, TLMButtonType } from '../lib/components/TLMButtonCo
 import dataContext from '../lib/models/DataContext';
 import useCustomHeader from '../lib/components/CustomHeaderComponent';
 import { Currencies, Currency } from '../lib/data/Currencies';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import MultiSelectIconComponent from '../lib/components/MultiSelectIconsComponent';
 
 const NewEventScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData())
@@ -33,9 +37,9 @@ const NewEventScreen = ({ navigation }: any) => {
   const handleEventDescriptionChange = (e: any) => {
     setEventDescription(e.nativeEvent.text);
   };
-  const handleCurrencyAdd = (value: string) => {
-    currencies.push(value);
-    setCurrencies(currencies);
+  const handleCurrencyAdd = (items: any[]) => {
+    // currencies.push(value);
+    // setCurrencies(currencies);
   }
 
   const saveEvent = () => {
@@ -110,13 +114,18 @@ const NewEventScreen = ({ navigation }: any) => {
         <FormControl style={GlobalStyles.mt15}>
           <FormControl.Label>Valute aggiuntive</FormControl.Label>
         </FormControl>
-        <Select width={"100%"} onValueChange={handleCurrencyAdd}>
-          {Currencies && Currencies.length && Currencies.map(currency => {
-            return (
-              <Select.Item value={currency.code} label={`${currency.name} - ${currency.code} - ${currency.symbol}`} />
-            );
-          })}
-        </Select>
+        <View style={{ flex: 1, width: "100%" }}>          
+          <SectionedMultiSelect
+            items={Currencies}
+            uniqueKey="code"
+            showDropDowns={true}
+            onSelectedItemsChange={handleCurrencyAdd}
+            //@ts-ignore
+            IconRenderer={MultiSelectIconComponent}
+            selectText="Seleziona valute aggiuntive"
+            style={multiSelectStyle}  
+          />
+        </View>
         <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
           <TLMButtonComponent title='Salva' buttonType={TLMButtonType.Primary} onPress={saveEvent}></TLMButtonComponent>
         </HStack>
@@ -125,6 +134,15 @@ const NewEventScreen = ({ navigation }: any) => {
     </NativeBaseProvider>
   );
 };
+
+const multiSelectStyle = StyleSheet.create({
+  container: {
+    backgroundColor: "red"
+  },
+  confirmText: {
+    backgroundColor: "red"
+  }
+})
 
 const styles = StyleSheet.create({
   container: {
