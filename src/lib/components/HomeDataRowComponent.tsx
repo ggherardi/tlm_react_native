@@ -32,7 +32,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                 <View style={styles.swipedConfirmationContainer}>
                     <Text style={styles.deleteConfirmationText}>Vuoi cancellare l'evento?</Text>
                 </View>
-                <InputSideButton icon="trash" pressFunction={deleteEvent} iconStyle={{ color: ThemeColors.white }} stretchHeight={true} />
+                <InputSideButton icon="trash" pressFunction={deleteEvent} iconColor={ThemeColors.white}  stretchHeight={true} />
             </View>
         );
     };
@@ -47,19 +47,10 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
         ]);
     };
 
-    // let isPressed: Boolean = false;
-    // const handlePress = (pressed: Boolean) => {
-    //     isPressed = pressed;        
-    // };
-    // const pressableStyle = StyleSheet.create({ fontColor: { color: isPressed ? 'white' : 'gray' } });
-    const pressableStyle = StyleSheet.create({ });
-
     return (
         <GestureHandlerRootView>
             <Swipeable key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions}>
                 <Pressable key={`pressable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`}
-                    // onPressIn={() => handlePress(true)}
-                    // onPressOut={() => handlePress(false)}
                     onPress={goToEvent} style={({ pressed }) => [
                         styles.container, { backgroundColor: pressed ? ThemeColors.primary : ThemeColors.white }]}>
                     <Row>
@@ -74,11 +65,8 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                         </VStack>
                         {event.description != undefined && event.description.length ? (
                             <VStack style={styles.eventNameContainer}>
-                                <Text style={[styles.eventName, pressableStyle.fontColor]}>{event.name}</Text>
-                                <Text style={[styles.eventDescription, pressableStyle.fontColor, { flex: 1 }]} numberOfLines={1}>{event.description}</Text>
-                                {/* <View style={{ flexGrow: 1, flex: 1, width: 0 }}>
-                                    <Text style={[styles.eventDescription, { flex: 1 }]} numberOfLines={1}>{event.description}</Text>
-                                </View> */}
+                                <Text style={[styles.eventName]}>{event.name}</Text>
+                                <Text style={[styles.eventDescription, { flex: 1 }]} numberOfLines={1}>{event.description}</Text>
                             </VStack>
                         ) : (
                             <Text style={[styles.eventName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{event.name}</Text>
@@ -92,7 +80,8 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, flexWrap: 'wrap',
+        flex: 1, 
+        flexWrap: 'wrap',
         maxWidth: '100%',
         padding: 20,
         backgroundColor: ThemeColors.white
@@ -118,8 +107,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         paddingLeft: 5,
-        backgroundColor: '#d0342c',
-        margin: 20,
+        backgroundColor: '#d0342c',        
         minHeight: 50,
     },
     deleteConfirmationText: {

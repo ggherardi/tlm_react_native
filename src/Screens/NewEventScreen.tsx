@@ -9,12 +9,13 @@ import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { Utility } from '../lib/Utility';
 import { TLMButtonComponent, TLMButtonType } from '../lib/components/TLMButtonComponent';
 import dataContext from '../lib/models/DataContext';
-import useCustomHeader from '../lib/components/CustomHeaderComponent';
+import useCustomHeader, { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
 import { Currencies, Currency } from '../lib/data/Currencies';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import MultiSelectIconComponent from '../lib/components/MultiSelectIconsComponent';
+import { Constants } from '../lib/Constants';
 
 const NewEventScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData())
@@ -26,9 +27,10 @@ const NewEventScreen = ({ navigation }: any) => {
   const [setDateFunction, setSetDateFunction] = useState('');
   const [currencies, setCurrencies] = useState<string[]>([]);
   const [feedback, setFeedback] = useState('Feedback original state');
+  const [isFormValid, setIsFormValid] = useState(true);
 
   useEffect(() => {
-    useCustomHeader(navigation, "Crea nuovo evento");
+    useCustomHeaderSaveButton(navigation, "Crea nuovo evento", () => saveEvent(), undefined, !isFormValid);    
   });
 
   const handleEventNameChange = (e: any) => {
@@ -37,12 +39,12 @@ const NewEventScreen = ({ navigation }: any) => {
   const handleEventDescriptionChange = (e: any) => {
     setEventDescription(e.nativeEvent.text);
   };
-  const handleCurrencyAdd = (items: any[]) => {
-    // currencies.push(value);
-    // setCurrencies(currencies);
+  const handleCurrencyAdd = (items: string[]) => {
+    setCurrencies(items);
   }
 
   const saveEvent = () => {
+    console.log("TEST");
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
@@ -52,6 +54,7 @@ const NewEventScreen = ({ navigation }: any) => {
     event.endDate = eventEndDate.toString();
     events.push(event);
     dataContext.Events.saveData(events);
+    navigation.navigate(Constants.Navigation.Home)
   };
 
   return (
@@ -118,18 +121,14 @@ const NewEventScreen = ({ navigation }: any) => {
           <SectionedMultiSelect
             items={Currencies}
             uniqueKey="code"
-            showDropDowns={true}
+            selectedItems={currencies}
             onSelectedItemsChange={handleCurrencyAdd}
             //@ts-ignore
             IconRenderer={MultiSelectIconComponent}
             selectText="Seleziona valute aggiuntive"
-            style={multiSelectStyle}  
+            // style={multiSelectStyle}  
           />
         </View>
-        <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
-          <TLMButtonComponent title='Salva' buttonType={TLMButtonType.Primary} onPress={saveEvent}></TLMButtonComponent>
-        </HStack>
-        <Text>{feedback}</Text>
       </ScrollView>
     </NativeBaseProvider>
   );
