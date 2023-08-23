@@ -30,7 +30,7 @@ const NewEventScreen = ({ navigation }: any) => {
   const [isFormValid, setIsFormValid] = useState(true);
 
   useEffect(() => {
-    useCustomHeaderSaveButton(navigation, "Crea nuovo evento", () => saveEvent(), undefined, !isFormValid);    
+    useCustomHeaderSaveButton(navigation, "Crea nuovo evento", () => saveEvent(), undefined, !isFormValid);
   });
 
   const handleEventNameChange = (e: any) => {
@@ -117,7 +117,7 @@ const NewEventScreen = ({ navigation }: any) => {
         <FormControl style={GlobalStyles.mt15}>
           <FormControl.Label>Valute aggiuntive</FormControl.Label>
         </FormControl>
-        <View style={{ flex: 1, width: "100%" }}>          
+        <View style={{ flex: 1, width: "100%" }}>
           <SectionedMultiSelect
             items={Currencies}
             uniqueKey="code"
@@ -126,7 +126,9 @@ const NewEventScreen = ({ navigation }: any) => {
             //@ts-ignore
             IconRenderer={MultiSelectIconComponent}
             selectText="Seleziona valute aggiuntive"
-            // style={multiSelectStyle}  
+            styles={multiSelectStyle}
+            searchPlaceholderText='Cerca valuta'
+            confirmText='Conferma'            
           />
         </View>
       </ScrollView>
@@ -135,11 +137,25 @@ const NewEventScreen = ({ navigation }: any) => {
 };
 
 const multiSelectStyle = StyleSheet.create({
-  container: {
-    backgroundColor: "red"
+  itemText: { 
+    fontWeight: '100', 
+    fontSize: 15 
   },
-  confirmText: {
-    backgroundColor: "red"
+  listContainer: { 
+    backgroundColor: "red" 
+  },
+  selectToggle: {
+    borderColor: '#d4d4d4',    
+    borderRadius: 4,
+    borderWidth: 1,
+    marginTop: 5,
+    marginBottom: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 12,    
+  },
+  selectToggleText: {
+    color: '#d4d4d4',
+    fontSize: 15,
   }
 })
 

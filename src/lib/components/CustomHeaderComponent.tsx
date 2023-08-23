@@ -60,24 +60,12 @@ const CustomHeaderSaveButtonComponent = ({ title, subtitle, onSave, isDisabled }
 const useCustomHeader = (navigation: any, title: string, subtitle?: string) => {
     navigation.setOptions({
         headerTitle: () => <BaseCustomHeaderComponent title={title} subtitle={subtitle} />,
-        backgroundColor: ThemeColors.primary,
-        statusBarColor: ThemeColors.primary,
-        headerStyle: {
-            backgroundColor: ThemeColors.primary
-        },
-        headerTintColor: ThemeColors.white
     })
 }
 
 export const useCustomHeaderSaveButton = (navigation: any, title: string, onSave: Function, subtitle?: string, isDisabled?: boolean) => {
     navigation.setOptions({
         headerTitle: () => <CustomHeaderSaveButtonComponent title={title} subtitle={subtitle} onSave={onSave as Function} isDisabled={isDisabled as boolean} />,
-        backgroundColor: ThemeColors.primary,
-        statusBarColor: ThemeColors.primary,
-        headerStyle: {
-            backgroundColor: ThemeColors.primary
-        },
-        headerTintColor: ThemeColors.white
     })
 }
 

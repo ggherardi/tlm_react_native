@@ -20,7 +20,7 @@ const GlobalStyles = StyleSheet.create({
   },
   // Icons
   iconPrimary: {
-    color: ThemeColors.primary,
+    // color: ThemeColors.primary,
     padding: 10
   },
   // Positioning

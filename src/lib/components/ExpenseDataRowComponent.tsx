@@ -31,7 +31,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, onDelete, index, nav
                 <View style={styles.swipedConfirmationContainer}>
                     <Text style={styles.deleteConfirmationText}>Vuoi cancellare la spesa?</Text>
                 </View>
-                <InputSideButton icon="trash" pressFunction={deleteExpense} iconStyle={{ color: ThemeColors.white }} stretchHeight={true} />
+                <InputSideButton icon="trash" pressFunction={deleteExpense} iconColor={ThemeColors.white} stretchHeight={true} />
             </View>
         );
     };
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: 5,
         backgroundColor: '#d0342c',
-        margin: 20,
+        // margin: 20,
         minHeight: 50,
     },
     deleteConfirmationText: {

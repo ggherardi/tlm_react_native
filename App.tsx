@@ -47,8 +47,8 @@ function App(): JSX.Element {
   return (
     <NavigationContainer theme={TLMTheme}>
       <Stack.Navigator>
-        <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} />
-        <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEventScreen} />
+        <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} options={commonOptions} />
+        <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEventScreen} options={commonOptions} />
         <Stack.Screen name={Constants.Navigation.EventHome} component={EventHomeScreen} options={commonOptions} />
       </Stack.Navigator>
     </NavigationContainer>

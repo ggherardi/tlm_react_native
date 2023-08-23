@@ -36,7 +36,6 @@ const EventScreen = ({ route, navigation }: any) => {
                 <ScrollView>
                     {reports && reports.length && reports.map ? reports.map((report: ExpenseReport, index: number) => (
                         <View>
-
                             <ExpenseDataRowComponent key={`homedatarow_${index}`} expense={report} onDelete={refreshData} navigation={navigation} index={index} />
                         </View>
                     )) : (

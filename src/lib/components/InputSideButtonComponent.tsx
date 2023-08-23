@@ -17,18 +17,18 @@ interface IInputSideButtonProps {
   isDisabled?: boolean;
 }
 
-export const InputSideButton = ({ pressFunction, icon, iconColor = ThemeColors.primary, iconStyle, stretchHeight, text, size, isDisabled = false }: IInputSideButtonProps) => (  
-  <Pressable onPress={() => pressFunction()} style={({ pressed }) => [{ 
-    opacity: pressed ? 0.2 : 1, 
-    height: stretchHeight ? "100%" : "auto" }, styles.btnBox]} disabled={isDisabled}>
+export const InputSideButton = ({ pressFunction, icon, iconColor = ThemeColors.primary, iconStyle, stretchHeight, text, size, isDisabled = false }: IInputSideButtonProps) => (
+  <Pressable onPress={() => pressFunction()} style={({ pressed }) => [{
+    opacity: pressed ? 0.2 : 1,
+    height: stretchHeight ? "100%" : "auto"
+  }, styles.btnBox]} disabled={isDisabled}>
     <View style={[GlobalStyles.flexRow]}>
       {Utility.IsNotNullOrUndefined(text) && (
         <Text style={{ paddingRight: 10 }}>{text}</Text>
       )}
-      <FontAwesomeIcon style={[iconStyle ? iconStyle : GlobalStyles.iconPrimary, { color: isDisabled ? 'gray' : iconColor } ]} icon={icon} size={size ? size : 20} />
+      <FontAwesomeIcon style={[iconStyle ? iconStyle : GlobalStyles.iconPrimary, { color: isDisabled ? 'gray' : iconColor }]} icon={icon} size={size ? size : 20} />
     </View>
-  </Pressable>
-);
+  </Pressable>);
 
 const styles = StyleSheet.create({
   btnBox: {
