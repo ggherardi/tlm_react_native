@@ -8,6 +8,7 @@ import { ExpenseDataRowComponent } from '../lib/components/ExpenseDataRowCompone
 import { Utility } from '../lib/Utility';
 import { ExpenseReport } from '../lib/models/ExpenseReport';
 import { useIsFocused } from '@react-navigation/native';
+import GlobalStyles from '../lib/GlobalStyles';
 
 const EventScreen = ({ route, navigation }: any) => {
     const event = route.params[0];
@@ -33,10 +34,10 @@ const EventScreen = ({ route, navigation }: any) => {
     return (
         <NativeBaseProvider>
             <GestureHandlerRootView>
-                <ScrollView>
+                <ScrollView contentContainerStyle={[GlobalStyles.container]}>
                     {reports && reports.length && reports.map ? reports.map((report: ExpenseReport, index: number) => (
-                        <View>
-                            <ExpenseDataRowComponent key={`homedatarow_${index}`} expense={report} onDelete={refreshData} navigation={navigation} index={index} />
+                        <View key={`homedatarow_${index}_${Utility.GenerateRandomGuid()}`}>
+                            <ExpenseDataRowComponent expense={report} onDelete={refreshData} navigation={navigation} index={index} />
                         </View>
                     )) : (
                         <Text>Nessuna spesa trovata</Text>)}

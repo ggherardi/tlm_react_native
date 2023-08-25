@@ -3,17 +3,13 @@ import { FormControl, Input, NativeBaseProvider, Button, HStack, TextArea, Selec
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
-import { SaveConstants, Storage } from '../lib/DataStorage';
 import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { Utility } from '../lib/Utility';
-import { TLMButtonComponent, TLMButtonType } from '../lib/components/TLMButtonComponent';
 import dataContext from '../lib/models/DataContext';
-import useCustomHeader, { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
+import { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
 import { Currencies, Currency } from '../lib/data/Currencies';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import MultiSelectIconComponent from '../lib/components/MultiSelectIconsComponent';
 import { Constants } from '../lib/Constants';
 
@@ -25,6 +21,7 @@ const NewEventScreen = ({ navigation }: any) => {
   const [eventStartDate, setEventStartDate] = useState(new Date());
   const [eventEndDate, setEventEndDate] = useState(new Date());
   const [setDateFunction, setSetDateFunction] = useState('');
+  const [mainCurrency, setMainCurrency] = useState('EUR');
   const [currencies, setCurrencies] = useState<string[]>([]);
   const [feedback, setFeedback] = useState('Feedback original state');
   const [isFormValid, setIsFormValid] = useState(true);
@@ -33,22 +30,18 @@ const NewEventScreen = ({ navigation }: any) => {
     useCustomHeaderSaveButton(navigation, "Crea nuovo evento", () => saveEvent(), undefined, !isFormValid);
   });
 
-  const handleEventNameChange = (e: any) => {
-    setEventName(e.nativeEvent.text);
-  };
-  const handleEventDescriptionChange = (e: any) => {
-    setEventDescription(e.nativeEvent.text);
-  };
-  const handleCurrencyAdd = (items: string[]) => {
-    setCurrencies(items);
-  }
+  const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);
+  const handleEventDescriptionChange = (e: any) => setEventDescription(e.nativeEvent.text);
+  const handleCurrencyAdd = (items: string[]) => setCurrencies(items);
+  const handleMainCurrencyChange = (value: any) => setMainCurrency(value);
 
   const saveEvent = () => {
-    console.log("TEST");
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
     event.name = eventName.trim();
+    event.mainCurrency = mainCurrency;
+    event.currencies = currencies;
     event.description = eventDescription.trim();
     event.startDate = eventStartDate.toString();
     event.endDate = eventEndDate.toString();
@@ -114,6 +107,14 @@ const NewEventScreen = ({ navigation }: any) => {
             }}
           />
         )}
+        <FormControl style={GlobalStyles.mt15} isRequired>
+          <FormControl.Label>Valuta principale</FormControl.Label>
+        </FormControl>
+        <Select width={"100%"} onValueChange={handleMainCurrencyChange} selectedValue={mainCurrency}>
+          {Currencies && Currencies.length && Currencies.map(currency => (
+            <Select.Item key={`select_item_${currency.code}`} label={currency.name} value={currency.code} />
+          ))}          
+        </Select>
         <FormControl style={GlobalStyles.mt15}>
           <FormControl.Label>Valute aggiuntive</FormControl.Label>
         </FormControl>
@@ -128,7 +129,8 @@ const NewEventScreen = ({ navigation }: any) => {
             selectText="Seleziona valute aggiuntive"
             styles={multiSelectStyle}
             searchPlaceholderText='Cerca valuta'
-            confirmText='Conferma'            
+            confirmText='Conferma'
+            selectedText='selezionate'
           />
         </View>
       </ScrollView>
@@ -137,21 +139,21 @@ const NewEventScreen = ({ navigation }: any) => {
 };
 
 const multiSelectStyle = StyleSheet.create({
-  itemText: { 
-    fontWeight: '100', 
-    fontSize: 15 
+  itemText: {
+    fontWeight: '100',
+    fontSize: 15
   },
-  listContainer: { 
-    backgroundColor: "red" 
+  listContainer: {
+    backgroundColor: "red"
   },
   selectToggle: {
-    borderColor: '#d4d4d4',    
+    borderColor: '#d4d4d4',
     borderRadius: 4,
     borderWidth: 1,
     marginTop: 5,
     marginBottom: 15,
     paddingHorizontal: 10,
-    paddingVertical: 12,    
+    paddingVertical: 12,
   },
   selectToggleText: {
     color: '#d4d4d4',
@@ -160,12 +162,8 @@ const multiSelectStyle = StyleSheet.create({
 })
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+  container: {    
     padding: 20,
-    backgroundColor: 'white',
   },
   title: {
     fontSize: 30,

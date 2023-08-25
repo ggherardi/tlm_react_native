@@ -93,7 +93,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, onDelete, index, nav
 const styles = StyleSheet.create({
     container: {
         maxWidth: '100%',
-        padding: 10,
+        paddingBottom: 10,
         backgroundColor: ThemeColors.white
     },
     expenseNameContainer: {

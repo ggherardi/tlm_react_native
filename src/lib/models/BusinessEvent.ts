@@ -8,6 +8,7 @@ export class BusinessEvent extends BusinessDataTypeBase {
   startDate?: string;
   endDate?: string;
   currencies?: string[];
+  mainCurrency?: string;
 
   static getDataContextKey = () => SaveConstants.events.key;
 

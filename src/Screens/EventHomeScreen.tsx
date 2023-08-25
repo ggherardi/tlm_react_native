@@ -7,6 +7,7 @@ import NewExpenseReportScreen from './NewExpenseReportScreen';
 import { ThemeColors } from '../lib/GlobalStyles';
 import EventHistoryScreen from './EventHistoryScreen';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import EventSettingsScreen from './EventSettingsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -41,8 +42,8 @@ const EventHomeScreen = ({ navigation, route }: any) => {
                 component={NewExpenseReportScreen}
                 options={commonTabOptions}></Tab.Screen>
             <Tab.Screen
-                name={Constants.Navigation.EventHistoryScreen}
-                component={EventHistoryScreen}                
+                name={Constants.Navigation.EventSettingsScreen}
+                component={EventSettingsScreen}                
                 options={commonTabOptions}></Tab.Screen>
         </Tab.Navigator>
     )
