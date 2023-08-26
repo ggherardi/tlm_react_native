@@ -7,15 +7,17 @@ import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler'
 import { InputSideButton } from './InputSideButtonComponent';
 import dataContext from '../models/DataContext';
 import GlobalStyles, { ThemeColors } from '../GlobalStyles';
+import { BusinessEvent } from '../models/BusinessEvent';
 
 interface IExpenseDataRow {
     expense: ExpenseReport;
+    event: BusinessEvent;
     onDelete: Function;
     index: number;
     navigation: any;
 }
 
-export const ExpenseDataRowComponent = ({ expense: expense, onDelete, index, navigation }: IExpenseDataRow) => {
+export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, index, navigation }: IExpenseDataRow) => {
     const goToExpense = () => {
         // navigation.navigate(Constants.Navigation.EventHome, { expense: expense });
     };
@@ -79,7 +81,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, onDelete, index, nav
                             )}
                         </View>
                         <View style={[GlobalStyles.flexRow, GlobalStyles.selfCenter, { flex: 1 }]}>
-                            <Text style={{ fontSize: 20 }}>{expense.amount}</Text>
+                            <Text style={{ fontSize: 20 }}>{expense.amount}{event.mainCurrency?.symbol}</Text>
                         </View>
                     </View>
 
@@ -93,7 +95,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, onDelete, index, nav
 const styles = StyleSheet.create({
     container: {
         maxWidth: '100%',
-        paddingBottom: 10,
+        padding: 10,
         backgroundColor: ThemeColors.white
     },
     expenseNameContainer: {

@@ -1,4 +1,5 @@
 import { SaveConstants } from '../DataStorage';
+import { Currency } from '../data/Currencies';
 import { BusinessDataTypeBase } from './BusinessDataTypeBase';
 
 export class BusinessEvent extends BusinessDataTypeBase {  
@@ -7,8 +8,8 @@ export class BusinessEvent extends BusinessDataTypeBase {
   description?: string;
   startDate?: string;
   endDate?: string;
-  currencies?: string[];
-  mainCurrency?: string;
+  currencies?: (Currency | undefined)[];
+  mainCurrency?: Currency | undefined;
 
   static getDataContextKey = () => SaveConstants.events.key;
 

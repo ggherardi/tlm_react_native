@@ -37,7 +37,7 @@ const EventScreen = ({ route, navigation }: any) => {
                 <ScrollView contentContainerStyle={[GlobalStyles.container]}>
                     {reports && reports.length && reports.map ? reports.map((report: ExpenseReport, index: number) => (
                         <View key={`homedatarow_${index}_${Utility.GenerateRandomGuid()}`}>
-                            <ExpenseDataRowComponent expense={report} onDelete={refreshData} navigation={navigation} index={index} />
+                            <ExpenseDataRowComponent expense={report} event={event} onDelete={refreshData} navigation={navigation} index={index} />
                         </View>
                     )) : (
                         <Text>Nessuna spesa trovata</Text>)}

@@ -8,7 +8,7 @@ import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { Utility } from '../lib/Utility';
 import dataContext from '../lib/models/DataContext';
 import { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
-import { Currencies, Currency } from '../lib/data/Currencies';
+import { Currencies, Currency, GetCurrencies, GetCurrency } from '../lib/data/Currencies';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import MultiSelectIconComponent from '../lib/components/MultiSelectIconsComponent';
 import { Constants } from '../lib/Constants';
@@ -21,8 +21,8 @@ const NewEventScreen = ({ navigation }: any) => {
   const [eventStartDate, setEventStartDate] = useState(new Date());
   const [eventEndDate, setEventEndDate] = useState(new Date());
   const [setDateFunction, setSetDateFunction] = useState('');
-  const [mainCurrency, setMainCurrency] = useState('EUR');
-  const [currencies, setCurrencies] = useState<string[]>([]);
+  const [mainCurrencyCode, setMainCurrencyCode] = useState('EUR');
+  const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
   const [feedback, setFeedback] = useState('Feedback original state');
   const [isFormValid, setIsFormValid] = useState(true);
 
@@ -32,16 +32,16 @@ const NewEventScreen = ({ navigation }: any) => {
 
   const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);
   const handleEventDescriptionChange = (e: any) => setEventDescription(e.nativeEvent.text);
-  const handleCurrencyAdd = (items: string[]) => setCurrencies(items);
-  const handleMainCurrencyChange = (value: any) => setMainCurrency(value);
+  const handleCurrencyAdd = (items: string[]) => setCurrenciesCodes(items);
+  const handleMainCurrencyChange = (value: any) => setMainCurrencyCode(value);
 
   const saveEvent = () => {
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
     event.name = eventName.trim();
-    event.mainCurrency = mainCurrency;
-    event.currencies = currencies;
+    event.mainCurrency = GetCurrency(mainCurrencyCode);
+    event.currencies = GetCurrencies(currenciesCodes);
     event.description = eventDescription.trim();
     event.startDate = eventStartDate.toString();
     event.endDate = eventEndDate.toString();
@@ -110,7 +110,7 @@ const NewEventScreen = ({ navigation }: any) => {
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Valuta principale</FormControl.Label>
         </FormControl>
-        <Select width={"100%"} onValueChange={handleMainCurrencyChange} selectedValue={mainCurrency}>
+        <Select width={"100%"} onValueChange={handleMainCurrencyChange} selectedValue={mainCurrencyCode}>
           {Currencies && Currencies.length && Currencies.map(currency => (
             <Select.Item key={`select_item_${currency.code}`} label={currency.name} value={currency.code} />
           ))}          
@@ -122,7 +122,7 @@ const NewEventScreen = ({ navigation }: any) => {
           <SectionedMultiSelect
             items={Currencies}
             uniqueKey="code"
-            selectedItems={currencies}
+            selectedItems={currenciesCodes}
             onSelectedItemsChange={handleCurrencyAdd}
             //@ts-ignore
             IconRenderer={MultiSelectIconComponent}

@@ -10,7 +10,7 @@ export const ThemeColors = {
 const GlobalStyles = StyleSheet.create({
   // Common components styles
   container: {
-    padding: 20
+    padding: 10
   },
   // Colors
   colorPrimary: {

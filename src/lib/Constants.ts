@@ -6,6 +6,6 @@ export class Constants {
     Event: 'Nota spese',
     NewExpenseReport: 'Nuova spesa',
     EventHistoryScreen: 'History',
-    EventSettingsScreen: 'EventSettings',
+    EventSettingsScreen: 'Impostazioni',
   }
 }

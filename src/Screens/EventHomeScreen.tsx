@@ -23,8 +23,8 @@ const EventHomeScreen = ({ navigation, route }: any) => {
                     case Constants.Navigation.NewExpenseReport:
                         tabIcon = "plus";
                     break;
-                    case Constants.Navigation.EventHistoryScreen:
-                        tabIcon = "timeline";
+                    case Constants.Navigation.EventSettingsScreen:
+                        tabIcon = "cog";
                     break;
                 }
                 return <FontAwesomeIcon icon={tabIcon} color={focused ? ThemeColors.primary : ThemeColors.inactive} />
@@ -43,7 +43,8 @@ const EventHomeScreen = ({ navigation, route }: any) => {
                 options={commonTabOptions}></Tab.Screen>
             <Tab.Screen
                 name={Constants.Navigation.EventSettingsScreen}
-                component={EventSettingsScreen}                
+                component={EventSettingsScreen}         
+                initialParams={[route.params.event]}       
                 options={commonTabOptions}></Tab.Screen>
         </Tab.Navigator>
     )

@@ -32,7 +32,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                 <View style={styles.swipedConfirmationContainer}>
                     <Text style={styles.deleteConfirmationText}>Vuoi cancellare l'evento?</Text>
                 </View>
-                <InputSideButton icon="trash" pressFunction={deleteEvent} iconColor={ThemeColors.white}  stretchHeight={true} />
+                <InputSideButton icon="trash" pressFunction={deleteEvent} iconColor={ThemeColors.white} stretchHeight={true} />
             </View>
         );
     };
@@ -66,7 +66,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                         {event.description != undefined && event.description.length ? (
                             <VStack style={styles.eventNameContainer}>
                                 <Text style={[styles.eventName]}>{event.name}</Text>
-                                <Text style={[styles.eventDescription, { flex: 1 }]} numberOfLines={1}>{event.description}</Text>
+                                <Text style={[styles.eventDescription]} numberOfLines={1}>{event.description}</Text>
                             </VStack>
                         ) : (
                             <Text style={[styles.eventName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{event.name}</Text>
@@ -80,10 +80,10 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, 
+        flex: 1,
         flexWrap: 'wrap',
         maxWidth: '100%',
-        padding: 20,
+        padding: 10,
         backgroundColor: ThemeColors.white
     },
     eventNameContainer: {
@@ -99,15 +99,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     eventDescription: {
-        maxWidth: '100%',
-        flex: 1
+        // maxWidth: '100%',
+        // flex: 1
     },
     swipedRow: {
         flexDirection: 'row',
         flex: 1,
         alignItems: 'center',
         paddingLeft: 5,
-        backgroundColor: '#d0342c',        
+        backgroundColor: '#d0342c',
         minHeight: 50,
     },
     deleteConfirmationText: {

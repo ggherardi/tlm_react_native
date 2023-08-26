@@ -1,3 +1,11 @@
+export const GetCurrencies = (codes: string[]): (Currency | undefined)[] => {
+    return codes.map(c => GetCurrency(c));
+}
+
+export const GetCurrency = (code: string): Currency | undefined => {
+    return Currencies.find(c => c.code == code);
+}
+
 export class Currency {
   objectId?: string;
   countries?: string[];

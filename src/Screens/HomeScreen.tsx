@@ -29,7 +29,7 @@ const HomeScreen = ({ navigation }: any) => {
 
   return (
     <NativeBaseProvider>
-      <ScrollView contentContainerStyle={{ backgroundColor: 'white' }}>
+      <ScrollView contentContainerStyle={[GlobalStyles.container]}>
         {events && events.length && events.map ? events.map((event: BusinessEvent, index: number) => (
           <HomeDataRowComponent key={`homedatarow_${index}`} event={event} onDelete={refreshData} navigation={navigation} index={index} />
         )) : (
