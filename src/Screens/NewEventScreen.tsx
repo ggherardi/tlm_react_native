@@ -26,9 +26,7 @@ const NewEventScreen = ({ navigation }: any) => {
   const [countriesCodes, setCountriesCodes] = useState<string[]>([]);
   const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
   const [isFormValid, setIsFormValid] = useState(true);
-
-  console.log(showDateTimePicker);
-
+  
   useEffect(() => {
     useCustomHeaderSaveButton(navigation, "Crea nuovo evento", () => saveEvent(), undefined, !isFormValid);
   });
@@ -74,7 +72,6 @@ const NewEventScreen = ({ navigation }: any) => {
                 iconStyle={GlobalStyles.iconPrimary}
                 pressFunction={() => {
                   setShowDateTimePicker(true);
-                  console.log("Launching start date");
                   setSetDateFunction('setEventStartDate');
                 }}
               />
@@ -93,7 +90,6 @@ const NewEventScreen = ({ navigation }: any) => {
                 iconStyle={GlobalStyles.iconPrimary}
                 pressFunction={() => {
                   setShowDateTimePicker(true);
-                  console.log("Launching end date");
                   setSetDateFunction('setEventEndDate');
                 }}
               />
@@ -107,7 +103,6 @@ const NewEventScreen = ({ navigation }: any) => {
             display="spinner"
             value={new Date()}
             onChange={(event, date) => {
-              console.log("Function: ", setDateFunction);
               setShowDateTimePicker(false);
               const func = setDateFunction == 'setEventEndDate' ? setEventEndDate : setEventStartDate;
               func(date as Date);

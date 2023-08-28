@@ -52,7 +52,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
             <Swipeable key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions}>
                 <Pressable key={`pressable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`}
                     onPress={goToEvent} style={({ pressed }) => [
-                        styles.container, { backgroundColor: pressed ? ThemeColors.primary : ThemeColors.white }]}>
+                        styles.container, { backgroundColor: pressed ? ThemeColors.selected : ThemeColors.white }]}>
                     <Row>
                         <VStack style={[styles.dateContainer, GlobalStyles.selfCenter]}>
                             <Text style={[styles.day]}>{Utility.ToDate(event.startDate as string).getFullYear()}</Text>
