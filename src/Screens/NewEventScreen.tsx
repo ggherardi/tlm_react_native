@@ -12,6 +12,7 @@ import { Currencies, Currency, GetCurrencies, GetCurrency } from '../lib/data/Cu
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import MultiSelectIconComponent from '../lib/components/MultiSelectIconsComponent';
 import { Constants } from '../lib/Constants';
+import { Countries, GetCountries, GetCountry } from '../lib/data/Countries';
 
 const NewEventScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData())
@@ -22,6 +23,7 @@ const NewEventScreen = ({ navigation }: any) => {
   const [eventEndDate, setEventEndDate] = useState(new Date());
   const [setDateFunction, setSetDateFunction] = useState('');
   const [mainCurrencyCode, setMainCurrencyCode] = useState('EUR');
+  const [countriesCodes, setCountriesCodes] = useState<string[]>([]);
   const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
   const [feedback, setFeedback] = useState('Feedback original state');
   const [isFormValid, setIsFormValid] = useState(true);
@@ -34,6 +36,7 @@ const NewEventScreen = ({ navigation }: any) => {
   const handleEventDescriptionChange = (e: any) => setEventDescription(e.nativeEvent.text);
   const handleCurrencyAdd = (items: string[]) => setCurrenciesCodes(items);
   const handleMainCurrencyChange = (value: any) => setMainCurrencyCode(value);
+  const handleCountryChange = (items: string[]) => setCountriesCodes(items);
 
   const saveEvent = () => {
     let event: BusinessEvent = new BusinessEvent();
@@ -42,6 +45,7 @@ const NewEventScreen = ({ navigation }: any) => {
     event.name = eventName.trim();
     event.mainCurrency = GetCurrency(mainCurrencyCode);
     event.currencies = GetCurrencies(currenciesCodes);
+    event.country = GetCountry(countriesCodes && countriesCodes && countriesCodes.length ? countriesCodes[0] : '');
     event.description = eventDescription.trim();
     event.startDate = eventStartDate.toString();
     event.endDate = eventEndDate.toString();
@@ -57,10 +61,7 @@ const NewEventScreen = ({ navigation }: any) => {
           <FormControl.Label>Nome dell'evento</FormControl.Label>
           <Input placeholder="Nome evento" onChange={handleEventNameChange}></Input>
         </FormControl>
-        <FormControl style={GlobalStyles.mt15}>
-          <FormControl.Label>Descrizione dell'evento</FormControl.Label>
-          <TextArea placeholder="Descrizione breve dell'evento" onChange={handleEventDescriptionChange} autoCompleteType={true}></TextArea>
-        </FormControl>
+
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
           <Input
@@ -78,6 +79,7 @@ const NewEventScreen = ({ navigation }: any) => {
             }
           />
         </FormControl>
+
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Data di fine dell'evento</FormControl.Label>
           <Input
@@ -95,6 +97,7 @@ const NewEventScreen = ({ navigation }: any) => {
             }
           />
         </FormControl>
+
         {showDateTimePicker && (
           <DateTimePicker
             mode="date"
@@ -107,6 +110,7 @@ const NewEventScreen = ({ navigation }: any) => {
             }}
           />
         )}
+
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Valuta principale</FormControl.Label>
         </FormControl>
@@ -115,6 +119,31 @@ const NewEventScreen = ({ navigation }: any) => {
             <Select.Item key={`select_item_${currency.code}`} label={currency.name} value={currency.code} />
           ))}          
         </Select>
+
+        <FormControl style={GlobalStyles.mt15}>
+          <FormControl.Label>Paese</FormControl.Label>
+        </FormControl>
+        <View style={{ flex: 1, width: "100%" }}>
+          <SectionedMultiSelect 
+            single={true}
+            items={Countries}
+            uniqueKey="code"
+            selectedItems={countriesCodes}
+            onSelectedItemsChange={handleCountryChange}
+            //@ts-ignore
+            IconRenderer={MultiSelectIconComponent}
+            selectText="Seleziona paese"
+            styles={{ ...multiSelectStyle, selectToggleText: { color: 'black', fontSize: 12 } }}
+            searchPlaceholderText='Cerca paese'
+            confirmText='Conferma'            
+          />
+        </View>
+
+        <FormControl style={GlobalStyles.mt15}>
+          <FormControl.Label>Descrizione dell'evento</FormControl.Label>
+          <TextArea placeholder="Descrizione breve dell'evento" onChange={handleEventDescriptionChange} autoCompleteType={true}></TextArea>
+        </FormControl>
+
         <FormControl style={GlobalStyles.mt15}>
           <FormControl.Label>Valute aggiuntive</FormControl.Label>
         </FormControl>
@@ -133,6 +162,7 @@ const NewEventScreen = ({ navigation }: any) => {
             selectedText='selezionate'
           />
         </View>
+
       </ScrollView>
     </NativeBaseProvider>
   );

@@ -1,4 +1,5 @@
 import { SaveConstants } from '../DataStorage';
+import { Country } from '../data/Countries';
 import { Currency } from '../data/Currencies';
 import { BusinessDataTypeBase } from './BusinessDataTypeBase';
 
@@ -8,6 +9,7 @@ export class BusinessEvent extends BusinessDataTypeBase {
   description?: string;
   startDate?: string;
   endDate?: string;
+  country?: Country;
   currencies?: (Currency | undefined)[];
   mainCurrency?: Currency | undefined;
 

@@ -63,10 +63,10 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                             <Text style={[styles.day]}>{Utility.GetDay(event.endDate as string)}</Text>
                             <Text>{Utility.GetMonthShortName(event.endDate as string)}</Text>
                         </VStack>
-                        {event.description != undefined && event.description.length ? (
+                        {event.country != undefined ? (
                             <VStack style={styles.eventNameContainer}>
                                 <Text style={[styles.eventName]}>{event.name}</Text>
-                                <Text style={[styles.eventDescription]} numberOfLines={1}>{event.description}</Text>
+                                <Text style={[styles.eventDescription]} numberOfLines={1}>{event.country?.name}</Text>
                             </VStack>
                         ) : (
                             <Text style={[styles.eventName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{event.name}</Text>

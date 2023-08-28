@@ -3,7 +3,7 @@ export const GetCurrencies = (codes: string[]): (Currency | undefined)[] => {
 }
 
 export const GetCurrency = (code: string): Currency | undefined => {
-    return Currencies.find(c => c.code == code);
+    return Currencies.find(c => c.code.toLowerCase() == code.toLowerCase());
 }
 
 export class Currency {
