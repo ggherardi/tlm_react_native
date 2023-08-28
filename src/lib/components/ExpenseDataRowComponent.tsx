@@ -80,8 +80,8 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
                                 <Text style={[styles.expenseName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{expense.name}</Text>
                             )}
                         </View>
-                        <View style={[GlobalStyles.flexRow, GlobalStyles.selfCenter, { flex: 1 }]}>
-                            <Text style={{ fontSize: 20 }}>{expense.amount}{event.mainCurrency?.symbol}</Text>
+                        <View style={[GlobalStyles.flexRow, GlobalStyles.selfCenter, { flex: 2 }]}>
+                            <Text style={{ fontSize: 20 }}>{expense.amount} {event.mainCurrency?.symbol}</Text>
                         </View>
                     </View>
 

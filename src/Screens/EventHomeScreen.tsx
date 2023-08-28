@@ -40,6 +40,7 @@ const EventHomeScreen = ({ navigation, route }: any) => {
             <Tab.Screen 
                 name={Constants.Navigation.NewExpenseReport} 
                 component={NewExpenseReportScreen}
+                initialParams={[route.params.event]}
                 options={commonTabOptions}></Tab.Screen>
             <Tab.Screen
                 name={Constants.Navigation.EventSettingsScreen}

@@ -1,5 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from 'native-base';
+import { FormControl, HStack, Input, NativeBaseProvider, Row, Select, TextArea } from 'native-base';
 import { useEffect, useState } from 'react';
 import React, { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
@@ -10,8 +10,11 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { ExpenseReport } from '../lib/models/ExpenseReport';
 import dataContext from '../lib/models/DataContext';
 import { MediaType } from 'react-native-image-picker/lib/typescript/types'
+import { InputNumber } from '../lib/components/InputNumberComponent';
+import { BusinessEvent } from '../lib/models/BusinessEvent';
+import { Currency } from '../lib/data/Currencies';
 
-const NewExpenseReportScreen = ({ navigation }: any) => {
+const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
     const [expenseName, setExpenseName] = useState('');
     const [expenseDescription, setExpenseDescription] = useState('');
@@ -21,23 +24,21 @@ const NewExpenseReportScreen = ({ navigation }: any) => {
     const [setDateFunction, setSetDateFunction] = useState('');
     const [photo, setPhoto] = useState<any>();
     const [feedback, setFeedback] = useState('Feedback original state');
-    // console.log("Expenses first time:", expenses, typeof expenses);
-    useEffect(() => {
-        setFeedback(JSON.stringify(expenses));
-    }, []);
+    const [amountCurrencyCode, setAmountCurrencyCode] = useState('EUR');
 
-    const handleExpenseNameChange = (value: any) => {
-        setExpenseName(value);
-    };
-    const handleExpenseDescriptionChange = (e: any) => {
-        setExpenseDescription(e.nativeEvent.text);
-    };
-    const handleExpenseAmount = (e: any) => {
-        setExpenseAmount(e.nativeEvent.text);
-    };
+    const event: BusinessEvent = route.params[0];
+    const extraCurrencies: any[] = event.currencies ? event.currencies : [];
+    const allCurrencies: Currency[] = [...extraCurrencies, event.mainCurrency];
+
+    useEffect(() => { setFeedback(JSON.stringify(expenses)); }, []);
+
+    const handleExpenseNameChange = (value: any) => setExpenseName(value);
+    const handleExpenseDescriptionChange = (e: any) => setExpenseDescription(e.nativeEvent.text);
+    const handleExpenseAmount = (e: any) => setExpenseAmount(e.nativeEvent.text);
+    const handleAmountCurrencyChange = (value: any) => setAmountCurrencyCode(value);
 
 
-    const imagePickerCommonOptions =  { mediaType: "photo", maxWidth: 800, maxHeight: 600, includeBase64: true };
+    const imagePickerCommonOptions = { mediaType: "photo", maxWidth: 800, maxHeight: 600, includeBase64: true };
     //@ts-ignore
     const onSelectImagePress = () => launchImageLibrary(imagePickerCommonOptions, onImageSelect);
     //@ts-ignore
@@ -98,6 +99,7 @@ const NewExpenseReportScreen = ({ navigation }: any) => {
                         <InputSideButton icon={"upload"} pressFunction={onSelectImagePress} />
                     </HStack>
                 </FormControl>
+
                 {photo ? (
                     <View style={{ width: "100%" }}>
                         <FormControl style={GlobalStyles.mt15} isRequired>
@@ -108,14 +110,16 @@ const NewExpenseReportScreen = ({ navigation }: any) => {
                             <Select.Item label="Cena" value="Cena" />
                             <Select.Item label="Taxi" value="Taxi" />
                         </Select>
-                        <FormControl style={GlobalStyles.mt15}>
-                            <FormControl.Label>Descrizione della spesa</FormControl.Label>
-                            <TextArea placeholder="Descrizione della spesa" onChange={handleExpenseDescriptionChange} autoCompleteType={true}></TextArea>
-                        </FormControl>
-                        <FormControl style={GlobalStyles.mt15}>
+                        <FormControl style={GlobalStyles.mt15} isRequired>
                             <FormControl.Label>Importo della spesa</FormControl.Label>
-                            <Input placeholder="Importo" onChange={handleExpenseAmount}></Input>
+                            <InputNumber placeholder='Importo' onChange={handleExpenseAmount} isRequired={true} />
                         </FormControl>
+                        <Select style={{ flex: 2 }} onValueChange={handleAmountCurrencyChange} selectedValue={amountCurrencyCode}>
+                            {allCurrencies && allCurrencies.length && allCurrencies.map(currency => (
+                                <Select.Item key={`select_item_${currency.code}`} label={currency.name} value={currency.code} />
+                            ))}
+                        </Select>
+
                         <FormControl style={GlobalStyles.mt15} isRequired>
                             <FormControl.Label>Data della spesa</FormControl.Label>
                             <Input
@@ -132,6 +136,7 @@ const NewExpenseReportScreen = ({ navigation }: any) => {
                                 }
                             />
                         </FormControl>
+
                         {showDateTimePicker && (
                             <DateTimePicker
                                 mode="date"
@@ -143,6 +148,10 @@ const NewExpenseReportScreen = ({ navigation }: any) => {
                                 }}
                             />
                         )}
+                        <FormControl style={GlobalStyles.mt15}>
+                            <FormControl.Label>Descrizione della spesa</FormControl.Label>
+                            <TextArea placeholder="Descrizione della spesa" onChange={handleExpenseDescriptionChange} autoCompleteType={true}></TextArea>
+                        </FormControl>
                         <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
                             <TLMButtonComponent title='Salva' buttonType={TLMButtonType.Primary} onPress={saveExpenseReport}></TLMButtonComponent>
                         </HStack>

@@ -11,7 +11,7 @@ export class BusinessEvent extends BusinessDataTypeBase {
   endDate!: string;
   country?: Country;
   currencies?: (Currency | undefined)[];
-  mainCurrency?: Currency | undefined;
+  mainCurrency!: Currency;
 
   static getDataContextKey = () => SaveConstants.events.key;
 

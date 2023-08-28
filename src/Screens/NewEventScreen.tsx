@@ -42,7 +42,7 @@ const NewEventScreen = ({ navigation }: any) => {
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
     event.name = eventName.trim();
-    event.mainCurrency = GetCurrency(mainCurrencyCode);
+    event.mainCurrency = GetCurrency(mainCurrencyCode) as Currency;
     event.currencies = GetCurrencies(currenciesCodes);
     event.country = GetCountry(countriesCodes && countriesCodes && countriesCodes.length ? countriesCodes[0] : '');
     event.description = eventDescription.trim();
