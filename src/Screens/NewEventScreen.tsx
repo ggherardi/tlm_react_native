@@ -25,8 +25,9 @@ const NewEventScreen = ({ navigation }: any) => {
   const [mainCurrencyCode, setMainCurrencyCode] = useState('EUR');
   const [countriesCodes, setCountriesCodes] = useState<string[]>([]);
   const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
-  const [feedback, setFeedback] = useState('Feedback original state');
   const [isFormValid, setIsFormValid] = useState(true);
+
+  console.log(showDateTimePicker);
 
   useEffect(() => {
     useCustomHeaderSaveButton(navigation, "Crea nuovo evento", () => saveEvent(), undefined, !isFormValid);
@@ -73,6 +74,7 @@ const NewEventScreen = ({ navigation }: any) => {
                 iconStyle={GlobalStyles.iconPrimary}
                 pressFunction={() => {
                   setShowDateTimePicker(true);
+                  console.log("Launching start date");
                   setSetDateFunction('setEventStartDate');
                 }}
               />
@@ -91,6 +93,7 @@ const NewEventScreen = ({ navigation }: any) => {
                 iconStyle={GlobalStyles.iconPrimary}
                 pressFunction={() => {
                   setShowDateTimePicker(true);
+                  console.log("Launching end date");
                   setSetDateFunction('setEventEndDate');
                 }}
               />
@@ -104,9 +107,10 @@ const NewEventScreen = ({ navigation }: any) => {
             display="spinner"
             value={new Date()}
             onChange={(event, date) => {
+              console.log("Function: ", setDateFunction);
+              setShowDateTimePicker(false);
               const func = setDateFunction == 'setEventEndDate' ? setEventEndDate : setEventStartDate;
               func(date as Date);
-              setShowDateTimePicker(false);
             }}
           />
         )}
@@ -117,14 +121,14 @@ const NewEventScreen = ({ navigation }: any) => {
         <Select width={"100%"} onValueChange={handleMainCurrencyChange} selectedValue={mainCurrencyCode}>
           {Currencies && Currencies.length && Currencies.map(currency => (
             <Select.Item key={`select_item_${currency.code}`} label={currency.name} value={currency.code} />
-          ))}          
+          ))}
         </Select>
 
         <FormControl style={GlobalStyles.mt15}>
           <FormControl.Label>Paese</FormControl.Label>
         </FormControl>
         <View style={{ flex: 1, width: "100%" }}>
-          <SectionedMultiSelect 
+          <SectionedMultiSelect
             single={true}
             items={Countries}
             uniqueKey="code"
@@ -135,7 +139,7 @@ const NewEventScreen = ({ navigation }: any) => {
             selectText="Seleziona paese"
             styles={{ ...multiSelectStyle, selectToggleText: { color: 'black', fontSize: 12 } }}
             searchPlaceholderText='Cerca paese'
-            confirmText='Conferma'            
+            confirmText='Conferma'
           />
         </View>
 
@@ -192,7 +196,7 @@ const multiSelectStyle = StyleSheet.create({
 })
 
 const styles = StyleSheet.create({
-  container: {    
+  container: {
     padding: 20,
   },
   title: {
