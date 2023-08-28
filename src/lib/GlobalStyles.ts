@@ -53,6 +53,21 @@ const GlobalStyles = StyleSheet.create({
   pl25: {
     paddingLeft: 25
   },
+  pr5: {
+    paddingRight: 5
+  },
+  pr10: {
+    paddingRight: 10
+  },
+  pr15: {
+    paddingRight: 15
+  },
+  pr20: {
+    paddingRight: 20
+  },
+  pr25: {
+    paddingRight: 25
+  },
   pt5: {
     paddingTop: 5
   },

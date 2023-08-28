@@ -54,14 +54,13 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                     onPress={goToEvent} style={({ pressed }) => [
                         styles.container, { backgroundColor: pressed ? ThemeColors.primary : ThemeColors.white }]}>
                     <Row>
-                        <VStack space={2}>
-                            <Text style={[styles.day]}>{Utility.GetDay(event.startDate as string)}</Text>
-                            <Text>{Utility.GetMonthShortName(event.startDate as string)}</Text>
+                        <VStack style={[styles.dateContainer, GlobalStyles.selfCenter]}>
+                            <Text style={[styles.day]}>{Utility.ToDate(event.startDate as string).getFullYear()}</Text>
+                            <Text style={[GlobalStyles.selfCenter]}>{Utility.GetMonthShortName(event.startDate as string)}</Text>
                         </VStack>
-                        <Text style={{ textAlignVertical: 'center' }}>-</Text>
-                        <VStack space={2}>
-                            <Text style={[styles.day]}>{Utility.GetDay(event.endDate as string)}</Text>
-                            <Text>{Utility.GetMonthShortName(event.endDate as string)}</Text>
+                        <VStack style={[styles.dateContainer, GlobalStyles.selfCenter]}>
+                            <Text style={[styles.day]}>{Utility.GetNumberOfDaysBetweenDates(event.startDate, event.endDate)}</Text>
+                            <Text style={[GlobalStyles.selfCenter]}>gg</Text>
                         </VStack>
                         {event.country != undefined ? (
                             <VStack style={styles.eventNameContainer}>
@@ -69,7 +68,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                                 <Text style={[styles.eventDescription]} numberOfLines={1}>{event.country?.name}</Text>
                             </VStack>
                         ) : (
-                            <Text style={[styles.eventName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{event.name}</Text>
+                            <Text style={[styles.eventNameContainer, styles.eventName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{event.name}</Text>
                         )}
                     </Row>
                 </Pressable>
@@ -86,9 +85,13 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: ThemeColors.white
     },
+    dateContainer: {
+        flex: 1,
+        flexDirection: 'column' 
+    },
     eventNameContainer: {
+        flex: 4,
         paddingLeft: 10,
-        paddingTop: 5
     },
     day: {
         alignSelf: 'center',
@@ -99,8 +102,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     eventDescription: {
-        // maxWidth: '100%',
-        // flex: 1
+
     },
     swipedRow: {
         flexDirection: 'row',

@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 
 export const Utility = {
+  IsDateValid: (date: Date): boolean => {
+    return date && !isNaN(date.getDate());
+  },
+
   FormatDateDDMMYYYY: (dateString: string): string => {
     let formattedDate = '';
     let date = new Date(dateString);
@@ -31,10 +35,27 @@ export const Utility = {
     return formattedDate;
   },
 
+  GetNumberOfDaysBetweenDates: (startDateString: string, endDateString: string): number => {
+    let numberOfDays = 0;
+    const startDate = new Date(startDateString);
+    const endDate = new Date(endDateString);
+    if (Utility.IsDateValid(startDate) && Utility.IsDateValid(endDate)) {
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(0, 0, 0, 0);
+      numberOfDays = (endDate.getTime() - startDate.getTime()) / 1000 / 60 / 60 / 24;
+    }
+    return numberOfDays;
+  },
+
+  ToDate: (dateString: string): Date => {  
+    let date = new Date(dateString);
+    return date;
+  },
+
   GetDay: (dateString: string): string => {
     let dayString = '';
     let date = new Date(dateString);
-    if (date && !isNaN(date.getDate())) {
+    if (Utility.IsDateValid(date)) {
       const day = date.getDate();
       dayString = `${day < 10 ? `0${day}` : day}`;
     }
@@ -44,7 +65,7 @@ export const Utility = {
   GetMonthShortName: (dateString: string): string => {
     let returnValue = '';
     let date = new Date(dateString);
-    if (date && !isNaN(date.getDate())) {
+    if (Utility.IsDateValid(date)) {
       returnValue = date.toLocaleDateString("it-it", { month: 'short' });
     }
     return returnValue;

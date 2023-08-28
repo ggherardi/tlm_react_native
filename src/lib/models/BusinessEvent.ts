@@ -7,8 +7,8 @@ export class BusinessEvent extends BusinessDataTypeBase {
   id!: number;
   name?: string;
   description?: string;
-  startDate?: string;
-  endDate?: string;
+  startDate!: string;
+  endDate!: string;
   country?: Country;
   currencies?: (Currency | undefined)[];
   mainCurrency?: Currency | undefined;
