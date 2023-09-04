@@ -14,6 +14,7 @@ import { InputNumber } from '../lib/components/InputNumberComponent';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { Currency } from '../lib/data/Currencies';
 import { Constants } from '../lib/Constants';
+import { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
 
 const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
@@ -26,12 +27,15 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [photo, setPhoto] = useState<any>();
     const [feedback, setFeedback] = useState('Feedback original state');
     const [amountCurrencyCode, setAmountCurrencyCode] = useState('EUR');
+    const [isFormValid, setIsFormValid] = useState(false);
 
     const event: BusinessEvent = route.params[0];
     const extraCurrencies: any[] = event.currencies ? event.currencies : [];
     const allCurrencies: Currency[] = [...extraCurrencies, event.mainCurrency];
 
-    useEffect(() => { setFeedback(JSON.stringify(expenses)); }, []);
+    useEffect(() => {
+        useCustomHeaderSaveButton(navigation.getParent(), event.name, () => saveExpenseReport(), 'Crea nuova spesa', isFormValid);
+      });
 
     const handleExpenseNameChange = (value: any) => setExpenseName(value);
     const handleExpenseDescriptionChange = (e: any) => setExpenseDescription(e.nativeEvent.text);
@@ -150,14 +154,14 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                             <FormControl.Label>Descrizione della spesa</FormControl.Label>
                             <TextArea placeholder="Descrizione della spesa" onChange={handleExpenseDescriptionChange} autoCompleteType={true}></TextArea>
                         </FormControl>
-                        <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
+                        {/* <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
                             <TLMButtonComponent title='Salva' buttonType={TLMButtonType.Primary} onPress={saveExpenseReport}></TLMButtonComponent>
-                        </HStack>
+                        </HStack> */}
                     </View>
                 ) : (
                     <Text></Text>
                 )}
-                <InputSideButton icon={"trash"} pressFunction={clear}></InputSideButton>
+                {/* <InputSideButton icon={"trash"} pressFunction={clear}></InputSideButton> */}
                 {/* <Text>{feedback}</Text> */}
             </ScrollView>
         </NativeBaseProvider>

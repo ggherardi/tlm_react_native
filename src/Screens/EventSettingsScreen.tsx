@@ -4,10 +4,16 @@ import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { GetCurrency } from '../lib/data/Currencies';
+import useCustomHeader from '../lib/components/CustomHeaderComponent';
 
 const EventSettingsScreen = ({ route, navigation }: any) => {
     const event: BusinessEvent = route.params[0];    
-    console.log(event);
+
+    const refreshData = async () => {
+        useCustomHeader(navigation.getParent(), event.name, "Impostazioni evento");
+    };
+    Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
+
     return (
         <NativeBaseProvider>
             <ScrollView contentContainerStyle={[GlobalStyles.container]}>

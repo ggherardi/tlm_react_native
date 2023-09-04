@@ -25,10 +25,10 @@ const NewEventScreen = ({ navigation }: any) => {
   const [mainCurrencyCode, setMainCurrencyCode] = useState('EUR');
   const [countriesCodes, setCountriesCodes] = useState<string[]>([]);
   const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
-  const [isFormValid, setIsFormValid] = useState(true);
+  const [isFormValid, setIsFormValid] = useState(false);
   
   useEffect(() => {
-    useCustomHeaderSaveButton(navigation, "Crea nuovo evento", () => saveEvent(), undefined, !isFormValid);
+    useCustomHeaderSaveButton(navigation, "Crea nuovo evento", () => saveEvent(), undefined, isFormValid);
   });
 
   const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);
