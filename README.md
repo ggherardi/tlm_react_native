@@ -24,6 +24,8 @@ npm i --save @types/react-native-vector-icons
 npm i --save react-native-email
 # To retry when I have a working internet access npm i --save react-native-html-to-pdf
 
+# TO NEXT: fixing all expenses formatting
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started

@@ -15,9 +15,7 @@ const EventScreen = ({ route, navigation }: any) => {
     const event: BusinessEvent = route.params[0];
 
     useEffect(() => {
-        // useCustomHeader(navigation.getParent(), event.name, "Tutte le spese");
         dataContext.setExpenseReportsKey(`${event?.id}_${event?.name}`);
-        navigation.getParent().setOptions
     }, []);
 
     const [feedback, setFeedback] = useState('Feedback original state');
@@ -25,7 +23,9 @@ const EventScreen = ({ route, navigation }: any) => {
 
     const refreshData = async () => {
         useCustomHeader(navigation.getParent(), event.name, "Tutte le spese");
-        setReports(dataContext.ExpenseReports.getAllData());
+        let data = dataContext.ExpenseReports.getAllData();
+        data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        setReports(data);
     };
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
