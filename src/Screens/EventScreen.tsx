@@ -9,15 +9,15 @@ import { Utility } from '../lib/Utility';
 import { ExpenseReport } from '../lib/models/ExpenseReport';
 import { useIsFocused } from '@react-navigation/native';
 import GlobalStyles from '../lib/GlobalStyles';
+import { BusinessEvent } from '../lib/models/BusinessEvent';
 
 const EventScreen = ({ route, navigation }: any) => {
-    const event = route.params[0];
+    const event: BusinessEvent = route.params[0];
 
     useEffect(() => {
-        useCustomHeader(navigation.getParent(), event.name, event.description);
-        dataContext.setExpenseReportsKey(`${event?.id}_${event?.name}`);    
+        useCustomHeader(navigation.getParent(), event.name as string, event.description);
+        dataContext.setExpenseReportsKey(`${event?.id}_${event?.name}`);
         navigation.getParent().setOptions
-        // setFeedback(JSON.stringify(reports));
     }, []);
 
     const [feedback, setFeedback] = useState('Feedback original state');
@@ -35,6 +35,10 @@ const EventScreen = ({ route, navigation }: any) => {
         <NativeBaseProvider>
             <GestureHandlerRootView>
                 <ScrollView contentContainerStyle={[GlobalStyles.container]}>
+                    <View style={[GlobalStyles.flexRow, { padding: 10 }]}>
+                        <Text style={{ flex: 5, fontSize: 20 }}>Importo totale:</Text>
+                        <Text style={{ flex: 2, fontSize: 20 }}>{event.mainCurrency.symbol} {reports && reports.length && reports.map(r => r.amount).reduce((p, c) => Number(p) + Number(c))}</Text>
+                    </View>
                     {reports && reports.length && reports.map ? reports.map((report: ExpenseReport, index: number) => (
                         <View key={`homedatarow_${index}_${Utility.GenerateRandomGuid()}`}>
                             <ExpenseDataRowComponent expense={report} event={event} onDelete={refreshData} navigation={navigation} index={index} />

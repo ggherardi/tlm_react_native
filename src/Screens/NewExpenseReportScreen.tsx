@@ -13,6 +13,7 @@ import { MediaType } from 'react-native-image-picker/lib/typescript/types'
 import { InputNumber } from '../lib/components/InputNumberComponent';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { Currency } from '../lib/data/Currencies';
+import { Constants } from '../lib/Constants';
 
 const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
@@ -45,9 +46,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const onTakePhoto = () => launchCamera(imagePickerCommonOptions, onImageSelect);
     const deletePhoto = () => setPhoto(undefined);
 
-    const onImageSelect = async (media: any) => {
-        console.log(media);
-
+    const onImageSelect = async (media: any) => {        
         if (!media.didCancel && media.assets[0]) {
             const photo = media.assets[0];
             setPhoto(photo);
@@ -68,12 +67,11 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
             expenses.push(expense);
             dataContext.ExpenseReports.saveData(expenses);
             setExpenses(dataContext.ExpenseReports.getAllData());
-            setFeedback(JSON.stringify(expenses));
+            navigation.navigate(Constants.Navigation.Event);
         }
     };
 
     const refreshData = () => {
-        console.log("Refreshing data");
         setExpenses(dataContext.ExpenseReports.getAllData());
     }
 
@@ -141,10 +139,10 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                             <DateTimePicker
                                 mode="date"
                                 display="spinner"
-                                value={new Date()}
+                                value={expenseDate}
                                 onChange={(event, date) => {
-                                    setExpenseDate(expenseDate);
                                     setShowDateTimePicker(false);
+                                    setExpenseDate(date as Date);
                                 }}
                             />
                         )}

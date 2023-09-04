@@ -21,6 +21,8 @@ npm i --save react-native-image-picker
 npm i --save react-native-sectioned-multi-select
 npm i --save react-native-vector-icons
 npm i --save @types/react-native-vector-icons
+npm i --save react-native-email
+# To retry when I have a working internet access npm i --save react-native-html-to-pdf
 
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
