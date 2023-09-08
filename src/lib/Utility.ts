@@ -44,7 +44,7 @@ export const Utility = {
       endDate.setHours(0, 0, 0, 0);
       numberOfDays = (endDate.getTime() - startDate.getTime()) / 1000 / 60 / 60 / 24;
     }
-    return numberOfDays;
+    return numberOfDays == 0 ? numberOfDays + 1 : numberOfDays;
   },
 
   ToDate: (dateString: string): Date => {  
