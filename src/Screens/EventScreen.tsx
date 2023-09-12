@@ -54,6 +54,7 @@ const EventScreen = ({ route, navigation }: any) => {
     const sendEmail = async () => {
         const attachments = [];
         attachments.push(new Attachment(`nota_spese_${event.name}_${Utility.GetYear(event.startDate)}_nomeTL`, file?.filePath));
+        // GOTTA ADD PICTURES HERE!
         EmailManager.send(["e.campolo@tourleadermanagement.ch", "giamalfred@gmail.com"], `Nota spese ${event.name} del ${Utility.FormatDateDDMMYYYY(event.startDate)}. TL: nome_tl (da implementare)`, "Mail inviata dall'app con pdf generato dalla stessa app (ancora in fase grafica embrionale)", attachments);
         // EmailManager.send(["giamalfred@gmail.com"], `Nota spese ${event.name} del ${Utility.FormatDateDDMMYYYY(event.startDate)}. TL: nome_tl (da implementare)`, "Mail inviata dall'app con pdf generato dalla stessa app (ancora in fase grafica embrionale)", attachments);
     }
