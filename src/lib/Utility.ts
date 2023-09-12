@@ -71,6 +71,15 @@ export const Utility = {
     return returnValue;
   },
 
+  GetYear: (dateString: string): string => {
+    let returnValue = '';
+    let date = new Date(dateString);
+    if (Utility.IsDateValid(date)) {
+      returnValue = date.getFullYear().toString();
+    }
+    return returnValue;
+  },
+
   RefreshScreen: ({ navigation, refreshFunc }: any) => {
     React.useEffect(() => {
       const focusHandler = navigation.addListener('focus', () => {

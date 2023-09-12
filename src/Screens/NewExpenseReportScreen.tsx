@@ -71,12 +71,21 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
             expenses.push(expense);
             dataContext.ExpenseReports.saveData(expenses);
             setExpenses(dataContext.ExpenseReports.getAllData());
+            resetForm();
             navigation.navigate(Constants.Navigation.Event);
         }
     };
 
     const refreshData = () => {
         setExpenses(dataContext.ExpenseReports.getAllData());
+    }
+
+    const resetForm = () => {
+        setExpenseName('');
+        setExpenseAmount('');
+        setExpenseDate(new Date());
+        setPhoto(undefined);
+        setIsFormValid(false);
     }
 
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });

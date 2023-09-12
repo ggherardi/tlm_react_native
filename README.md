@@ -22,7 +22,10 @@ npm i --save react-native-sectioned-multi-select
 npm i --save react-native-vector-icons
 npm i --save @types/react-native-vector-icons
 npm i --save react-native-email
+npm i --save react-native-fetch-blob
 # To retry when I have a working internet access npm i --save react-native-html-to-pdf
+npm i --save react-native-pdf
+npm i --save react-native-blob-util
 
 # TO NEXT: fixing all expenses formatting
 

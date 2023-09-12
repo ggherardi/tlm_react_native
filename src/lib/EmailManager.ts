@@ -1,11 +1,19 @@
-import email from 'react-native-email'
+// import email from 'react-native-email'
+import Mailer from 'react-native-mail'
 
 export const EmailManager = {
-    send: (to: string | string[], subject: string, body: string) => {
-        email(to, {
-          subject: subject,
-          body: body,
-          checkCanOpen: true
-        }).catch(console.error)      
-    }
+  send: (to: string[], subject: string, body: string, attachments?: any[]) => {
+    Mailer.mail({
+      subject: subject,
+      recipients: to,
+      body: body,
+      // attachments: attachments,
+      attachments: attachments
+    }, (error, event) => {
+      console.log(error, event);
+      if (error != undefined) {
+        console.log("Cannot open default email app");
+      }
+    })
+  }
 }
