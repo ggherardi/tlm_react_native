@@ -27,10 +27,14 @@ class DataSet<T extends BusinessDataTypeBase> {
 
     deleteWhere = (primaryKeyValue: any) => {
         const indexToDelete = this.allData.findIndex((element: T) => this.classRef.primaryKeyWhereCondition(element, primaryKeyValue));        
+        let element;
         if (indexToDelete > -1) {
-            this.allData.splice(indexToDelete, 1);
+            element = this.allData.splice(indexToDelete, 1);            
         }
         Storage.save(this.storageKey, this.classRef.getDataContextKey(), this.allData);
+        if (element && element.length) {
+            this.classRef.extraDeleteSteps(element[0]);
+        }
         this.refreshData();
     }
 

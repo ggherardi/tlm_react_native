@@ -1,6 +1,42 @@
 import React, { useEffect } from "react";
+import { PermissionsAndroid } from 'react-native';
+import RNFetchBlob from 'rn-fetch-blob';
 
 export const Utility = {
+  storageTest: async () => {
+    console.log(RNFetchBlob.fs.dirs.DocumentDir);    
+    RNFetchBlob.fs.ls("/storage/emulated/0/Android/data/com.tlm/files/Documents")
+      .then((v) => { console.log("OK, ", v) })
+      .catch((e) => { console.log("OK, ", e) });
+    // RNFetchBlob.fs.ls(RNFetchBlob.fs.dirs.MainBundleDir)
+    //   .then((v) => { console.log("OK, ", v) })
+    //   .catch((e) => { console.log("OK, ", e) });
+    return;
+    const permissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+    if (permissions === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log("Granted permissions");
+      RNFetchBlob.fs.mkdir(`${RNFetchBlob.fs.dirs.MovieDir}/test1`)
+      .then((v) => { console.log("Success: ", v) })
+      .catch((e) => { console.log("Error: ", e) })
+    } else {
+      console.log("Permissions not granted");
+    }
+  },
+
+  SanitizeString: (str: string) => {
+    return str.replace(/[^a-zA-Z ]/g, "");
+  },
+
+  WriteBase64ToFile: async (base64: string) => {
+    const dirs = RNFetchBlob.fs.dirs;
+    const path = dirs.DCIMDir + "PATH/TO/FILE.png" 
+
+    const promise = await RNFetchBlob.fs.writeFile(path, base64, 'base64');
+    console.log(promise);
+      // .then((result) => {console.log("File has been saved to:" + result })
+      // .catch(error => console.log(err);
+  },
+
   IsDateValid: (date: Date): boolean => {
     return date && !isNaN(date.getDate());
   },

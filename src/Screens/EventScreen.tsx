@@ -18,7 +18,7 @@ import { Attachment } from '../lib/models/Attachment';
 
 const EventScreen = ({ route, navigation }: any) => {
     const [pdfSource, setPdfSource] = useState<any>({ uri: 'file:///storage/emulated/0/Android/data/com.tlm/files/Documents/test.pdf', cache: true });
-    const [file, setFile] = useState<RNHTMLtoPDF.Pdf>();
+    const [file, setFile] = useState<RNHTMLtoPDF.Pdf>();    
     const [feedback, setFeedback] = useState('Feedback original state');
     const [reports, setReports] = useState<ExpenseReport[]>();
 
@@ -39,9 +39,9 @@ const EventScreen = ({ route, navigation }: any) => {
     
     const createPdf = async () => {
         let options = {
-            html: PDFBuilder.generatePdf(event, reports as ExpenseReport[], totalAmount),
+            html: PDFBuilder.generateHtml(event, reports as ExpenseReport[], totalAmount),
             fileName: 'test',
-            directory: 'Documents',
+            directory: '/data/user/0/com.tlm/test1',
         };
 
         let file = await RNHTMLtoPDF.convert(options);        
@@ -50,7 +50,7 @@ const EventScreen = ({ route, navigation }: any) => {
         setPdfSource(source);
         console.log(file.filePath);
     }
-
+    
     const sendEmail = async () => {
         const attachments = [];
         attachments.push(new Attachment(`nota_spese_${event.name}_${Utility.GetYear(event.startDate)}_nomeTL`, file?.filePath));
@@ -63,13 +63,14 @@ const EventScreen = ({ route, navigation }: any) => {
         <NativeBaseProvider>
             <GestureHandlerRootView>
                 <ScrollView contentContainerStyle={[GlobalStyles.container]}>
+                    <InputSideButton icon={'cog'} pressFunction={() => Utility.storageTest()} />
                     <View style={[GlobalStyles.flexRow, { padding: 10 }]}>
                         <Text style={{ flex: 5, fontSize: 20 }}>Importo totale:</Text>
                         <Text style={{ flex: 2, fontSize: 20 }}>{event.mainCurrency.symbol} {totalAmount}</Text>                        
                     </View>
                     <HStack>
                         <InputSideButton icon={'file-pdf'} pressFunction={() => createPdf()} />
-                        <InputSideButton icon={'paper-plane'} pressFunction={() => sendEmail()} />                        
+                        <InputSideButton icon={'paper-plane'} pressFunction={() => sendEmail()} />
                     </HStack>
                     {reports && reports.length && reports.map ? reports.map((report: ExpenseReport, index: number) => (
                         <View key={`homedatarow_${index}_${Utility.GenerateRandomGuid()}`}>

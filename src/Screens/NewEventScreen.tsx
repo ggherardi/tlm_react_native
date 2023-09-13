@@ -13,6 +13,7 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import MultiSelectIconComponent from '../lib/components/MultiSelectIconsComponent';
 import { Constants } from '../lib/Constants';
 import { Countries, GetCountries, GetCountry } from '../lib/data/Countries';
+import { PDFBuilder } from '../lib/PDFBuilder';
 
 const NewEventScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData())
@@ -37,7 +38,7 @@ const NewEventScreen = ({ navigation }: any) => {
   const handleMainCurrencyChange = (value: any) => setMainCurrencyCode(value);
   const handleCountryChange = (items: string[]) => setCountriesCodes(items);
 
-  const saveEvent = () => {
+  const saveEvent = async () => {
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
@@ -49,8 +50,16 @@ const NewEventScreen = ({ navigation }: any) => {
     event.startDate = eventStartDate.toString();
     event.endDate = eventEndDate.toString();
     events.push(event);
-    dataContext.Events.saveData(events);
-    navigation.navigate(Constants.Navigation.Home)
+    const sanitizedEventName = Utility.SanitizeString(event.name);
+    const pdfFileName = `nota_spese_${sanitizedEventName}_${Utility.GetYear(event.startDate)}_nomeTL`;
+    const creationResult = await PDFBuilder.createDirectoryAndPdf(event, sanitizedEventName, pdfFileName);
+    if (creationResult) {
+      console.log("Ok, ", event.fullFilePath, event.directoryPath);
+      dataContext.Events.saveData(events);
+      navigation.navigate(Constants.Navigation.Home)
+    } else {
+      console.log("Errore");
+    }
   };
 
   return (
