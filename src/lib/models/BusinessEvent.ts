@@ -13,8 +13,11 @@ export class BusinessEvent extends BusinessDataTypeBase {
   country?: Country;
   currencies?: (Currency | undefined)[];
   mainCurrency!: Currency;
+  directoryName!: string;
   directoryPath!: string;
   fullFilePath!: string;
+  reportFileName!: string;
+  expensesDataContextKey!: string;
 
   static getDataContextKey = () => SaveConstants.events.key;
 
@@ -23,6 +26,6 @@ export class BusinessEvent extends BusinessDataTypeBase {
   }
 
   static extraDeleteSteps(element: BusinessEvent): void {
-    FileManager.deleteFolder(element.directoryPath);
+    FileManager.deleteFileOrFolder(element.directoryPath);
   }
 }

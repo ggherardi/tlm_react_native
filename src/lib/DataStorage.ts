@@ -14,6 +14,11 @@ export default class DataStorage {
     this.storage.clearAll();
   }
 
+  deleteWithKey = (key: string) => {
+    console.log("Deleting ", key);
+    this.storage.delete(key);
+  }
+
   save = (key: string, dataContextKey: string, value: any) => {    
     const saveConstant = (SaveConstants as any)[dataContextKey];
     if (saveConstant) {

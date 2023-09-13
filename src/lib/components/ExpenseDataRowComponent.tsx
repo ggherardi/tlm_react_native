@@ -49,7 +49,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
         ]);
     };
 
-    const imageUri = `data:image/jpeg;base64,${expense.receiptPhotoBase64}`;
+    const imageUri = `file:///${expense.photoFilePath}`;
 
     return (
         <GestureHandlerRootView>
@@ -64,7 +64,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
                             </VStack>
                         </View>
                         <View style={[GlobalStyles.flexRow, { flex: 1 }]}>
-                            {Utility.IsNotNullOrUndefined(expense.receiptPhotoBase64) && (
+                            {Utility.IsNotNullOrUndefined(expense.photoFilePath) && (
                                 <Image alt='noimage' source={{ uri: imageUri }} style={[styles.image]} />
                             )}
                         </View>

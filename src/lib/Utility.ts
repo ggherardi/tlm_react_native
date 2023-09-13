@@ -4,7 +4,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 
 export const Utility = {
   storageTest: async () => {
-    console.log(RNFetchBlob.fs.dirs.DocumentDir);    
+    console.log(RNFetchBlob.fs.dirs.DocumentDir);
     RNFetchBlob.fs.ls("/storage/emulated/0/Android/data/com.tlm/files/Documents")
       .then((v) => { console.log("OK, ", v) })
       .catch((e) => { console.log("OK, ", e) });
@@ -16,8 +16,8 @@ export const Utility = {
     if (permissions === PermissionsAndroid.RESULTS.GRANTED) {
       console.log("Granted permissions");
       RNFetchBlob.fs.mkdir(`${RNFetchBlob.fs.dirs.MovieDir}/test1`)
-      .then((v) => { console.log("Success: ", v) })
-      .catch((e) => { console.log("Error: ", e) })
+        .then((v) => { console.log("Success: ", v) })
+        .catch((e) => { console.log("Error: ", e) })
     } else {
       console.log("Permissions not granted");
     }
@@ -27,28 +27,26 @@ export const Utility = {
     return str.replace(/[^a-zA-Z ]/g, "");
   },
 
-  WriteBase64ToFile: async (base64: string) => {
-    const dirs = RNFetchBlob.fs.dirs;
-    const path = dirs.DCIMDir + "PATH/TO/FILE.png" 
-
-    const promise = await RNFetchBlob.fs.writeFile(path, base64, 'base64');
-    console.log(promise);
-      // .then((result) => {console.log("File has been saved to:" + result })
-      // .catch(error => console.log(err);
+  GetExtensionFromType: (type: string) => {
+    return type.substring(type.lastIndexOf("/") + 1)
   },
 
   IsDateValid: (date: Date): boolean => {
     return date && !isNaN(date.getDate());
   },
 
-  FormatDateDDMMYYYY: (dateString: string): string => {
+  CalculateTotalAmount: (array: any[], propertyToReduceName: string) => {
+    return array.map(r => r[propertyToReduceName]).reduce((p, c) => Number(p) + Number(c));
+  },
+
+  FormatDateDDMMYYYY: (dateString: string, separator: string = '/'): string => {
     let formattedDate = '';
     let date = new Date(dateString);
     if (date && !isNaN(date.getDate())) {
       const day = date.getDate();
       const month = date.getMonth() + 1;
       const year = date.getFullYear();
-      formattedDate = `${day < 10 ? `0${day}` : day}/${month < 10 ? `0${month}` : month}/${year}`;
+      formattedDate = `${day < 10 ? `0${day}` : day}${separator}${month < 10 ? `0${month}` : month}${separator}${year}`;
     } else {
       formattedDate = '';
     }
@@ -83,7 +81,7 @@ export const Utility = {
     return numberOfDays == 0 ? numberOfDays + 1 : numberOfDays;
   },
 
-  ToDate: (dateString: string): Date => {  
+  ToDate: (dateString: string): Date => {
     let date = new Date(dateString);
     return date;
   },
@@ -134,8 +132,8 @@ export const Utility = {
     }, [navigation]);
   },
 
-  GenerateRandomGuid: () => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+  GenerateRandomGuid: (separator: string = "-") => {
+    return `xxxxxxxx${separator}xxxx${separator}4xxx${separator}yxxx${separator}xxxxxxxxxxxx`
       .replace(/[xy]/g, function (c) {
         const r = Math.random() * 16 | 0,
           v = c == 'x' ? r : (r & 0x3 | 0x8);

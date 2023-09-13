@@ -7,8 +7,12 @@ class DataContext {
     Events: DataSet<BusinessEvent> = new DataSet<BusinessEvent>(SaveConstants.events.key, BusinessEvent);
     ExpenseReports!: DataSet<ExpenseReport>;
 
-    setExpenseReportsKey = (eventKey: string) => {
-        this.ExpenseReports = new DataSet<ExpenseReport>(`event-${eventKey}-reports-${SaveConstants.expenseReport.key}`, ExpenseReport);
+    setExpenseReportsKey = (storageKey: string) => {
+        this.ExpenseReports = new DataSet<ExpenseReport>(storageKey, ExpenseReport);
+    }
+
+    deleteEntryWithKey = (storageKey: string) => {
+        Storage.deleteWithKey(storageKey);
     }
 }
 

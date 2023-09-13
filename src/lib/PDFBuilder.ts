@@ -4,29 +4,34 @@ import { ExpenseReport } from './models/ExpenseReport';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 export const PDFBuilder = {
-  createDirectoryAndPdf: async (event: BusinessEvent, directoryName: string, fileName: string): Promise<boolean> => {
+  createExpensesPdfAsync: async (event: BusinessEvent, directoryName: string, fileName: string, reports: ExpenseReport[] = []): Promise<RNHTMLtoPDF.Pdf> => {
     return new Promise(async (resolve, reject) => {
       const directory = `Documents/${directoryName}`
       const options = {
-        html: PDFBuilder.generateHtml(event, [] as ExpenseReport[], 0),
+        html: PDFBuilder.generateHtml(event, reports, Utility.CalculateTotalAmount(reports, 'amount')),
         fileName: fileName,
         directory: directory,
       };
 
       let file = await RNHTMLtoPDF.convert(options);
       if (file) {
-        const filePath = file.filePath as string;
-        event.fullFilePath = filePath;
-        event.directoryPath = filePath.substring(0, filePath.lastIndexOf("/"));
-        resolve(true);
+        resolve(file);
       } else {
-        reject(false);
+        reject(undefined);
       }
     });
   },
 
   generateHtml: (event: BusinessEvent, expenses: ExpenseReport[], totalAmount: Number | undefined): string => {
     let html = `
+    <style>
+      .mb-5 {
+        margin-bottom: 30px;
+      }
+      @media print {
+        .pagebreak { page-break-before: always; }
+      }      
+    </style>
     <div>
       <h1>${event.name} (${Utility.FormatDateDDMMYYYY(event.startDate)} - ${Utility.FormatDateDDMMYYYY(event.endDate)})</h1>
       <table>
@@ -65,6 +70,18 @@ export const PDFBuilder = {
 
     html += `
     </div>`;
+
+    // GG: I know this is slower, but it's much more readable this way
+    for (let i = 0; i < expenses.length; i++) {
+      const expense = expenses[i];
+      html += `
+      <div class="pagebreak"></div>
+      <div>
+        <div class="mb-5">${expense.name} - ${Utility.FormatDateDDMMYYYYhhmm(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</div>
+        <img src="file:///${expense.photoFilePath}">
+      </div>          
+      `;
+    }
     return html;
   }
 }

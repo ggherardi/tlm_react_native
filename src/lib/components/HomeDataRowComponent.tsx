@@ -8,6 +8,7 @@ import { InputSideButton } from './InputSideButtonComponent';
 import dataContext from '../models/DataContext';
 import GlobalStyles, { ThemeColors } from '../GlobalStyles';
 import { Constants } from '../Constants';
+import DataContext from '../models/DataContext';
 
 interface IHomeDataRow {
     event: BusinessEvent;
@@ -39,6 +40,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
     const deleteEvent = () => {
         const onDeleteConfirm = () => {
             dataContext.Events.deleteWhere(event.id);
+            DataContext.deleteEntryWithKey(event.expensesDataContextKey);
             onDelete();
         }
         Alert.alert("Conferma cancellazione", "Tutti i dati legati all'evento verranno rimossi dal dispositivo.", [

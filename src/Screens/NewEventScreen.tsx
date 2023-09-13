@@ -14,6 +14,7 @@ import MultiSelectIconComponent from '../lib/components/MultiSelectIconsComponen
 import { Constants } from '../lib/Constants';
 import { Countries, GetCountries, GetCountry } from '../lib/data/Countries';
 import { PDFBuilder } from '../lib/PDFBuilder';
+import { SaveConstants } from '../lib/DataStorage';
 
 const NewEventScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData())
@@ -49,12 +50,18 @@ const NewEventScreen = ({ navigation }: any) => {
     event.description = eventDescription.trim();
     event.startDate = eventStartDate.toString();
     event.endDate = eventEndDate.toString();
+    event.expensesDataContextKey = `event-${event.id}_${event.name}-reports-${SaveConstants.expenseReport.key}`;
     events.push(event);
     const sanitizedEventName = Utility.SanitizeString(event.name);
     const pdfFileName = `nota_spese_${sanitizedEventName}_${Utility.GetYear(event.startDate)}_nomeTL`;
-    const creationResult = await PDFBuilder.createDirectoryAndPdf(event, sanitizedEventName, pdfFileName);
-    if (creationResult) {
-      console.log("Ok, ", event.fullFilePath, event.directoryPath);
+    const directoryName = `${sanitizedEventName}_${Utility.FormatDateDDMMYYYY(event.startDate, "-")}_${Utility.FormatDateDDMMYYYY(event.endDate, "-")}_${Utility.GenerateRandomGuid("")}`;
+    const createdFile = await PDFBuilder.createExpensesPdfAsync(event, directoryName, pdfFileName);
+    event.reportFileName = pdfFileName;
+    if (createdFile) {
+      const filePath = createdFile.filePath as string;
+      event.directoryName = directoryName;
+      event.fullFilePath = filePath;
+      event.directoryPath = filePath.substring(0, filePath.lastIndexOf("/"));
       dataContext.Events.saveData(events);
       navigation.navigate(Constants.Navigation.Home)
     } else {

@@ -21,6 +21,7 @@ import { faCalendarDay, faCalendarWeek, faCamera, faCheck, faChevronDown, faChev
 import NewEventScreen from './src/Screens/NewEventScreen';
 import EventHomeScreen from './src/Screens/EventHomeScreen';
 import { ThemeColors } from './src/lib/GlobalStyles';
+import ViewPdfScreen from './src/Screens/ViewPdfScreen';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
@@ -50,6 +51,7 @@ function App(): JSX.Element {
         <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} options={commonOptions} />
         <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEventScreen} options={commonOptions} />
         <Stack.Screen name={Constants.Navigation.EventHome} component={EventHomeScreen} options={commonOptions} />
+        <Stack.Screen name={Constants.Navigation.ViewPdf} component={ViewPdfScreen} options={commonOptions} />
       </Stack.Navigator>
     </NavigationContainer>
   );

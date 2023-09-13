@@ -5,16 +5,16 @@ import React, { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-
 import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
-import { TLMButtonComponent, TLMButtonType } from '../lib/components/TLMButtonComponent';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { ExpenseReport } from '../lib/models/ExpenseReport';
 import dataContext from '../lib/models/DataContext';
-import { MediaType } from 'react-native-image-picker/lib/typescript/types'
 import { InputNumber } from '../lib/components/InputNumberComponent';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { Currency } from '../lib/data/Currencies';
 import { Constants } from '../lib/Constants';
 import { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
+import { FileManager } from '../lib/FileManager';
+import { PDFBuilder } from '../lib/PDFBuilder';
 
 const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
@@ -23,9 +23,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenseDate, setExpenseDate] = useState(new Date());
     const [expenseAmount, setExpenseAmount] = useState('');
     const [showDateTimePicker, setShowDateTimePicker] = useState(false);
-    const [setDateFunction, setSetDateFunction] = useState('');
     const [photo, setPhoto] = useState<any>();
-    const [feedback, setFeedback] = useState('Feedback original state');
     const [amountCurrencyCode, setAmountCurrencyCode] = useState('EUR');
     const [isFormValid, setIsFormValid] = useState(false);
 
@@ -57,7 +55,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         }
     };
 
-    const saveExpenseReport = () => {
+    const saveExpenseReport = async () => {
         let expense: ExpenseReport = new ExpenseReport();
         if (expenses && expenses.map) {
             let id = Math.max(...expenses.map((e: ExpenseReport) => e.id));
@@ -66,13 +64,21 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
             expense.description = expenseDescription.trim();
             expense.amount = Number(expenseAmount);
             expense.date = expenseDate.toString();
-            expense.timeStamp = new Date().toString();
-            expense.receiptPhotoBase64 = photo.base64;
-            expenses.push(expense);
-            dataContext.ExpenseReports.saveData(expenses);
-            setExpenses(dataContext.ExpenseReports.getAllData());
-            resetForm();
-            navigation.navigate(Constants.Navigation.Event);
+            expense.timeStamp = new Date().toString();            
+            const photoFileName = `${Utility.SanitizeString(event.name)}-${Utility.SanitizeString(expense.name)}-${Utility.FormatDateDDMMYYYY(expense.date, '-')}-${Utility.GenerateRandomGuid("")}.${Utility.GetExtensionFromType(photo.type)}`;
+            const photoFileFullPath = `${event.directoryPath}/${photoFileName}`;
+            const saveResult = await FileManager.saveFromBase64(photoFileFullPath, photo.base64);
+            if (saveResult) {                
+                expense.photoFilePath = photoFileFullPath;
+                expenses.push(expense);
+                PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName, expenses);
+                dataContext.ExpenseReports.saveData(expenses);
+                setExpenses(dataContext.ExpenseReports.getAllData());
+                resetForm();
+                navigation.navigate(Constants.Navigation.Event);
+            } else {
+                console.log("Cannot save the expense report because the photo could not be added to external storage");
+            }
         }
     };
 
@@ -83,16 +89,13 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const resetForm = () => {
         setExpenseName('');
         setExpenseAmount('');
+        setExpenseDescription('');
         setExpenseDate(new Date());
         setPhoto(undefined);
         setIsFormValid(false);
     }
 
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
-
-    const clear = () => {
-        dataContext.ExpenseReports.saveData([]);
-    }
 
     return (
         <NativeBaseProvider>
@@ -163,15 +166,10 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                             <FormControl.Label>Descrizione della spesa</FormControl.Label>
                             <TextArea placeholder="Descrizione della spesa" onChange={handleExpenseDescriptionChange} autoCompleteType={true}></TextArea>
                         </FormControl>
-                        {/* <HStack space={2} justifyContent="center" style={GlobalStyles.mt15}>
-                            <TLMButtonComponent title='Salva' buttonType={TLMButtonType.Primary} onPress={saveExpenseReport}></TLMButtonComponent>
-                        </HStack> */}
                     </View>
                 ) : (
                     <Text></Text>
                 )}
-                {/* <InputSideButton icon={"trash"} pressFunction={clear}></InputSideButton> */}
-                {/* <Text>{feedback}</Text> */}
             </ScrollView>
         </NativeBaseProvider>
     )
