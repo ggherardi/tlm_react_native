@@ -2,9 +2,11 @@ import { SaveConstants, Storage } from "../DataStorage";
 import { BusinessDataTypeBase } from "./BusinessDataTypeBase";
 import { BusinessEvent } from "./BusinessEvent";
 import { ExpenseReport } from "./ExpenseReport";
+import { UserProfile } from './UserProfile';
 
 class DataContext {
     Events: DataSet<BusinessEvent> = new DataSet<BusinessEvent>(SaveConstants.events.key, BusinessEvent);
+    UserProfile: DataSet<UserProfile> = new DataSet<UserProfile>(SaveConstants.userProfile.key, UserProfile);
     ExpenseReports!: DataSet<ExpenseReport>;
 
     setExpenseReportsKey = (storageKey: string) => {
@@ -40,7 +42,7 @@ class DataSet<T extends BusinessDataTypeBase> {
             this.classRef.extraDeleteSteps(element[0]);
         }
         this.refreshData();
-    }
+    }    
 
     getAllData = (): T[] => { 
         this.refreshData();

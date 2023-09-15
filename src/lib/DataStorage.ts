@@ -35,14 +35,19 @@ export default class DataStorage {
 
   load = (key: string, dataContextKey: string): any => {
     let returnValue;
+    let json;
     const saveConstant = (SaveConstants as any)[dataContextKey];
     if (saveConstant) {
       switch (saveConstant.dataType) {
         case 'string':
           returnValue = this.storage.getString(key);
           break;
+        case 'json':
+          json = this.storage.getString(key);                    
+          returnValue = json ? JSON.parse(json) : {};
+          break;
         case 'array':          
-          const json = this.storage.getString(key);                    
+          json = this.storage.getString(key);                    
           returnValue = json ? JSON.parse(json) : [];
           break;
         case 'buffer':
@@ -69,6 +74,10 @@ export const SaveConstants = {
   },
   expenseReport: {
     key: 'expenseReport',
+    dataType: 'array'
+  },
+  userProfile: {
+    key: 'userProfile',
     dataType: 'array'
   }
 };

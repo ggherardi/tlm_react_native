@@ -17,16 +17,17 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons/faSquareCheck'
 import { faBeerMugEmpty } from '@fortawesome/free-solid-svg-icons/faBeerMugEmpty'
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar'
-import { faCalendarDay, faCalendarWeek, faCamera, faCheck, faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faCog, faFilePdf, faFloppyDisk, faPaperPlane, faPlus, faSave, faSearch, faTable, faTableCells, faTableCellsLarge, faTableColumns, faTableList, faTableTennis, faTimeline, faTrash, faUpload, faX } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDay, faCalendarWeek, faCamera, faCheck, faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faCog, faFilePdf, faFloppyDisk, faPaperPlane, faPlus, faSave, faSearch, faTable, faTableCells, faTableCellsLarge, faTableColumns, faTableList, faTableTennis, faTimeline, faTrash, faUpload, faUser, faX } from '@fortawesome/free-solid-svg-icons';
 import NewEventScreen from './src/Screens/NewEventScreen';
 import EventHomeScreen from './src/Screens/EventHomeScreen';
 import { ThemeColors } from './src/lib/GlobalStyles';
 import ViewPdfScreen from './src/Screens/ViewPdfScreen';
+import ProfileScreen from './src/Screens/ProfileScreen';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
   faTimeline, faCamera, faUpload, faX, faSearch, faChevronDown, faChevronLeft, faChevronRight, faChevronUp,
-  faCheck, faSave, faFloppyDisk, faCog, faPaperPlane, faFilePdf)
+  faCheck, faSave, faFloppyDisk, faCog, faPaperPlane, faFilePdf, faUser)
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +53,7 @@ function App(): JSX.Element {
         <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEventScreen} options={commonOptions} />
         <Stack.Screen name={Constants.Navigation.EventHome} component={EventHomeScreen} options={commonOptions} />
         <Stack.Screen name={Constants.Navigation.ViewPdf} component={ViewPdfScreen} options={commonOptions} />
+        <Stack.Screen name={Constants.Navigation.UserProfile} component={ProfileScreen} options={commonOptions} />
       </Stack.Navigator>
     </NavigationContainer>
   );

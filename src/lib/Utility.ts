@@ -1,8 +1,19 @@
 import React, { useEffect } from "react";
 import { PermissionsAndroid } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
+import { UserProfile } from './models/UserProfile';
+import dataContext from './models/DataContext';
 
 export const Utility = {
+  GetUserProfile: (): UserProfile => {
+    let userProfile;
+    const userProfileAllData = dataContext.UserProfile.getAllData();
+    if (userProfileAllData && userProfileAllData.length) {
+      userProfile = userProfileAllData[0];
+    }
+    return userProfile || new UserProfile;
+  },
+
   storageTest: async () => {
     console.log(RNFetchBlob.fs.dirs.DocumentDir);
     RNFetchBlob.fs.ls("/storage/emulated/0/Android/data/com.tlm/files/Documents")

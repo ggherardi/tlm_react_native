@@ -1,4 +1,5 @@
 import { Utility } from './Utility';
+import { Bootstrap } from './bootstrap';
 import { BusinessEvent } from './models/BusinessEvent';
 import { ExpenseReport } from './models/ExpenseReport';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
@@ -28,13 +29,16 @@ export const PDFBuilder = {
       .mb-5 {
         margin-bottom: 30px;
       }
+
+      ${Bootstrap.style}
+
       @media print {
         .pagebreak { page-break-before: always; }
       }      
     </style>
     <div>
       <h1>${event.name} (${Utility.FormatDateDDMMYYYY(event.startDate)} - ${Utility.FormatDateDDMMYYYY(event.endDate)})</h1>
-      <table>
+      <table class="table table-striped">
         <caption>
           Nota spese
         </caption>
@@ -69,11 +73,18 @@ export const PDFBuilder = {
       </table>`
 
     html += `
-    </div>`;
+    </div>
+    <div class="pagebreak"></div>
+    `;
 
     // GG: I know this is slower, but it's much more readable this way
     for (let i = 0; i < expenses.length; i++) {
       const expense = expenses[i];
+      html += `
+      // <div>
+      //   <img src="file:///${expense.photoFilePath}">
+      // </div>          
+      // `;
       html += `
       <div class="pagebreak"></div>
       <div>
@@ -83,5 +94,5 @@ export const PDFBuilder = {
       `;
     }
     return html;
-  }
+  },
 }

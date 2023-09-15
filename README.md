@@ -1,3 +1,34 @@
+Data = Data corrente solo data
+Gruppo = Nome Evento
+Data Evento = dal evento al evento
+Destinazione = Città
+
+Aggiungere alle impostazioni dell'evento:
+Spunta per uso auto?
+Località di partenza = Località di partenza (in auto)
+Località di arrivo = Località di arrivo (in auto)
+Km effettuati => Se compilato compare anche il campo:
+Importo forfettario rimborso => sarà compilato con con un default di 0.2€ che potrà essere però modificato manualmente
+
+Eliminare il numero dalla griglia (N.)
+
+Modificare il campo "Descrizione" delle spese in "Note" ed aggiungerlo alla griglia finale del pdf
+
+Eliminare orario dalla data della spesa
+
+Aggiungere all'evento il campo Fondo cassa. Se questo campo viene riempito, quando viene effettuato il calcolo dell'ammontare totale, va anche sottratto l'importo del fondo cassa. Questa informazione è utile soprattutto al TL, di conseguenza devono essere meno evidenziati i campi. Aggiungere campo con fondo cassa e sotto il campo con il totale da cui è stato sottratto il fondo cassa. Eventualmente un'altra griglia sotto a quella principale.
+
+Evidenziare bene il totale del rimborso (con un colore o un font più grande o ambedue)
+
+Eliminare la firma
+
+Aggiungere email allo user profile
+
+Aggiungere un modo per inviare le notifiche all'utente ogni giorno per 3 giorni prima della scadenza dell'evento (data fine evento). Eventualmente tramite notifiche dello smartphone ma anche tramite email. Previo consenso.
+
+
+
+
 npm i @react-navigation/native
 npm i @react-navigation/native-stack
 npm i react-native-screens
@@ -23,7 +54,7 @@ npm i --save react-native-vector-icons
 npm i --save @types/react-native-vector-icons
 npm i --save react-native-email
 npm i --save react-native-fetch-blob
-# To retry when I have a working internet access npm i --save react-native-html-to-pdf
+npm i --save react-native-html-to-pdf
 npm i --save react-native-pdf
 npm i --save react-native-blob-util
 
