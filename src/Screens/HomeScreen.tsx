@@ -15,7 +15,7 @@ const HomeScreen = ({ navigation }: any) => {
 
   useEffect(() => {
     // useCustomHeader(navigation, "Tutti gli eventi");   
-    useCustomHeaderWithButton(navigation, "Tutti gli eventi", () => { navigation.navigate(Constants.Navigation.NewExpenseReport) }, 'user'); 
+    useCustomHeaderWithButton(navigation, "Tutti gli eventi", () => { navigation.navigate(Constants.Navigation.UserProfile) }, 'user'); 
   }, []);
 
   const goToNewEvent = () => navigation.navigate(Constants.Navigation.NewEvent);

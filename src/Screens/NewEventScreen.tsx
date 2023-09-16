@@ -15,6 +15,7 @@ import { Constants } from '../lib/Constants';
 import { Countries, GetCountries, GetCountry } from '../lib/data/Countries';
 import { PDFBuilder } from '../lib/PDFBuilder';
 import { SaveConstants } from '../lib/DataStorage';
+import { Cities, GetCity } from '../lib/data/Cities';
 
 const NewEventScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData())
@@ -25,7 +26,7 @@ const NewEventScreen = ({ navigation }: any) => {
   const [eventEndDate, setEventEndDate] = useState(new Date());
   const [setDateFunction, setSetDateFunction] = useState('');
   const [mainCurrencyCode, setMainCurrencyCode] = useState('EUR');
-  const [countriesCodes, setCountriesCodes] = useState<string[]>([]);
+  const [city, setCity] = useState('')
   const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
   const [isFormValid, setIsFormValid] = useState(false);
   
@@ -35,9 +36,9 @@ const NewEventScreen = ({ navigation }: any) => {
 
   const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);
   const handleEventDescriptionChange = (e: any) => setEventDescription(e.nativeEvent.text);
+  const handleCityChange = (e: any) => setCity(e.nativeEvent.text);
   const handleCurrencyAdd = (items: string[]) => setCurrenciesCodes(items);
-  const handleMainCurrencyChange = (value: any) => setMainCurrencyCode(value);
-  const handleCountryChange = (items: string[]) => setCountriesCodes(items);
+  const handleMainCurrencyChange = (value: any) => setMainCurrencyCode(value);  
 
   const saveEvent = async () => {
     let event: BusinessEvent = new BusinessEvent();
@@ -46,7 +47,7 @@ const NewEventScreen = ({ navigation }: any) => {
     event.name = eventName.trim();
     event.mainCurrency = GetCurrency(mainCurrencyCode) as Currency;
     event.currencies = GetCurrencies(currenciesCodes);
-    event.country = GetCountry(countriesCodes && countriesCodes && countriesCodes.length ? countriesCodes[0] : '');
+    event.city = city;
     event.description = eventDescription.trim();
     event.startDate = eventStartDate.toString();
     event.endDate = eventEndDate.toString();
@@ -127,57 +128,14 @@ const NewEventScreen = ({ navigation }: any) => {
         )}
 
         <FormControl style={GlobalStyles.mt15} isRequired>
-          <FormControl.Label>Valuta principale</FormControl.Label>
+          <FormControl.Label>Destinazione</FormControl.Label>
+          <Input placeholder="Destinazione (città)" onChange={handleCityChange}></Input>
         </FormControl>
-        <Select width={"100%"} onValueChange={handleMainCurrencyChange} selectedValue={mainCurrencyCode}>
-          {Currencies && Currencies.length && Currencies.map(currency => (
-            <Select.Item key={`select_item_${currency.code}`} label={currency.name} value={currency.code} />
-          ))}
-        </Select>
-
-        <FormControl style={GlobalStyles.mt15}>
-          <FormControl.Label>Paese</FormControl.Label>
-        </FormControl>
-        <View style={{ flex: 1, width: "100%" }}>
-          <SectionedMultiSelect
-            single={true}
-            items={Countries}
-            uniqueKey="code"
-            selectedItems={countriesCodes}
-            onSelectedItemsChange={handleCountryChange}
-            //@ts-ignore
-            IconRenderer={MultiSelectIconComponent}
-            selectText="Seleziona paese"
-            styles={{ ...multiSelectStyle, selectToggleText: { color: 'black', fontSize: 12 } }}
-            searchPlaceholderText='Cerca paese'
-            confirmText='Conferma'
-          />
-        </View>
 
         <FormControl style={GlobalStyles.mt15}>
           <FormControl.Label>Descrizione dell'evento</FormControl.Label>
           <TextArea placeholder="Descrizione breve dell'evento" onChange={handleEventDescriptionChange} autoCompleteType={true}></TextArea>
         </FormControl>
-
-        <FormControl style={GlobalStyles.mt15}>
-          <FormControl.Label>Valute aggiuntive</FormControl.Label>
-        </FormControl>
-        <View style={{ flex: 1, width: "100%" }}>
-          <SectionedMultiSelect
-            items={Currencies}
-            uniqueKey="code"
-            selectedItems={currenciesCodes}
-            onSelectedItemsChange={handleCurrencyAdd}
-            //@ts-ignore
-            IconRenderer={MultiSelectIconComponent}
-            selectText="Seleziona valute aggiuntive"
-            styles={multiSelectStyle}
-            searchPlaceholderText='Cerca valuta'
-            confirmText='Conferma'
-            selectedText='selezionate'
-          />
-        </View>
-
       </ScrollView>
     </NativeBaseProvider>
   );

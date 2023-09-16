@@ -1,31 +1,41 @@
-import { NativeBaseProvider, ScrollView } from 'native-base';
+import { FormControl, Input, NativeBaseProvider, ScrollView } from 'native-base';
 import React, { StyleSheet, Text, View } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
-import useCustomHeader from '../lib/components/CustomHeaderComponent';
+import useCustomHeader, { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
 import { UserProfile } from '../lib/models/UserProfile';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import dataContext from '../lib/models/DataContext';
 
 const ProfileScreen = ({ route, navigation }: any) => {
     const [userProfile, setUserProfile] = useState<UserProfile>(Utility.GetUserProfile());
+    const [name, setName] = useState(userProfile.name);
+    const [surname, setSurname] = useState(userProfile.surname);
+    console.log(userProfile, name, surname);
 
-    const refreshData = async () => {
-        useCustomHeader(navigation.getParent(), `Impostazioni profilo`);
+    const save = () => {
+        const profile = new UserProfile();
+        profile.name = name.trim();
+        profile.surname = surname.trim();
+        dataContext.UserProfile.saveData([profile]);
     };
-    Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
+
+    useEffect(() => {
+        useCustomHeaderSaveButton(navigation, `Profilo Tour Leader`, () => save());
+    });
 
     return (
         <NativeBaseProvider>
             <ScrollView contentContainerStyle={[GlobalStyles.container]}>
-                <View style={[styles.section]}>
-                    <Text style={[styles.caption]}>Nome Tour Leader</Text>
-                    <Text style={[styles.text]}>{userProfile.name}</Text>
-                </View>
-                <View style={[styles.section]}>
-                    <Text style={[styles.caption]}>Paese</Text>
-                    <Text style={[styles.text]}>{userProfile.surname}</Text>
-                </View>
+                <FormControl style={GlobalStyles.mt15} isRequired>
+                    <FormControl.Label>Nome</FormControl.Label>
+                    <Input value={name} placeholder="Nome TL" onChange={(e: any) => setName(e.nativeEvent.text)}></Input>
+                </FormControl>
+                <FormControl style={GlobalStyles.mt15} isRequired>
+                    <FormControl.Label>Cognome</FormControl.Label>
+                    <Input value={surname} placeholder="Cognome TL" onChange={(e: any) => setSurname(e.nativeEvent.text)}></Input>
+                </FormControl>
             </ScrollView>
         </NativeBaseProvider>
     )

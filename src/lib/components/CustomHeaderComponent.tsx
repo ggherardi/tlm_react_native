@@ -45,10 +45,9 @@ const BaseCustomHeaderComponent = ({ title, subtitle }: ICustomHeaderComponent) 
 
 const CustomHeaderWithButtonComponent = ({ title, subtitle, onClick, icon, isDisabled }: ICustomHeaderWithButtonComponent) => {
     return (
-        <NativeBaseProvider>
-            <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', width: '75%' }]}>
-                <View style={{ flex: 2 }}><Text>test</Text></View>
-                <View style={{ flex: 4 }}>
+        <NativeBaseProvider>            
+            <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', width: '90%' }]}>                
+                <View style={{ flex: 6 }}>
                     {subtitle != undefined && subtitle != "" ? (
                         <VStack>
                             <Text style={[styles.eventName, GlobalStyles.colorWhite]} numberOfLines={1}>{title}</Text>

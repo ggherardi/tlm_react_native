@@ -1,5 +1,5 @@
 import { Utility } from './Utility';
-import { Bootstrap } from './bootstrap';
+import { Bootstrap } from './Bootstrap';
 import { BusinessEvent } from './models/BusinessEvent';
 import { ExpenseReport } from './models/ExpenseReport';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';

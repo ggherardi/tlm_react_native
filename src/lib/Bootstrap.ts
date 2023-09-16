@@ -8095,7 +8095,5 @@ export const Bootstrap = {
      border: 1px solid #ddd !important;
    }
  }
- 
- /*# sourceMappingURL=bootstrap.css.map */
   `
 }

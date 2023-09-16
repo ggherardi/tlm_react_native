@@ -1,6 +1,6 @@
 Data = Data corrente solo data
 Gruppo = Nome Evento
-Data Evento = dal evento al evento
+Data Evento = dal data inizio evento al data fine evento
 Destinazione = Città
 
 Aggiungere alle impostazioni dell'evento:
