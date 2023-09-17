@@ -10,7 +10,7 @@ Località di arrivo = Località di arrivo (in auto)
 Km effettuati => Se compilato compare anche il campo:
 Importo forfettario rimborso => sarà compilato con con un default di 0.2€ che potrà essere però modificato manualmente
 
-Eliminare il numero dalla griglia (N.)
+OK - Eliminare il numero dalla griglia (N.)
 
 Modificare il campo "Descrizione" delle spese in "Note" ed aggiungerlo alla griglia finale del pdf
 
@@ -18,7 +18,7 @@ Eliminare orario dalla data della spesa
 
 Aggiungere all'evento il campo Fondo cassa. Se questo campo viene riempito, quando viene effettuato il calcolo dell'ammontare totale, va anche sottratto l'importo del fondo cassa. Questa informazione è utile soprattutto al TL, di conseguenza devono essere meno evidenziati i campi. Aggiungere campo con fondo cassa e sotto il campo con il totale da cui è stato sottratto il fondo cassa. Eventualmente un'altra griglia sotto a quella principale.
 
-Evidenziare bene il totale del rimborso (con un colore o un font più grande o ambedue)
+OK - Evidenziare bene il totale del rimborso (con un colore o un font più grande o ambedue)
 
 Eliminare la firma
 
