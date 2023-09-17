@@ -13,8 +13,7 @@ import { Storage } from '../lib/DataStorage';
 const HomeScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData());
 
-  useEffect(() => {
-    // useCustomHeader(navigation, "Tutti gli eventi");   
+  useEffect(() => {    
     useCustomHeaderWithButton(navigation, "Tutti gli eventi", () => { navigation.navigate(Constants.Navigation.UserProfile) }, 'user'); 
   }, []);
 

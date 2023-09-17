@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useColorScheme } from 'react-native';
 import React from 'react';
@@ -23,6 +16,7 @@ import EventHomeScreen from './src/Screens/EventHomeScreen';
 import { ThemeColors } from './src/lib/GlobalStyles';
 import ViewPdfScreen from './src/Screens/ViewPdfScreen';
 import ProfileScreen from './src/Screens/ProfileScreen';
+import EditEventScreen from './src/Screens/EditEventScreen';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
@@ -54,6 +48,7 @@ function App(): JSX.Element {
         <Stack.Screen name={Constants.Navigation.EventHome} component={EventHomeScreen} options={commonOptions} />
         <Stack.Screen name={Constants.Navigation.ViewPdf} component={ViewPdfScreen} options={commonOptions} />
         <Stack.Screen name={Constants.Navigation.UserProfile} component={ProfileScreen} options={commonOptions} />
+        <Stack.Screen name={Constants.Navigation.EditEventScreen} component={EditEventScreen} options={commonOptions} />
       </Stack.Navigator>
     </NavigationContainer>
   );

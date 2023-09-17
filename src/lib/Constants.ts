@@ -8,6 +8,7 @@ export class Constants {
     ViewPdf: 'PDF Nota Spese',
     NewExpenseReport: 'Nuova spesa',
     EventHistoryScreen: 'History',
-    EventSettingsScreen: 'Impostazioni',    
+    EventSettingsScreen: 'Impostazioni',
+    EditEventScreen: 'Modifica evento',
   }
 }

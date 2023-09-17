@@ -13,7 +13,7 @@ import { Constants } from '../lib/Constants';
 import { PDFBuilder } from '../lib/PDFBuilder';
 import { SaveConstants } from '../lib/DataStorage';
 
-const NewEventScreen = ({ navigation }: any) => {
+const EditEventScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData())
   const [eventName, setEventName] = useState('');
   const [eventDescription, setEventDescription] = useState('');
@@ -169,4 +169,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default NewEventScreen;
+export default EditEventScreen;
