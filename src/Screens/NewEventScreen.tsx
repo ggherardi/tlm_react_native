@@ -12,6 +12,7 @@ import { Currency, GetCurrencies, GetCurrency } from '../lib/data/Currencies';
 import { Constants } from '../lib/Constants';
 import { PDFBuilder } from '../lib/PDFBuilder';
 import { SaveConstants } from '../lib/DataStorage';
+import { InputNumber } from '../lib/components/InputNumberComponent';
 
 const NewEventScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData())
@@ -24,6 +25,7 @@ const NewEventScreen = ({ navigation }: any) => {
   const [mainCurrencyCode, setMainCurrencyCode] = useState('EUR');
   const [city, setCity] = useState('')
   const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
+  const [cashFund, setCashFund] = useState();
   const [isFormValid, setIsFormValid] = useState(false);
   
   useEffect(() => {
@@ -33,8 +35,7 @@ const NewEventScreen = ({ navigation }: any) => {
   const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);
   const handleEventDescriptionChange = (e: any) => setEventDescription(e.nativeEvent.text);
   const handleCityChange = (e: any) => setCity(e.nativeEvent.text);
-  const handleCurrencyAdd = (items: string[]) => setCurrenciesCodes(items);
-  const handleMainCurrencyChange = (value: any) => setMainCurrencyCode(value);  
+  const handleCashFundChange = (e: any) => setCashFund(e.nativeEvent.text);
 
   const saveEvent = async () => {
     let event: BusinessEvent = new BusinessEvent();
@@ -124,8 +125,13 @@ const NewEventScreen = ({ navigation }: any) => {
         )}
 
         <FormControl style={GlobalStyles.mt15} isRequired>
-          <FormControl.Label>Destinazione</FormControl.Label>
-          <Input placeholder="Destinazione (città)" onChange={handleCityChange}></Input>
+          <FormControl.Label>Destinazione (città)</FormControl.Label>
+          <Input placeholder="es. Roma" onChange={handleCityChange}></Input>
+        </FormControl>
+
+        <FormControl style={GlobalStyles.mt15}>
+          <FormControl.Label>Fondo cassa (se fornito)</FormControl.Label>
+          <InputNumber placeholder='es. 10.5' onChange={handleCashFundChange} isRequired={true} />
         </FormControl>
 
         <FormControl style={GlobalStyles.mt15}>

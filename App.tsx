@@ -10,7 +10,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons/faSquareCheck'
 import { faBeerMugEmpty } from '@fortawesome/free-solid-svg-icons/faBeerMugEmpty'
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar'
-import { faCalendarDay, faCalendarWeek, faCamera, faCheck, faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faCog, faFilePdf, faFloppyDisk, faPaperPlane, faPlus, faSave, faSearch, faTable, faTableCells, faTableCellsLarge, faTableColumns, faTableList, faTableTennis, faTimeline, faTrash, faUpload, faUser, faX } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDay, faCalendarWeek, faCamera, faCheck, faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faCog, faFilePdf, faFloppyDisk, faPaperPlane, faPencil, faPlus, faSave, faSearch, faTable, faTableCells, faTableCellsLarge, faTableColumns, faTableList, faTableTennis, faTimeline, faTrash, faUpload, faUser, faX } from '@fortawesome/free-solid-svg-icons';
 import NewEventScreen from './src/Screens/NewEventScreen';
 import EventHomeScreen from './src/Screens/EventHomeScreen';
 import { ThemeColors } from './src/lib/GlobalStyles';
@@ -21,7 +21,7 @@ import EditEventScreen from './src/Screens/EditEventScreen';
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
   faTimeline, faCamera, faUpload, faX, faSearch, faChevronDown, faChevronLeft, faChevronRight, faChevronUp,
-  faCheck, faSave, faFloppyDisk, faCog, faPaperPlane, faFilePdf, faUser)
+  faCheck, faSave, faFloppyDisk, faCog, faPaperPlane, faFilePdf, faUser, faPencil)
 
 const Stack = createNativeStackNavigator();
 

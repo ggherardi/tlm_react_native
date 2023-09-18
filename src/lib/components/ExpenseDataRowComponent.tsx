@@ -55,7 +55,6 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
         <GestureHandlerRootView>
             <Swipeable key={`swipable_${expense.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions}>
                 <Pressable key={`${index}`} onPress={goToExpense} style={({ pressed }) => [styles.container, { opacity: pressed ? 1 : 1 }]}>
-                    {/* <HStack space={0}> */}
                     <View style={[GlobalStyles.flexRow, { flex: 1 }]}>
                         <View style={[GlobalStyles.flexRow, { flex: 1 }]}>
                             <VStack space={2}>
@@ -77,15 +76,13 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
                                     </View>
                                 </VStack>
                             ) : (
-                                <Text style={[styles.expenseName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{expense.name}</Text>
+                                <Text style={[styles.expenseName, GlobalStyles.selfCenter]}>{expense.name}</Text>
                             )}
                         </View>
                         <View style={[GlobalStyles.flexRow, GlobalStyles.selfCenter, { flex: 2 }]}>
-                            <Text style={{ fontSize: 20 }}>{event.mainCurrency?.symbol} {expense.amount}</Text>
+                            <Text style={{ fontSize: 20 }}>{expense.amount.toFixed(2)} {event.mainCurrency?.symbol}</Text>
                         </View>
                     </View>
-
-                    {/* </HStack> */}
                 </Pressable>
             </Swipeable>
         </GestureHandlerRootView>

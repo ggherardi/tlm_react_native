@@ -7,11 +7,14 @@ import { InputSideButton } from './InputSideButtonComponent';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface ICustomHeaderComponent {
+    navigation: any;
     title: string;
     subtitle?: string;
 }
 
 interface ICustomHeaderWithButtonComponent {
+    // @ts-ignore
+    navigation;
     title: string;    
     icon: IconProp;
     onClick: Function;
@@ -20,13 +23,15 @@ interface ICustomHeaderWithButtonComponent {
 }
 
 interface ICustomHeaderSaveButtonComponent {
+    // @ts-ignore
+    navigation;
     title: string;
     subtitle?: string;
     onSave: Function;
     isDisabled: boolean;
 }
 
-const BaseCustomHeaderComponent = ({ title, subtitle }: ICustomHeaderComponent) => {
+const BaseCustomHeaderComponent = ({ navigation, title, subtitle }: ICustomHeaderComponent) => {
     return (
         <NativeBaseProvider>
             <View>
@@ -43,11 +48,11 @@ const BaseCustomHeaderComponent = ({ title, subtitle }: ICustomHeaderComponent) 
     );
 }
 
-const CustomHeaderWithButtonComponent = ({ title, subtitle, onClick, icon, isDisabled }: ICustomHeaderWithButtonComponent) => {
+const CustomHeaderWithButtonComponent = ({ navigation, title, subtitle, onClick, icon, isDisabled }: ICustomHeaderWithButtonComponent) => {
     return (
         <NativeBaseProvider>            
-            <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', width: '90%' }]}>                
-                <View style={{ flex: 6 }}>
+            <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', width: navigation.canGoBack() ? '75%' : '90%'} ]}>                
+                <View style={{ flex: navigation.canGoBack() ? 4 : 6 }}>
                     {subtitle != undefined && subtitle != "" ? (
                         <VStack>
                             <Text style={[styles.eventName, GlobalStyles.colorWhite]} numberOfLines={1}>{title}</Text>
@@ -65,7 +70,7 @@ const CustomHeaderWithButtonComponent = ({ title, subtitle, onClick, icon, isDis
     )
 }
 
-const CustomHeaderSaveButtonComponent = ({ title, subtitle, onSave, isDisabled }: ICustomHeaderSaveButtonComponent) => {
+const CustomHeaderSaveButtonComponent = ({ navigation, title, subtitle, onSave, isDisabled }: ICustomHeaderSaveButtonComponent) => {
     return (
         <NativeBaseProvider>
             <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', width: '75%' }]}>                
@@ -89,19 +94,19 @@ const CustomHeaderSaveButtonComponent = ({ title, subtitle, onSave, isDisabled }
 
 const useCustomHeader = (navigation: any, title: string, subtitle?: string) => {
     navigation.setOptions({
-        headerTitle: () => <BaseCustomHeaderComponent title={title} subtitle={subtitle} />,
+        headerTitle: () => <BaseCustomHeaderComponent navigation={navigation} title={title} subtitle={subtitle} />,
     })
 }
 
-export const useCustomHeaderWithButton = (navigation: any, title: string, onClick: Function, icon: IconProp, subtitle?: string, isDisabled?: boolean) => {
+export const useCustomHeaderWithButton = (navigation: any, title: string, onClick: Function, icon: IconProp, subtitle?: string, isDisabled?: boolean) => {    
     navigation.setOptions({
-        headerTitle: () => <CustomHeaderWithButtonComponent title={title} icon={icon} subtitle={subtitle} onClick={onClick as Function} isDisabled={isDisabled as boolean} />,
+        headerTitle: () => <CustomHeaderWithButtonComponent navigation={navigation} title={title} icon={icon} subtitle={subtitle} onClick={onClick as Function} isDisabled={isDisabled as boolean} />,
     })
 }
 
 export const useCustomHeaderSaveButton = (navigation: any, title: string, onSave: Function, subtitle?: string, isDisabled?: boolean) => {
     navigation.setOptions({
-        headerTitle: () => <CustomHeaderSaveButtonComponent title={title} subtitle={subtitle} onSave={onSave as Function} isDisabled={isDisabled as boolean} />,
+        headerTitle: () => <CustomHeaderSaveButtonComponent navigation={navigation} title={title} subtitle={subtitle} onSave={onSave as Function} isDisabled={isDisabled as boolean} />,
     })
 }
 

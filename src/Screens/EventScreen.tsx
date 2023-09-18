@@ -19,8 +19,8 @@ import { PDFBuilder } from '../lib/PDFBuilder';
 const EventScreen = ({ route, navigation }: any) => {
     const [file, setFile] = useState<RNHTMLtoPDF.Pdf>();
     const [reports, setReports] = useState<ExpenseReport[]>();
+    const [event, setEvent] = useState(route.params[0]);
 
-    const event: BusinessEvent = route.params[0];
     let totalAmount = reports && reports.length && Utility.CalculateTotalAmount(reports, 'amount');
 
     useEffect(() => {
@@ -32,6 +32,7 @@ const EventScreen = ({ route, navigation }: any) => {
         let data = dataContext.ExpenseReports.getAllData();
         data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         setReports(data);
+        setEvent(Utility.GetEvent(event.id));
     };
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
@@ -52,11 +53,11 @@ const EventScreen = ({ route, navigation }: any) => {
         <NativeBaseProvider>
             <GestureHandlerRootView>
                 <ScrollView contentContainerStyle={[GlobalStyles.container]}>                    
-                    <View style={[GlobalStyles.flexRow, { padding: 10 }]}>
+                    <View style={[GlobalStyles.flexRow, { padding: 10, paddingBottom: 20 }]}>
                         <Text style={{ flex: 5, fontSize: 20 }}>Importo totale:</Text>
-                        <Text style={{ flex: 2, fontSize: 20 }}>{event.mainCurrency.symbol} {totalAmount}</Text>
+                        <Text style={{ flex: 2, fontSize: 20, fontWeight: 'bold' }}>{totalAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
                     </View>
-                    <HStack>
+                    <HStack style={{ paddingBottom: 20 }}>
                         <InputSideButton icon={'file-pdf'} pressFunction={() => viewPdf()} />
                         <InputSideButton icon={'paper-plane'} pressFunction={() => sendEmail()} />
                     </HStack>

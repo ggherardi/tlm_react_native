@@ -5,6 +5,11 @@ import { UserProfile } from './models/UserProfile';
 import dataContext from './models/DataContext';
 
 export const Utility = {
+  GetEvent: (id: number) => {
+    const foundEvent = dataContext.Events.getAllData().find(e => e.id == id);
+    return foundEvent;
+  },
+
   GetUserProfile: (): UserProfile => {
     let userProfile;
     const userProfileAllData = dataContext.UserProfile.getAllData();
@@ -12,26 +17,6 @@ export const Utility = {
       userProfile = userProfileAllData[0];
     }
     return userProfile || new UserProfile;
-  },
-
-  storageTest: async () => {
-    console.log(RNFetchBlob.fs.dirs.DocumentDir);
-    RNFetchBlob.fs.ls("/storage/emulated/0/Android/data/com.tlm/files/Documents")
-      .then((v) => { console.log("OK, ", v) })
-      .catch((e) => { console.log("OK, ", e) });
-    // RNFetchBlob.fs.ls(RNFetchBlob.fs.dirs.MainBundleDir)
-    //   .then((v) => { console.log("OK, ", v) })
-    //   .catch((e) => { console.log("OK, ", e) });
-    return;
-    const permissions = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-    if (permissions === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log("Granted permissions");
-      RNFetchBlob.fs.mkdir(`${RNFetchBlob.fs.dirs.MovieDir}/test1`)
-        .then((v) => { console.log("Success: ", v) })
-        .catch((e) => { console.log("Error: ", e) })
-    } else {
-      console.log("Permissions not granted");
-    }
   },
 
   SanitizeString: (str: string) => {

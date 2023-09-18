@@ -6,13 +6,17 @@ import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { GetCurrency } from '../lib/data/Currencies';
 import useCustomHeader from '../lib/components/CustomHeaderComponent';
 import Pdf from 'react-native-pdf';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const ViewPdfScreen = ({ route, navigation }: any) => {
+const ViewPdfScreen = ({ navigation, route }: any) => {
   const event: BusinessEvent = route.params.event;
 
+  useEffect(() => {
+    useCustomHeader(navigation, event.name, "PDF Nota Spese");
+  });
+
   const [pdfSource, setPdfSource] = useState<any>({ uri: `file:///${event.fullFilePath}`, cache: true });
-    
+
   return (
     <NativeBaseProvider>
       <ScrollView>

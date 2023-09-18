@@ -3,16 +3,22 @@ import React, { StyleSheet, Text, View } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
-import useCustomHeader, { useCustomHeaderWithButton } from '../lib/components/CustomHeaderComponent';
+import { useCustomHeaderWithButton } from '../lib/components/CustomHeaderComponent';
 import { Constants } from '../lib/Constants';
+import { useEffect, useState } from 'react';
+import dataContext from '../lib/models/DataContext';
 
 const EventSettingsScreen = ({ route, navigation }: any) => {
-    const event: BusinessEvent = route.params[0];    
+    const [event, setEvent] = useState(route.params[0]);
+
+    useEffect(() => {
+        useCustomHeaderWithButton(navigation.getParent(), event.name, () => { navigation.navigate(Constants.Navigation.EditEventScreen, { event: event }) }, 'pencil', 'Impostazioni evento');
+    });
 
     const refreshData = async () => {
-        useCustomHeaderWithButton(navigation, "Modifica evento", () => { navigation.navigate(Constants.Navigation.EditEventScreen) }, 'user'); 
-        useCustomHeader(navigation.getParent(), event.name, "Impostazioni evento");
+        setEvent(Utility.GetEvent(event.id));
     };
+
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
     return (

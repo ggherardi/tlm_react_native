@@ -8,6 +8,7 @@ export class UserProfile extends BusinessDataTypeBase {
   id!: number;
   name!: string;
   surname!: string;
+  email!: string;
   
   static getDataContextKey = () => SaveConstants.userProfile.key;
 

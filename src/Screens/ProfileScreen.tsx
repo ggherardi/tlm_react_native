@@ -12,12 +12,14 @@ const ProfileScreen = ({ route, navigation }: any) => {
     const [userProfile, setUserProfile] = useState<UserProfile>(Utility.GetUserProfile());
     const [name, setName] = useState(userProfile.name);
     const [surname, setSurname] = useState(userProfile.surname);
+    const [email, setEmail] = useState(userProfile.email);
     console.log(userProfile, name, surname);
 
     const save = () => {
         const profile = new UserProfile();
         profile.name = name.trim();
         profile.surname = surname.trim();
+        profile.email = email.trim();
         dataContext.UserProfile.saveData([profile]);
     };
 
@@ -30,11 +32,15 @@ const ProfileScreen = ({ route, navigation }: any) => {
             <ScrollView contentContainerStyle={[GlobalStyles.container]}>
                 <FormControl style={GlobalStyles.mt15} isRequired>
                     <FormControl.Label>Nome</FormControl.Label>
-                    <Input value={name} placeholder="Nome TL" onChange={(e: any) => setName(e.nativeEvent.text)}></Input>
+                    <Input defaultValue={name} placeholder="es. Mario" onChange={(e: any) => setName(e.nativeEvent.text)}></Input>
                 </FormControl>
                 <FormControl style={GlobalStyles.mt15} isRequired>
                     <FormControl.Label>Cognome</FormControl.Label>
-                    <Input value={surname} placeholder="Cognome TL" onChange={(e: any) => setSurname(e.nativeEvent.text)}></Input>
+                    <Input defaultValue={surname} placeholder="es. Rossi" onChange={(e: any) => setSurname(e.nativeEvent.text)}></Input>
+                </FormControl>
+                <FormControl style={GlobalStyles.mt15} isRequired>
+                    <FormControl.Label>Email</FormControl.Label>
+                    <Input defaultValue={email} placeholder="es. tl@gmail.com" onChange={(e: any) => setEmail(e.nativeEvent.text)}></Input>
                 </FormControl>
             </ScrollView>
         </NativeBaseProvider>

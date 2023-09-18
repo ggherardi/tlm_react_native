@@ -1,7 +1,7 @@
-Data = Data corrente solo data
-Gruppo = Nome Evento
-Data Evento = dal data inizio evento al data fine evento
-Destinazione = Città
+OK - Data = Data corrente solo data
+OK - Gruppo = Nome Evento
+OK - Data Evento = dal data inizio evento al data fine evento
+OK - Destinazione = Città
 
 Aggiungere alle impostazioni dell'evento:
 Spunta per uso auto?
@@ -20,11 +20,13 @@ Aggiungere all'evento il campo Fondo cassa. Se questo campo viene riempito, quan
 
 OK - Evidenziare bene il totale del rimborso (con un colore o un font più grande o ambedue)
 
-Eliminare la firma
+OK - Eliminare la firma
 
-Aggiungere email allo user profile
+OK - Aggiungere email allo user profile
 
 Aggiungere un modo per inviare le notifiche all'utente ogni giorno per 3 giorni prima della scadenza dell'evento (data fine evento). Eventualmente tramite notifiche dello smartphone ma anche tramite email. Previo consenso.
+
+Messaggio di successo dopo salvataggio profilo (o redirect back)
 
 
 

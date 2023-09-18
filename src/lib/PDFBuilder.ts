@@ -54,11 +54,16 @@ export const PDFBuilder = {
         <h1 class="text-center">NOTA SPESE</h1>
       </div>      
 
+      <div class="text-right my-5">
+        <span>Data:</span>
+        <span>${Utility.FormatDateDDMMYYYY(new Date().toString())}</span>
+      </div>
+
       <div class="my-5 row border border-dark p-3">
         <div class="col-6">
           <span>Gruppo:</span>
           <h2 class="font-weight-bold">${event.name}</h2>
-        </div>
+        </div>        
         <div class="col-6">
           <span>Date evento:</span>
           <h2 class="font-weight-bold">${Utility.FormatDateDDMMYYYY(event.startDate)} - ${Utility.FormatDateDDMMYYYY(event.endDate)}</h2>
@@ -137,13 +142,14 @@ export const PDFBuilder = {
 
     // GG: I know this is slower, but it's much more readable this way
     for (let i = 0; i < expenses.length; i++) {
+      let isEven = i % 2 == 0;
       const expense = expenses[i];
       html += `
-      <div class="pagebreak"></div>
-      <div>
+      ${isEven ? '<div class="pagebreak"></div>' : ''}
+      <div ${isEven ? '' : 'class="my-5"'}>
         <div class="mb-5">
           <span>Scontrino per la spesa:</span>
-          <span>${expense.name} - ${Utility.FormatDateDDMMYYYYhhmm(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
+          <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
         </div>
         <img src="file:///${expense.photoFilePath}">
       </div>          

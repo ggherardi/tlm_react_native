@@ -1,7 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, Input, NativeBaseProvider, Button, HStack, TextArea, Select } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
@@ -9,69 +9,52 @@ import { Utility } from '../lib/Utility';
 import dataContext from '../lib/models/DataContext';
 import { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
 import { Currency, GetCurrencies, GetCurrency } from '../lib/data/Currencies';
-import { Constants } from '../lib/Constants';
-import { PDFBuilder } from '../lib/PDFBuilder';
-import { SaveConstants } from '../lib/DataStorage';
 
-const EditEventScreen = ({ navigation }: any) => {
+const EditEventScreen = ({ navigation, route }: any) => {
+  const event: BusinessEvent = route.params.event;
+
   const [events, setEvents] = useState(dataContext.Events.getAllData())
-  const [eventName, setEventName] = useState('');
-  const [eventDescription, setEventDescription] = useState('');
+  const [eventName, setEventName] = useState(event.name);
+  const [eventDescription, setEventDescription] = useState(event.description);
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
-  const [eventStartDate, setEventStartDate] = useState(new Date());
-  const [eventEndDate, setEventEndDate] = useState(new Date());
+  const [eventStartDate, setEventStartDate] = useState(new Date(event.startDate));
+  const [eventEndDate, setEventEndDate] = useState(new Date(event.endDate));
   const [setDateFunction, setSetDateFunction] = useState('');
   const [mainCurrencyCode, setMainCurrencyCode] = useState('EUR');
-  const [city, setCity] = useState('')
+  const [city, setCity] = useState(event.city)
   const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
-  const [isFormValid, setIsFormValid] = useState(false);
-  
+  const [isFormValid, setIsFormValid] = useState(true);
+
   useEffect(() => {
-    useCustomHeaderSaveButton(navigation, "Crea nuovo evento", () => saveEvent(), undefined, isFormValid);
+    useCustomHeaderSaveButton(navigation, event.name, () => saveEvent(), "Modifica evento", !isFormValid);
   });
 
   const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);
   const handleEventDescriptionChange = (e: any) => setEventDescription(e.nativeEvent.text);
   const handleCityChange = (e: any) => setCity(e.nativeEvent.text);
-  const handleCurrencyAdd = (items: string[]) => setCurrenciesCodes(items);
-  const handleMainCurrencyChange = (value: any) => setMainCurrencyCode(value);  
 
   const saveEvent = async () => {
-    let event: BusinessEvent = new BusinessEvent();
-    let id = Math.max(...events.map((e: BusinessEvent) => e.id));
-    event.id = id >= 0 ? id + 1 : 0;
-    event.name = eventName.trim();
-    event.mainCurrency = GetCurrency(mainCurrencyCode) as Currency;
-    event.currencies = GetCurrencies(currenciesCodes);
-    event.city = city;
-    event.description = eventDescription.trim();
-    event.startDate = eventStartDate.toString();
-    event.endDate = eventEndDate.toString();
-    event.expensesDataContextKey = `event-${event.id}_${event.name}-reports-${SaveConstants.expenseReport.key}`;
-    events.push(event);
-    const sanitizedEventName = Utility.SanitizeString(event.name);
-    const pdfFileName = `nota_spese_${sanitizedEventName}_${Utility.GetYear(event.startDate)}_nomeTL`;
-    const directoryName = `${sanitizedEventName}_${Utility.FormatDateDDMMYYYY(event.startDate, "-")}_${Utility.FormatDateDDMMYYYY(event.endDate, "-")}_${Utility.GenerateRandomGuid("")}`;
-    const createdFile = await PDFBuilder.createExpensesPdfAsync(event, directoryName, pdfFileName);
-    event.reportFileName = pdfFileName;
-    if (createdFile) {
-      const filePath = createdFile.filePath as string;
-      event.directoryName = directoryName;
-      event.fullFilePath = filePath;
-      event.directoryPath = filePath.substring(0, filePath.lastIndexOf("/"));
+    const eventToEdit = events.find(e => e.id == event.id);
+    if (eventToEdit) {
+      eventToEdit.name = eventName.trim();
+      eventToEdit.mainCurrency = GetCurrency(mainCurrencyCode) as Currency;
+      eventToEdit.currencies = GetCurrencies(currenciesCodes);
+      eventToEdit.city = city ? city.trim() : "";
+      eventToEdit.description = eventDescription?.trim();
+      eventToEdit.startDate = eventStartDate.toString();
+      eventToEdit.endDate = eventEndDate.toString();
       dataContext.Events.saveData(events);
-      navigation.navigate(Constants.Navigation.Home)
-    } else {
-      console.log("Errore");
+      let dataTemp = dataContext.Events.getAllData();
+      navigation.goBack();
     }
   };
 
   return (
     <NativeBaseProvider>
       <ScrollView contentContainerStyle={styles.container}>
-        <FormControl style={GlobalStyles.mt15} isRequired>
+        <FormControl style={GlobalStyles.mt15}>
           <FormControl.Label>Nome dell'evento</FormControl.Label>
-          <Input placeholder="Nome evento" onChange={handleEventNameChange}></Input>
+          <Input defaultValue={event.name} placeholder="Nome evento" isDisabled onChange={handleEventNameChange}></Input>
         </FormControl>
 
         <FormControl style={GlobalStyles.mt15} isRequired>
@@ -124,13 +107,13 @@ const EditEventScreen = ({ navigation }: any) => {
         )}
 
         <FormControl style={GlobalStyles.mt15} isRequired>
-          <FormControl.Label>Destinazione</FormControl.Label>
-          <Input placeholder="Destinazione (città)" onChange={handleCityChange}></Input>
+          <FormControl.Label>Destinazione (città)</FormControl.Label>
+          <Input defaultValue={event.city} placeholder="es. Roma" onChange={handleCityChange}></Input>
         </FormControl>
 
         <FormControl style={GlobalStyles.mt15}>
           <FormControl.Label>Descrizione dell'evento</FormControl.Label>
-          <TextArea placeholder="Descrizione breve dell'evento" onChange={handleEventDescriptionChange} autoCompleteType={true}></TextArea>
+          <TextArea defaultValue={event.description} placeholder="Descrizione breve dell'evento" onChange={handleEventDescriptionChange} autoCompleteType={true}></TextArea>
         </FormControl>
       </ScrollView>
     </NativeBaseProvider>
