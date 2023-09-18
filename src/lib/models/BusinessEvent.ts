@@ -15,6 +15,7 @@ export class BusinessEvent extends BusinessDataTypeBase {
   city?: string;
   currencies?: (Currency | undefined)[];
   mainCurrency!: Currency;
+  needCarRefund?: boolean;
   refundStartingCity?: string;
   refundArrivalCity?: string;
   totalTravelledKms: number = 0;

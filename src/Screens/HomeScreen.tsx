@@ -7,14 +7,14 @@ import { HomeDataRowComponent } from '../lib/components/HomeDataRowComponent';
 import { Utility } from '../lib/Utility';
 import dataContext from '../lib/models/DataContext';
 import { Constants } from '../lib/Constants';
-import useCustomHeader, { useCustomHeaderWithButton } from '../lib/components/CustomHeaderComponent';
+import useCustomHeader, { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import { Storage } from '../lib/DataStorage';
 
 const HomeScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData());
 
   useEffect(() => {    
-    useCustomHeaderWithButton(navigation, "Tutti gli eventi", () => { navigation.navigate(Constants.Navigation.UserProfile) }, 'user'); 
+    useCustomHeaderWithButtonAsync(navigation, "Tutti gli eventi", () => { navigation.navigate(Constants.Navigation.UserProfile) }, 'user'); 
   }, []);
 
   const goToNewEvent = () => navigation.navigate(Constants.Navigation.NewEvent);

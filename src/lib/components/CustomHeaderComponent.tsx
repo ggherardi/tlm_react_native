@@ -98,10 +98,12 @@ const useCustomHeader = (navigation: any, title: string, subtitle?: string) => {
     })
 }
 
-export const useCustomHeaderWithButton = (navigation: any, title: string, onClick: Function, icon: IconProp, subtitle?: string, isDisabled?: boolean) => {    
-    navigation.setOptions({
-        headerTitle: () => <CustomHeaderWithButtonComponent navigation={navigation} title={title} icon={icon} subtitle={subtitle} onClick={onClick as Function} isDisabled={isDisabled as boolean} />,
-    })
+export const useCustomHeaderWithButtonAsync = (navigation: any, title: string, onClick: Function, icon: IconProp, subtitle?: string, isDisabled?: boolean) => {    
+    return new Promise((resolve, reject) => {
+        navigation.setOptions({
+            headerTitle: () => <CustomHeaderWithButtonComponent navigation={navigation} title={title} icon={icon} subtitle={subtitle} onClick={onClick as Function} isDisabled={isDisabled as boolean} />,
+        })
+    });    
 }
 
 export const useCustomHeaderSaveButton = (navigation: any, title: string, onSave: Function, subtitle?: string, isDisabled?: boolean) => {

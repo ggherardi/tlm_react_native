@@ -6,11 +6,11 @@ interface IInputNumber {
     placeholder: string;
     isRequired?: boolean;
     style?: any;
+    defaultValue?: number;
 }
 
 export const InputNumber = (config: IInputNumber) => {
     const [currentValue, setCurrentValue] = useState('');
-
     const validateNumber = (e: any) => {
         const text = e.nativeEvent.text;
         const validRegex = /[^0-9.]/g;
@@ -29,7 +29,7 @@ export const InputNumber = (config: IInputNumber) => {
             keyboardType='decimal-pad'
             onChange={validateNumber}
             isRequired={config.isRequired} 
-            value={currentValue}
-            style={config.style} />
+            style={config.style}
+            defaultValue={config.defaultValue ? config.defaultValue.toString() : ''} />
     )
 }

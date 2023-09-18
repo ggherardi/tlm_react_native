@@ -18,12 +18,13 @@ export const PDFBuilder = {
       if (file) {
         resolve(file);
       } else {
+        console.log("ERRORE");
         reject(undefined);
       }
     });
   },
 
-  generateHtml: (event: BusinessEvent, expenses: ExpenseReport[], totalAmount: Number | undefined): string => {
+  generateHtml: (event: BusinessEvent, expenses: ExpenseReport[], totalAmount: number): string => {
     const userProfile = Utility.GetUserProfile();
     let travelledKmsRefund = 0;
     if (Utility.IsNotNullOrUndefined(event.refundStartingCity) && Utility.IsNotNullOrUndefined(event.refundArrivalCity) && event.totalTravelledKms > 0 && event.travelRefundForfait > 0) {
@@ -96,7 +97,7 @@ export const PDFBuilder = {
         </div>
       </div>
 
-      <table class="table table-striped">
+      <table class="table">
         <thead>          
           <tr>
             <th>Data</th>
@@ -108,6 +109,7 @@ export const PDFBuilder = {
         <tbody>              
     `;
 
+    // Main table
     for (let i = 0; i < expenses.length; i++) {
       const expense = expenses[i];
       html += `
@@ -119,14 +121,13 @@ export const PDFBuilder = {
           </tr>
       `;
     }
-
     html += `
           <tr>
             <td></td>
             <td></td>
             <td>
               <div class="py-3 font-20 font-weight-bold">
-                TOTALE
+                <span>TOTALE NOTA SPESE</span>
               </div>
             </td>
             <td>
@@ -136,6 +137,32 @@ export const PDFBuilder = {
         </tbody>
       </table>`
 
+    // Cash fund table
+    html += `
+      <div style="width: 40%" class="mt-5">
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <td>Totale nota spese</td>
+              <td class="text-right">${totalAmount?.toFixed(2)} ${event.mainCurrency.symbol}</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>Fondo cassa ricevuto</td>
+              <td class="text-right">${event.cashFund && Number(event.cashFund).toFixed(2)} ${event.mainCurrency.symbol}</td>
+              <td>=</td>
+            </tr>
+            <tr class="border-bottom">
+              <td>Totale dovuto al Tour Leader</td>
+              <td class="text-right">${(totalAmount - Number(event.cashFund)).toFixed(2)} ${event.mainCurrency.symbol}</td>
+              <td />
+            </tr>
+          </tbody>
+        <table>   
+      </div>
+    `;
+
+    // Photos
     html += `
     </div>
     `;

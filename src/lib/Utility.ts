@@ -31,8 +31,8 @@ export const Utility = {
     return date && !isNaN(date.getDate());
   },
 
-  CalculateTotalAmount: (array: any[], propertyToReduceName: string) => {
-    return array.map(r => r[propertyToReduceName]).reduce((p, c) => Number(p) + Number(c));
+  CalculateTotalAmount: (array: any[], propertyToReduceName: string): number => {
+    return array.length ? array.map(r => r[propertyToReduceName]).reduce((p, c) => Number(p) + Number(c)) : 0;
   },
 
   FormatDateDDMMYYYY: (dateString: string, separator: string = '/'): string => {

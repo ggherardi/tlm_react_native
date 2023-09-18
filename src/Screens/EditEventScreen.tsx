@@ -1,7 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FormControl, Input, NativeBaseProvider, Button, HStack, TextArea, Select } from 'native-base';
+import { FormControl, Input, NativeBaseProvider, Button, HStack, TextArea, Select, Checkbox, ariaAttr } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, View } from 'react-native';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
@@ -9,9 +9,10 @@ import { Utility } from '../lib/Utility';
 import dataContext from '../lib/models/DataContext';
 import { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
 import { Currency, GetCurrencies, GetCurrency } from '../lib/data/Currencies';
+import { InputNumber } from '../lib/components/InputNumberComponent';
 
 const EditEventScreen = ({ navigation, route }: any) => {
-  const event: BusinessEvent = route.params.event;
+  const event: BusinessEvent = route.params.event;  
 
   const [events, setEvents] = useState(dataContext.Events.getAllData())
   const [eventName, setEventName] = useState(event.name);
@@ -23,7 +24,15 @@ const EditEventScreen = ({ navigation, route }: any) => {
   const [mainCurrencyCode, setMainCurrencyCode] = useState('EUR');
   const [city, setCity] = useState(event.city)
   const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
+  const [cashFund, setCashFund] = useState(event.cashFund);
+  const [needCarRefund, setNeedCarRefund] = useState(event.needCarRefund);
+  const [startingCity, setStartingCity] = useState(event.refundStartingCity);
+  const [arrivalCity, setArrivalCity] = useState(event.refundArrivalCity);
+  const [totalTravelledKms, setTotalTravelledKms] = useState(event.totalTravelledKms);
+  const [refundForfait, setRefundForfait] = useState(event.travelRefundForfait);
   const [isFormValid, setIsFormValid] = useState(true);
+
+  console.log("NeedCarRefund: ", needCarRefund);
 
   useEffect(() => {
     useCustomHeaderSaveButton(navigation, event.name, () => saveEvent(), "Modifica evento", !isFormValid);
@@ -32,6 +41,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
   const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);
   const handleEventDescriptionChange = (e: any) => setEventDescription(e.nativeEvent.text);
   const handleCityChange = (e: any) => setCity(e.nativeEvent.text);
+  const handleCashFundChange = (e: any) => setCashFund(e.nativeEvent.text);
 
   const saveEvent = async () => {
     const eventToEdit = events.find(e => e.id == event.id);
@@ -43,8 +53,15 @@ const EditEventScreen = ({ navigation, route }: any) => {
       eventToEdit.description = eventDescription?.trim();
       eventToEdit.startDate = eventStartDate.toString();
       eventToEdit.endDate = eventEndDate.toString();
+      eventToEdit.cashFund = cashFund ? cashFund : 0;
+      if (needCarRefund) {
+        eventToEdit.needCarRefund = needCarRefund;
+        eventToEdit.refundStartingCity = startingCity;
+        eventToEdit.refundArrivalCity = arrivalCity;
+        eventToEdit.totalTravelledKms = totalTravelledKms;
+        eventToEdit.travelRefundForfait = refundForfait;
+      }      
       dataContext.Events.saveData(events);
-      let dataTemp = dataContext.Events.getAllData();
       navigation.goBack();
     }
   };
@@ -112,9 +129,38 @@ const EditEventScreen = ({ navigation, route }: any) => {
         </FormControl>
 
         <FormControl style={GlobalStyles.mt15}>
+          <FormControl.Label>Fondo cassa (€)</FormControl.Label>
+          <InputNumber placeholder='es. 10.5' onChange={handleCashFundChange} isRequired={true} defaultValue={cashFund} />
+        </FormControl>
+
+        <FormControl style={GlobalStyles.mt15}>
           <FormControl.Label>Descrizione dell'evento</FormControl.Label>
           <TextArea defaultValue={event.description} placeholder="Descrizione breve dell'evento" onChange={handleEventDescriptionChange} autoCompleteType={true}></TextArea>
         </FormControl>
+
+        <FormControl style={GlobalStyles.mt15}>
+          <Checkbox value="Rimborso chilometrico" isChecked={needCarRefund} onChange={(e) => setNeedCarRefund(e)}>Rimborso chilometrico</Checkbox>
+        </FormControl>
+        {needCarRefund && (
+          <View>
+            <FormControl style={GlobalStyles.mt15} isRequired>
+              <FormControl.Label>Località di partenza (città)</FormControl.Label>
+              <Input defaultValue={event.refundStartingCity} placeholder="es. Roma" onChange={(e) => setStartingCity(e.nativeEvent.text)}></Input>
+            </FormControl>
+            <FormControl style={GlobalStyles.mt15} isRequired>
+              <FormControl.Label>Località di arrivo (città)</FormControl.Label>
+              <Input defaultValue={event.refundArrivalCity} placeholder="es. Firenze" onChange={(e) => setArrivalCity(e.nativeEvent.text)}></Input>
+            </FormControl>
+            <FormControl style={GlobalStyles.mt15} isRequired>
+              <FormControl.Label>Totale KM percorsi</FormControl.Label>
+              <InputNumber defaultValue={event.totalTravelledKms} placeholder="es. 35.8" onChange={(e: any) => setTotalTravelledKms(e.nativeEvent.text)}></InputNumber>
+            </FormControl>
+            <FormControl style={GlobalStyles.mt15} isRequired>
+              <FormControl.Label>Importo rimborso forfetetario (€)</FormControl.Label>
+              <InputNumber defaultValue={0.20} placeholder="es. 0.20" onChange={(e: any) => setRefundForfait(e.nativeEvent.text)}></InputNumber>
+            </FormControl>
+          </View>
+        )}
       </ScrollView>
     </NativeBaseProvider>
   );

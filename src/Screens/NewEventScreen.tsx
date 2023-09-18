@@ -48,6 +48,7 @@ const NewEventScreen = ({ navigation }: any) => {
     event.description = eventDescription.trim();
     event.startDate = eventStartDate.toString();
     event.endDate = eventEndDate.toString();
+    event.cashFund = cashFund ? cashFund : 0;
     event.expensesDataContextKey = `event-${event.id}_${event.name}-reports-${SaveConstants.expenseReport.key}`;
     events.push(event);
     const sanitizedEventName = Utility.SanitizeString(event.name);
@@ -130,7 +131,7 @@ const NewEventScreen = ({ navigation }: any) => {
         </FormControl>
 
         <FormControl style={GlobalStyles.mt15}>
-          <FormControl.Label>Fondo cassa (se fornito)</FormControl.Label>
+          <FormControl.Label>Fondo cassa (€)</FormControl.Label>
           <InputNumber placeholder='es. 10.5' onChange={handleCashFundChange} isRequired={true} />
         </FormControl>
 

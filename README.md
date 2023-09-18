@@ -12,11 +12,11 @@ Importo forfettario rimborso => sarà compilato con con un default di 0.2€ che
 
 OK - Eliminare il numero dalla griglia (N.)
 
-Modificare il campo "Descrizione" delle spese in "Note" ed aggiungerlo alla griglia finale del pdf
+OK - Modificare il campo "Descrizione" delle spese in "Note" ed aggiungerlo alla griglia finale del pdf
 
-Eliminare orario dalla data della spesa
+OK - Eliminare orario dalla data della spesa
 
-Aggiungere all'evento il campo Fondo cassa. Se questo campo viene riempito, quando viene effettuato il calcolo dell'ammontare totale, va anche sottratto l'importo del fondo cassa. Questa informazione è utile soprattutto al TL, di conseguenza devono essere meno evidenziati i campi. Aggiungere campo con fondo cassa e sotto il campo con il totale da cui è stato sottratto il fondo cassa. Eventualmente un'altra griglia sotto a quella principale.
+OK - Aggiungere all'evento il campo Fondo cassa. Se questo campo viene riempito, quando viene effettuato il calcolo dell'ammontare totale, va anche sottratto l'importo del fondo cassa. Questa informazione è utile soprattutto al TL, di conseguenza devono essere meno evidenziati i campi. Aggiungere campo con fondo cassa e sotto il campo con il totale da cui è stato sottratto il fondo cassa. Eventualmente un'altra griglia sotto a quella principale.
 
 OK - Evidenziare bene il totale del rimborso (con un colore o un font più grande o ambedue)
 
@@ -28,6 +28,7 @@ Aggiungere un modo per inviare le notifiche all'utente ogni giorno per 3 giorni 
 
 Messaggio di successo dopo salvataggio profilo (o redirect back)
 
+Fix Altezza pdf viewer
 
 
 
