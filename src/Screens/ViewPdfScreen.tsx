@@ -7,9 +7,11 @@ import { useEffect, useState } from 'react';
 import { EmailManager } from '../lib/EmailManager';
 import { Attachment } from '../lib/models/Attachment';
 import { Utility } from '../lib/Utility';
+import { UserProfile } from '../lib/models/UserProfile';
 
 const ViewPdfScreen = ({ navigation, route }: any) => {
   const event: BusinessEvent = route.params.event;
+  const userProfile: UserProfile = Utility.GetUserProfile();
 
   useEffect(() => {
     useCustomHeaderWithButtonAsync(navigation, event.name, () => { sendEmail() }, 'paper-plane', 'PDF Nota spese');
@@ -18,8 +20,8 @@ const ViewPdfScreen = ({ navigation, route }: any) => {
   const sendEmail = async () => {
     const attachments = [];
     attachments.push(new Attachment(`nota_spese_${event.name}_${Utility.GetYear(event.startDate)}_nomeTL`, event.fullFilePath));
-    // EmailManager.send(["e.campolo@tourleadermanagement.ch", "giamalfred@gmail.com"], `Nota spese ${event.name} del ${Utility.FormatDateDDMMYYYY(event.startDate)}. TL: nome_tl (da implementare)`, "Mail inviata dall'app con pdf generato", attachments);
-    EmailManager.send(["giamalfred@gmail.com"], `Nota spese ${event.name} del ${Utility.FormatDateDDMMYYYY(event.startDate)}. TL: nome_tl (da implementare)`, "Mail inviata dall'app con pdf generato dalla stessa app (ancora in fase grafica embrionale)", attachments);
+    EmailManager.send(["e.campolo@tourleadermanagement.ch", "giamalfred@gmail.com", "enricogherardi@hotmail.com"], `Nota spese ${event.name} del ${Utility.FormatDateDDMMYYYY(event.startDate)}. TL: ${userProfile.surname} ${userProfile.name}`, "Mail inviata dall'app con pdf generato", attachments);
+    // EmailManager.send(["giamalfred@gmail.com"], `Nota spese ${event.name} del ${Utility.FormatDateDDMMYYYY(event.startDate)}. TL: nome_tl (da implementare)`, "Mail inviata dall'app con pdf generato dalla stessa app (ancora in fase grafica embrionale)", attachments);
   }
 
   const [pdfSource, setPdfSource] = useState<any>({ uri: `file:///${event.fullFilePath}`, cache: true });

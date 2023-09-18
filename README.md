@@ -3,12 +3,12 @@ OK - Gruppo = Nome Evento
 OK - Data Evento = dal data inizio evento al data fine evento
 OK - Destinazione = Città
 
-Aggiungere alle impostazioni dell'evento:
-Spunta per uso auto?
-Località di partenza = Località di partenza (in auto)
-Località di arrivo = Località di arrivo (in auto)
-Km effettuati => Se compilato compare anche il campo:
-Importo forfettario rimborso => sarà compilato con con un default di 0.2€ che potrà essere però modificato manualmente
+OK - Aggiungere alle impostazioni dell'evento:
+OK - Spunta per uso auto?
+OK - Località di partenza = Località di partenza (in auto)
+OK - Località di arrivo = Località di arrivo (in auto)
+OK - Km effettuati => Se compilato compare anche il campo:
+OK - Importo forfettario rimborso => sarà compilato con con un default di 0.2€ che potrà essere però modificato manualmente
 
 OK - Eliminare il numero dalla griglia (N.)
 
@@ -28,7 +28,7 @@ Aggiungere un modo per inviare le notifiche all'utente ogni giorno per 3 giorni 
 
 Messaggio di successo dopo salvataggio profilo (o redirect back)
 
-Fix Altezza pdf viewer
+OK - Fix Altezza pdf viewer
 
 
 

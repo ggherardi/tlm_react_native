@@ -20,7 +20,7 @@ const EventSettingsScreen = ({ route, navigation }: any) => {
     };
 
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
-    console.log(event);
+    
     return (
         <NativeBaseProvider>
             <ScrollView contentContainerStyle={[GlobalStyles.container]}>

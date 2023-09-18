@@ -13,7 +13,6 @@ const ProfileScreen = ({ route, navigation }: any) => {
     const [name, setName] = useState(userProfile.name);
     const [surname, setSurname] = useState(userProfile.surname);
     const [email, setEmail] = useState(userProfile.email);
-    console.log(userProfile, name, surname);
 
     const save = () => {
         const profile = new UserProfile();

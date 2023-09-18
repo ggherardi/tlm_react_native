@@ -71,7 +71,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
             if (saveResult) {                
                 expense.photoFilePath = photoFileFullPath;
                 expenses.push(expense);
-                PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName, expenses);
+                PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);
                 dataContext.ExpenseReports.saveData(expenses);
                 setExpenses(dataContext.ExpenseReports.getAllData());
                 resetForm();
@@ -125,14 +125,9 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                             <Select.Item label="Taxi" value="Taxi" />
                         </Select>
                         <FormControl style={GlobalStyles.mt15} isRequired>
-                            <FormControl.Label>Importo della spesa</FormControl.Label>
+                            <FormControl.Label>Importo della spesa ({event.mainCurrency.symbol})</FormControl.Label>
                             <InputNumber placeholder='Importo' onChange={handleExpenseAmount} isRequired={true} />
                         </FormControl>
-                        <Select style={{ flex: 2 }} onValueChange={handleAmountCurrencyChange} selectedValue={amountCurrencyCode}>
-                            {allCurrencies && allCurrencies.length && allCurrencies.map(currency => (
-                                <Select.Item key={`select_item_${currency.code}`} label={currency.name} value={currency.code} />
-                            ))}
-                        </Select>
 
                         <FormControl style={GlobalStyles.mt15} isRequired>
                             <FormControl.Label>Data della spesa</FormControl.Label>

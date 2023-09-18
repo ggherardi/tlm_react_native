@@ -3,13 +3,17 @@ import { Bootstrap } from './Bootstrap';
 import { BusinessEvent } from './models/BusinessEvent';
 import { ExpenseReport } from './models/ExpenseReport';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { Constants } from './Constants';
+import dataContext from './models/DataContext';
 
 export const PDFBuilder = {
-  createExpensesPdfAsync: async (event: BusinessEvent, directoryName: string, fileName: string, reports: ExpenseReport[] = []): Promise<RNHTMLtoPDF.Pdf> => {
+  createExpensesPdfAsync: async (event: BusinessEvent, directoryName: string, fileName: string): Promise<RNHTMLtoPDF.Pdf> => {    
     return new Promise(async (resolve, reject) => {
-      const directory = `Documents/${directoryName}`
+      const directory = `Documents/${directoryName}`;
+      const expenses = dataContext.ExpenseReports.getAllData()
+      Utility.SortByDate(expenses, 'date', false);
       const options = {
-        html: PDFBuilder.generateHtml(event, reports, Utility.CalculateTotalAmount(reports, 'amount')),
+        html: PDFBuilder.generateHtml(event, expenses),
         fileName: fileName,
         directory: directory,
       };
@@ -18,22 +22,25 @@ export const PDFBuilder = {
       if (file) {
         resolve(file);
       } else {
-        console.log("ERRORE");
         reject(undefined);
       }
     });
   },
 
-  generateHtml: (event: BusinessEvent, expenses: ExpenseReport[], totalAmount: number): string => {
+  generateHtml: (event: BusinessEvent, expenses: ExpenseReport[]): string => {
     const userProfile = Utility.GetUserProfile();
     let travelledKmsRefund = 0;
-    if (Utility.IsNotNullOrUndefined(event.refundStartingCity) && Utility.IsNotNullOrUndefined(event.refundArrivalCity) && event.totalTravelledKms > 0 && event.travelRefundForfait > 0) {
+    if (event.needCarRefund && Utility.IsNotNullOrUndefined(event.refundStartingCity) && Utility.IsNotNullOrUndefined(event.refundArrivalCity) && event.totalTravelledKms > 0 && event.travelRefundForfait > 0) {      
       travelledKmsRefund = event.totalTravelledKms * event.travelRefundForfait;
       const expense = new ExpenseReport();
       expense.amount = travelledKmsRefund;
-      expense.name = "Rimborso chilometrico";
+      expense.name = Constants.Generic.TravelRefundExpenseName;
+      expense.description = '';
+      expense.date = new Date().toString();
       expenses.push(expense);
     }
+    const totalAmount: number = Utility.CalculateTotalAmount(expenses, 'amount')
+
     let html = `
     <style>
       ${Bootstrap.style}
@@ -82,18 +89,18 @@ export const PDFBuilder = {
         </div>
       </div>
 
-      <div class="${travelledKmsRefund == 0 ? 'd-none' : ''} border-bottom my-5">
+      <div class="${event.needCarRefund ? '' : 'd-none'} border-bottom my-5">
         <div>
           <span>Località di partenza:</span>
-          <span class="font-weight-bold">${"Genova"}</span>
+          <span class="font-weight-bold">${event.refundStartingCity}</span>
         </div>
         <div>
           <span>Località di arrivo:</span>
-          <span class="font-weight-bold">${"Genova"}</span>
+          <span class="font-weight-bold">${event.refundArrivalCity}</span>
         </div>
         <div>
           <span>Totale KM percorsi:</span>
-          <span class="font-weight-bold">${"500"}</span>
+          <span class="font-weight-bold">${event.totalTravelledKms}</span>
         </div>
       </div>
 
@@ -168,9 +175,12 @@ export const PDFBuilder = {
     `;
 
     // GG: I know this is slower, but it's much more readable this way
-    for (let i = 0; i < expenses.length; i++) {
-      let isEven = i % 2 == 0;
+    for (let i = 0; i < expenses.length; i++) {            
       const expense = expenses[i];
+      if (expense.name == Constants.Generic.TravelRefundExpenseName) {
+        continue;
+      }
+      let isEven = i % 2 == 0;
       html += `
       ${isEven ? '<div class="pagebreak"></div>' : ''}
       <div ${isEven ? '' : 'class="my-5"'}>

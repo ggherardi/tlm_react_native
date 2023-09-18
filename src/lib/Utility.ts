@@ -5,6 +5,17 @@ import { UserProfile } from './models/UserProfile';
 import dataContext from './models/DataContext';
 
 export const Utility = {
+  SortByDate: (array: any[], fieldToSort: string, ascending: boolean = true) => {
+    return array.sort((a, b) => {
+      if (!ascending) {
+        const temp = a;
+        a = b;
+        b = temp;
+      }
+      return new Date(a[fieldToSort]).getTime() - new Date(b[fieldToSort]).getTime();
+    });
+  },
+
   GetEvent: (id: number) => {
     const foundEvent = dataContext.Events.getAllData().find(e => e.id == id);
     return foundEvent;

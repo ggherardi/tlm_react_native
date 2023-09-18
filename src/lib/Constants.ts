@@ -11,4 +11,8 @@ export class Constants {
     EventSettingsScreen: 'Impostazioni',
     EditEventScreen: 'Modifica evento',
   }
+
+  static Generic = {
+    TravelRefundExpenseName: 'Rimborso chilometrico',
+  }
 }
