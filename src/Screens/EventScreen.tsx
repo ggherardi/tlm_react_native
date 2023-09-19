@@ -1,5 +1,5 @@
 import { HStack, NativeBaseProvider, View } from 'native-base';
-import React, { Dimensions, StyleSheet, Text } from 'react-native';
+import React, { Dimensions, Image, StyleSheet, Text } from 'react-native';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import useCustomHeader, { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import dataContext from '../lib/models/DataContext';
@@ -45,7 +45,7 @@ const EventScreen = ({ route, navigation }: any) => {
         <NativeBaseProvider>
             <GestureHandlerRootView>
                 <ScrollView contentContainerStyle={[GlobalStyles.container]}>                    
-                    <View style={[GlobalStyles.flexRow, { padding: 10, paddingBottom: 20 }]}>
+                    <View style={[GlobalStyles.flexRow, { padding: 10, paddingBottom: 20 }]}>                        
                         <Text style={{ flex: 5, fontSize: 20 }}>Importo totale:</Text>
                         <Text style={{ flex: 2, fontSize: 20, fontWeight: 'bold' }}>{totalAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
                     </View>                    

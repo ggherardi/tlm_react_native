@@ -5,13 +5,13 @@ import { ExpenseReport } from './models/ExpenseReport';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { Constants } from './Constants';
 import dataContext from './models/DataContext';
+import { Images } from '../assets';
 
 export const PDFBuilder = {
   createExpensesPdfAsync: async (event: BusinessEvent, directoryName: string, fileName: string): Promise<RNHTMLtoPDF.Pdf> => {    
     return new Promise(async (resolve, reject) => {
       const directory = `Documents/${directoryName}`;
-      const expenses = dataContext.ExpenseReports.getAllData()
-      Utility.SortByDate(expenses, 'date', false);
+      const expenses = dataContext.ExpenseReports.getAllData()      
       const options = {
         html: PDFBuilder.generateHtml(event, expenses),
         fileName: fileName,
@@ -39,8 +39,8 @@ export const PDFBuilder = {
       expense.date = new Date().toString();
       expenses.push(expense);
     }
+    Utility.SortByDate(expenses, 'date', false);
     const totalAmount: number = Utility.CalculateTotalAmount(expenses, 'amount')
-
     let html = `
     <style>
       ${Bootstrap.style}
@@ -61,20 +61,23 @@ export const PDFBuilder = {
       <div class="w-100 py-5 bg-grey">
         <h1 class="text-center">NOTA SPESE</h1>
       </div>      
+      
+      <div class="d-flex flex-row align-items-start justify-content-between pt-3">
+        <img src='${Images.tlm_logo.base_64}' width="300" />
+        <div class="d-flex">
+          <span>Data:</span>
+          <span>${Utility.FormatDateDDMMYYYY(new Date().toString())}</span>
+        </div>
+      </div>      
 
-      <div class="text-right my-5">
-        <span>Data:</span>
-        <span>${Utility.FormatDateDDMMYYYY(new Date().toString())}</span>
-      </div>
-
-      <div class="my-5 row border border-dark p-3">
+      <div class="mt-4 mb-5 row border border-dark p-3">
         <div class="col-6">
           <span>Gruppo:</span>
-          <h2 class="font-weight-bold">${event.name}</h2>
+          <span class="font-weight-bold">${event.name}</span>
         </div>        
         <div class="col-6">
           <span>Date evento:</span>
-          <h2 class="font-weight-bold">${Utility.FormatDateDDMMYYYY(event.startDate)} - ${Utility.FormatDateDDMMYYYY(event.endDate)}</h2>
+          <span class="font-weight-bold">${Utility.FormatDateDDMMYYYY(event.startDate)} - ${Utility.FormatDateDDMMYYYY(event.endDate)}</span>
         </div>
       </div>
 
