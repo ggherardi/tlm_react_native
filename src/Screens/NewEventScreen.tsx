@@ -14,6 +14,7 @@ import { PDFBuilder } from '../lib/PDFBuilder';
 import { SaveConstants } from '../lib/DataStorage';
 import { InputNumber } from '../lib/components/InputNumberComponent';
 import NavigationHelper from '../lib/NavigationHelper';
+import ModalLoaderComponent from '../lib/components/ModalWithLoader';
 
 const NewEventScreen = ({ navigation, route }: any) => {
   const [events, setEvents] = useState<BusinessEvent[]>(dataContext.Events.getAllData());
@@ -28,6 +29,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
   const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
   const [cashFund, setCashFund] = useState();
   const [isFormValid, setIsFormValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log(NavigationHelper.getHomeTabNavigation().getState());
 
@@ -41,6 +43,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
   const handleCashFundChange = (e: any) => setCashFund(e.nativeEvent.text);
   
   const saveEvent = async () => {
+    setIsLoading(true);
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
@@ -69,6 +72,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
     } else {
       console.log("Errore");
     }
+    setIsLoading(false);
   };
 
   const refreshData = () => {
@@ -79,6 +83,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
 
   return (
     <NativeBaseProvider>
+      <ModalLoaderComponent isLoading={isLoading} text='Creazione evento in corso..' />
       <ScrollView contentContainerStyle={styles.container}>
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Nome dell'evento</FormControl.Label>

@@ -16,6 +16,7 @@ import { useCustomHeaderSaveButton, useCustomHeaderWithButtonAsync } from '../li
 import { FileManager } from '../lib/FileManager';
 import { PDFBuilder } from '../lib/PDFBuilder';
 import NavigationHelper from '../lib/NavigationHelper';
+import ModalLoaderComponent from '../lib/components/ModalWithLoader';
 
 const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
@@ -27,6 +28,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [photo, setPhoto] = useState<any>();
     const [amountCurrencyCode, setAmountCurrencyCode] = useState('EUR');
     const [isFormValid, setIsFormValid] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const event: BusinessEvent = route.params.event;
     const extraCurrencies: any[] = event.currencies ? event.currencies : [];
@@ -57,6 +59,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     };
 
     const saveExpenseReport = async () => {
+        setIsLoading(true);
         let expense: ExpenseReport = new ExpenseReport();
         if (expenses && expenses.map) {
             let id = Math.max(...expenses.map((e: ExpenseReport) => e.id));
@@ -81,6 +84,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 console.log("Cannot save the expense report because the photo could not be added to external storage");
             }
         }
+        setIsLoading(false);
     };
 
     const refreshData = () => {
@@ -100,6 +104,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
 
     return (
         <NativeBaseProvider>
+            <ModalLoaderComponent isLoading={isLoading} text='Creazione spesa in corso..' />
             <ScrollView contentContainerStyle={styles.container}>
                 <FormControl style={GlobalStyles.mt15} isRequired isDisabled>
                     <FormControl.Label>Foto</FormControl.Label>

@@ -13,12 +13,15 @@ import { PDFBuilder } from '../lib/PDFBuilder';
 import NavigationHelper from '../lib/NavigationHelper';
 import { Images } from '../assets/Images';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { Dimensions, Image, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, Dimensions, Image, StyleSheet, Text } from 'react-native';
+import LoaderComponent from '../lib/components/LoaderComponent';
+import ModalLoaderComponent from '../lib/components/ModalWithLoader';
 
 const EventScreen = ({ route, navigation }: any) => {
     const [reports, setReports] = useState<ExpenseReport[]>();
     const [event, setEvent] = useState(route.params[0]);
     const [appHeight, setAppHeight] = useState(Dimensions.get('window').height);
+    const [isLoading, setIsLoading] = useState(false);
 
     // @ts-ignore
     const Context = React.createContext();
@@ -31,10 +34,12 @@ const EventScreen = ({ route, navigation }: any) => {
 
     const refreshData = async () => {
         useCustomHeaderWithButtonAsync(navigation.getParent(), Utility.GetEventHeaderTitle(event), () => viewPdf(), 'file-pdf', 'Nota spese');
+        setIsLoading(true);
         let data = dataContext.ExpenseReports.getAllData();
         Utility.SortByDate(data, 'date', false);
         setReports(data);
         setEvent(Utility.GetEvent(event.id));
+        setIsLoading(false);
     };
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
@@ -42,13 +47,14 @@ const EventScreen = ({ route, navigation }: any) => {
         await PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);
         navigation.navigate(Constants.Navigation.ViewPdf, { event: event });
     }
-
+console.log(isLoading);
     return (
         <NativeBaseProvider>
-            {/* <GestureHandlerRootView> */}
             {reports && reports.length ? (
                 <GestureHandlerRootView>
                     <ScrollView contentContainerStyle={[GlobalStyles.container]}>
+                        {/* <ModalLoaderComponent isLoading={true} text="Creazione nuova spesa.."></ModalLoaderComponent> */}
+                        {isLoading && (<LoaderComponent />)}                        
                         <View style={[GlobalStyles.flexRow, { padding: 10, paddingBottom: 20 }]}>
                             <Text style={{ flex: 5, fontSize: 20 }}>Importo totale:</Text>
                             <Text style={{ flex: 2, fontSize: 20, fontWeight: 'bold' }}>{totalAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
@@ -70,7 +76,6 @@ const EventScreen = ({ route, navigation }: any) => {
                     </View>
                 </Context.Provider>
             )}
-            {/* </GestureHandlerRootView> */}
         </NativeBaseProvider >
     )
 }

@@ -22,8 +22,7 @@ const ProfileScreen = ({ navigation, route }: any) => {
         dataContext.UserProfile.saveData([profile]);
     };
 
-    const applyCustomHeader = () => {
-        console.log("WHAT")
+    const applyCustomHeader = () => {        
         useCustomHeaderWithButtonAsync(navigation.getParent(), `Profilo Tour Leader`, () => save(), 'floppy-disk');
     }
 
