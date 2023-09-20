@@ -6890,6 +6890,11 @@ react-native-sectioned-multi-select@^0.10.0:
     lodash.isequal "^4.5.0"
     memoize-one "^6.0.0"
 
+react-native-splash-screen@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.npmjs.org/react-native-splash-screen/-/react-native-splash-screen-3.3.0.tgz"
+  integrity sha512-rGjt6HkoSXxMqH4SQUJ1gnPQlPJV8+J47+4yhgTIan4bVvAwJhEeJH7wWt9hXSdH4+VfwTS0GTaflj1Tw83IhA==
+
 react-native-svg@*, react-native-svg@^13.11.0, "react-native-svg@>= 11.x":
   version "13.11.0"
   resolved "https://registry.npmjs.org/react-native-svg/-/react-native-svg-13.11.0.tgz"
@@ -6916,7 +6921,7 @@ react-native-vision-camera@^2.15.5:
   resolved "https://registry.npmjs.org/react-native-vision-camera/-/react-native-vision-camera-2.15.5.tgz"
   integrity sha512-EtC3mlAOBgPTYa0AeTrp2wJCe6bnUlIMJe7rx9N2VxWQA7prOq+xb7Qdx7GPTep+YTgqnN6HoGobdDSJo0Dt5A==
 
-react-native@*, "react-native@>= 0.67", react-native@>=0.23.1, react-native@>=0.71.0, react-native@0.72.3:
+react-native@*, "react-native@>= 0.67", react-native@>=0.23.1, react-native@>=0.57.0, react-native@>=0.71.0, react-native@0.72.3:
   version "0.72.3"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.72.3.tgz"
   integrity sha512-QqISi+JVmCssNP2FlQ4MWhlc4O/I00MRE1/GClvyZ8h/6kdsyk/sOirkYdZqX3+DrJfI3q+OnyMnsyaXIQ/5tQ==

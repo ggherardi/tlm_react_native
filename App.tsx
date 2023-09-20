@@ -1,6 +1,6 @@
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useColorScheme } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import HomeScreen from './src/Screens/HomeScreen';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -17,6 +17,7 @@ import { ThemeColors } from './src/lib/GlobalStyles';
 import ViewPdfScreen from './src/Screens/ViewPdfScreen';
 import ProfileScreen from './src/Screens/ProfileScreen';
 import EditEventScreen from './src/Screens/EditEventScreen';
+import SplashScreen from 'react-native-splash-screen';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
@@ -39,6 +40,10 @@ function App(): JSX.Element {
       background: '#fff'
     },
   };
+
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 
   return (
     <NavigationContainer theme={TLMTheme}>

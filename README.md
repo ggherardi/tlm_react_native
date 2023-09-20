@@ -28,7 +28,11 @@ Aggiungere un modo per inviare le notifiche all'utente ogni giorno per 3 giorni 
 
 Messaggio di successo dopo salvataggio profilo (o redirect back)
 
+Validazione forms
+
 OK - Fix Altezza pdf viewer
+
+Splash page (https://blog.logrocket.com/building-splash-screens-react-native/ guide for IOS)
 
 
 
@@ -60,6 +64,7 @@ npm i --save react-native-fetch-blob
 npm i --save react-native-html-to-pdf
 npm i --save react-native-pdf
 npm i --save react-native-blob-util
+npm i --save react-native-splash-screen
 
 # TO NEXT: fixing all expenses formatting
 

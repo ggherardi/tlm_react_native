@@ -1,4 +1,6 @@
 package com.tlm;
+import android.os.Bundle; // required for onCreate parameter
+import org.devio.rn.splashscreen.SplashScreen; // required for react-native-splash-screen >= 0.3.1
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -28,5 +30,11 @@ public class MainActivity extends ReactActivity {
         getMainComponentName(),
         // If you opted-in for the New Architecture, we enable the Fabric Renderer.
         DefaultNewArchitectureEntryPoint.getFabricEnabled());
+  }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      SplashScreen.show(this);  // Add this here
+      super.onCreate(savedInstanceState);
   }
 }
