@@ -15,7 +15,7 @@ import { SaveConstants } from '../lib/DataStorage';
 import { InputNumber } from '../lib/components/InputNumberComponent';
 
 const NewEventScreen = ({ navigation }: any) => {
-  const [events, setEvents] = useState(dataContext.Events.getAllData())
+  const [events, setEvents] = useState<BusinessEvent[]>(dataContext.Events.getAllData());
   const [eventName, setEventName] = useState('');
   const [eventDescription, setEventDescription] = useState('');
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
@@ -27,30 +27,32 @@ const NewEventScreen = ({ navigation }: any) => {
   const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
   const [cashFund, setCashFund] = useState();
   const [isFormValid, setIsFormValid] = useState(false);
-  
+
   useEffect(() => {
     useCustomHeaderSaveButton(navigation, "Crea nuovo evento", () => saveEvent(), undefined, isFormValid);
   });
-
+  
   const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);
   const handleEventDescriptionChange = (e: any) => setEventDescription(e.nativeEvent.text);
   const handleCityChange = (e: any) => setCity(e.nativeEvent.text);
   const handleCashFundChange = (e: any) => setCashFund(e.nativeEvent.text);
 
   const saveEvent = async () => {
+    console.log(eventName);
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
-    event.name = eventName.trim();
+    event.name = eventName ? eventName.trim() : '';
     event.mainCurrency = GetCurrency(mainCurrencyCode) as Currency;
     event.currencies = GetCurrencies(currenciesCodes);
-    event.city = city;
+    event.city = city ? city.trim() : '';
     event.description = eventDescription.trim();
     event.startDate = eventStartDate.toString();
     event.endDate = eventEndDate.toString();
     event.cashFund = cashFund ? cashFund : 0;
     event.expensesDataContextKey = `event-${event.id}_${event.name}-reports-${SaveConstants.expenseReport.key}`;
     events.push(event);
+    console.log(event.city, event.cashFund, event.startDate, event.endDate);
     const sanitizedEventName = Utility.SanitizeString(event.name);
     const pdfFileName = `nota_spese_${sanitizedEventName}_${Utility.GetYear(event.startDate)}_nomeTL`;
     const directoryName = `${sanitizedEventName}_${Utility.FormatDateDDMMYYYY(event.startDate, "-")}_${Utility.FormatDateDDMMYYYY(event.endDate, "-")}_${Utility.GenerateRandomGuid("")}`;

@@ -16,9 +16,9 @@ const ProfileScreen = ({ route, navigation }: any) => {
 
     const save = () => {
         const profile = new UserProfile();
-        profile.name = name.trim();
-        profile.surname = surname.trim();
-        profile.email = email.trim();
+        profile.name = name ? name.trim() : '';
+        profile.surname = surname ? surname.trim() : '';
+        profile.email = email ? email.trim() : '';
         dataContext.UserProfile.saveData([profile]);
     };
 

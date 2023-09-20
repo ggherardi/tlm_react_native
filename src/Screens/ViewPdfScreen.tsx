@@ -20,9 +20,9 @@ const ViewPdfScreen = ({ navigation, route }: any) => {
   const sendEmail = async () => {
     const attachments = [];
     attachments.push(new Attachment(`nota_spese_${event.name}_${Utility.GetYear(event.startDate)}_nomeTL`, event.fullFilePath));
-    const subject = `Nota spese ${event.name} dal ${Utility.FormatDateDDMMYYYY(event.startDate)} al ${Utility.FormatDateDDMMYYYY(event.endDate)}. TL: ${userProfile.surname} ${userProfile.name}`;
-    EmailManager.send(["e.campolo@tourleadermanagement.ch", "giamalfred@gmail.com", "enricogherardi@hotmail.com"], subject, "Mail inviata dall'app con pdf generato", attachments);
-    // EmailManager.send(["giamalfred@gmail.com"], `Nota spese ${event.name} del ${Utility.FormatDateDDMMYYYY(event.startDate)}. TL: nome_tl (da implementare)`, "Mail inviata dall'app con pdf generato dalla stessa app (ancora in fase grafica embrionale)", attachments);
+    const subject = `Nota spese ${event.city} ${event.name} ${Utility.FormatDateDDMMYYYY(event.startDate)} - ${Utility.FormatDateDDMMYYYY(event.endDate)} ${userProfile.surname} ${userProfile.name}`;
+    // EmailManager.send(["e.campolo@tourleadermanagement.ch", "giamalfred@gmail.com", "enricogherardi@hotmail.com"], subject, "Mail inviata dall'app con pdf generato", attachments);
+    EmailManager.send(["giamalfred@gmail.com"], subject, "Mail inviata dall'app con pdf generato", attachments);
   }
 
   const [pdfSource, setPdfSource] = useState<any>({ uri: `file:///${event.fullFilePath}`, cache: true });

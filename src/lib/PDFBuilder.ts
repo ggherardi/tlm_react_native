@@ -10,15 +10,16 @@ import { Images } from '../assets';
 export const PDFBuilder = {
   createExpensesPdfAsync: async (event: BusinessEvent, directoryName: string, fileName: string): Promise<RNHTMLtoPDF.Pdf> => {    
     return new Promise(async (resolve, reject) => {
+      console.log("CREATING PDF");
       const directory = `Documents/${directoryName}`;
-      const expenses = dataContext.ExpenseReports.getAllData()      
+      const expenses = dataContext.ExpenseReports ? dataContext.ExpenseReports.getAllData() : []      
       const options = {
         html: PDFBuilder.generateHtml(event, expenses),
         fileName: fileName,
         directory: directory,
       };
 
-      let file = await RNHTMLtoPDF.convert(options);
+      let file = await RNHTMLtoPDF.convert(options).catch(e => console.log("Error while creating pdf: ", e));
       if (file) {
         resolve(file);
       } else {
@@ -58,16 +59,12 @@ export const PDFBuilder = {
       }      
     </style>
     <div>            
-      <div class="w-100 py-5 bg-grey">
-        <h1 class="text-center">NOTA SPESE</h1>
-      </div>      
+      <img src='${Images.tlm_logo.base_64}' width="150" />
+      <h1 class="text-center mt-5">NOTA SPESE</h1>
       
-      <div class="d-flex flex-row align-items-start justify-content-between pt-3">
-        <img src='${Images.tlm_logo.base_64}' width="300" />
-        <div class="d-flex">
-          <span>Data:</span>
-          <span>${Utility.FormatDateDDMMYYYY(new Date().toString())}</span>
-        </div>
+      <div class="text-right pt-3">        
+        <span>Data:</span>
+        <span>${Utility.FormatDateDDMMYYYY(new Date().toString())}</span>
       </div>      
 
       <div class="mt-4 mb-5 row border border-dark p-3">
