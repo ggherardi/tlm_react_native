@@ -8,10 +8,17 @@ import { ThemeColors } from '../lib/GlobalStyles';
 import EventHistoryScreen from './EventHistoryScreen';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import EventSettingsScreen from './EventSettingsScreen';
+import { NavigationFakeButtonComponent } from '../lib/components/NavigationFakeButtonComponent';
+import PlaceholderScreen from './PlaceholderScreen';
 
 const Tab = createBottomTabNavigator();
 
-const EventHomeScreen = ({ navigation, route }: any) => {   
+const EventHomeScreen = ({ navigation, route }: any) => {
+    // @ts-ignore
+    const newExpenseTabOptions = ({ navigation }) => ({
+        tabBarButton: () => <NavigationFakeButtonComponent icon={'plus'} pressFunction={() => { navigation.navigate(Constants.Navigation.NewExpenseReport, { event: route.params.event }) }} />
+    });
+
     return (
         <Tab.Navigator screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
@@ -19,16 +26,16 @@ const EventHomeScreen = ({ navigation, route }: any) => {
                 switch (route.name) {
                     case Constants.Navigation.Event:
                         tabIcon = "table-list"
-                    break;
+                        break;
                     case Constants.Navigation.NewExpenseReport:
                         tabIcon = "plus";
-                    break;
+                        break;
                     case Constants.Navigation.EventSettingsScreen:
                         tabIcon = "cog";
-                    break;
+                        break;
                 }
                 return <FontAwesomeIcon icon={tabIcon} color={focused ? ThemeColors.primary : ThemeColors.inactive} />
-            },            
+            },
             tabBarActiveTintColor: ThemeColors.primary,
             tabBarInactiveTintColor: 'gray',
         })}>
@@ -37,15 +44,18 @@ const EventHomeScreen = ({ navigation, route }: any) => {
                 component={EventScreen}
                 initialParams={[route.params.event]}
                 options={commonTabOptions}></Tab.Screen>
-            <Tab.Screen 
-                name={Constants.Navigation.NewExpenseReport} 
+            <Tab.Screen
+                name={Constants.Navigation.NewEvent}
+                component={PlaceholderScreen}
+                options={newExpenseTabOptions}></Tab.Screen>
+            {/* name={Constants.Navigation.NewExpenseReport}
                 component={NewExpenseReportScreen}
                 initialParams={[route.params.event]}
-                options={commonTabOptions}></Tab.Screen>
+                options={commonTabOptions}></Tab.Screen> */}
             <Tab.Screen
                 name={Constants.Navigation.EventSettingsScreen}
-                component={EventSettingsScreen}         
-                initialParams={[route.params.event]}       
+                component={EventSettingsScreen}
+                initialParams={[route.params.event]}
                 options={commonTabOptions}></Tab.Screen>
         </Tab.Navigator>
     )
@@ -53,7 +63,7 @@ const EventHomeScreen = ({ navigation, route }: any) => {
 
 const commonTabOptions: BottomTabNavigationOptions = {
     lazy: true,
-    headerShown: false,    
+    headerShown: false,
 }
 
 export default EventHomeScreen;

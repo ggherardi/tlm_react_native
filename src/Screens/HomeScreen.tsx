@@ -26,7 +26,7 @@ const HomeScreen = ({ navigation, route }: any) => {
 
     // @ts-ignore
     const newEventTabOptions = ({ navigation }) => ({        
-        tabBarButton: () => <NavigationFakeButtonComponent icon={'plus'} pressFunction={() => { console.log(navigation.getState()); navigation.getParent().navigate(Constants.Navigation.NewEvent)}} />
+        tabBarButton: () => <NavigationFakeButtonComponent icon={'folder-plus'} pressFunction={() => { navigation.getParent().navigate(Constants.Navigation.NewEvent)}} />
     });
     
     return (

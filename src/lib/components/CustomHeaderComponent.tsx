@@ -15,11 +15,12 @@ interface ICustomHeaderComponent {
 interface ICustomHeaderWithButtonComponent {
     // @ts-ignore
     navigation;
-    title: string;    
-    icon: IconProp;
+    title: string;
+    icon?: IconProp;
     onClick: Function;
     subtitle?: string;
     isDisabled?: boolean;
+    buttonText?: string;
 }
 
 interface ICustomHeaderSaveButtonComponent {
@@ -48,10 +49,10 @@ const BaseCustomHeaderComponent = ({ navigation, title, subtitle }: ICustomHeade
     );
 }
 
-const CustomHeaderWithButtonComponent = ({ navigation, title, subtitle, onClick, icon, isDisabled }: ICustomHeaderWithButtonComponent) => {
+const CustomHeaderWithButtonComponent = ({ navigation, title, subtitle, onClick, icon, isDisabled, buttonText }: ICustomHeaderWithButtonComponent) => {
     return (
-        <NativeBaseProvider>            
-            <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', width: navigation.canGoBack() ? '75%' : '90%'} ]}>                
+        <NativeBaseProvider>
+            <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', width: navigation.canGoBack() ? '75%' : '90%' }]}>
                 <View style={{ flex: navigation.canGoBack() ? 4 : 6 }}>
                     {subtitle != undefined && subtitle != "" ? (
                         <VStack>
@@ -62,8 +63,8 @@ const CustomHeaderWithButtonComponent = ({ navigation, title, subtitle, onClick,
                         <Text style={[styles.eventName, GlobalStyles.colorWhite]} numberOfLines={1}>{title}</Text>
                     )}
                 </View>
-                <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'center' }]}>
-                    <InputSideButton icon={icon} iconColor={ThemeColors.white} size={25} pressFunction={() => onClick()} isDisabled={isDisabled} iconStyle={{ color: ThemeColors.white }} />
+                <View style={[{ flex: icon ? 1 : 2, flexDirection: 'row', justifyContent: 'center' }]}>
+                    <InputSideButton icon={icon} text={buttonText} iconColor={ThemeColors.white} size={25} pressFunction={() => onClick()} isDisabled={isDisabled} iconStyle={{ color: ThemeColors.white }} />
                 </View>
             </View>
         </NativeBaseProvider>
@@ -73,7 +74,7 @@ const CustomHeaderWithButtonComponent = ({ navigation, title, subtitle, onClick,
 const CustomHeaderSaveButtonComponent = ({ navigation, title, subtitle, onSave, isDisabled }: ICustomHeaderSaveButtonComponent) => {
     return (
         <NativeBaseProvider>
-            <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', width: '75%' }]}>                
+            <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', width: '75%' }]}>
                 <View style={{ flex: 4 }}>
                     {subtitle != undefined && subtitle != "" ? (
                         <VStack>
@@ -98,12 +99,12 @@ const useCustomHeader = (navigation: any, title: string, subtitle?: string) => {
     })
 }
 
-export const useCustomHeaderWithButtonAsync = (navigation: any, title: string, onClick: Function, icon: IconProp, subtitle?: string, isDisabled?: boolean) => {    
+export const useCustomHeaderWithButtonAsync = (navigation: any, title: string, onClick: Function, icon?: IconProp, subtitle?: string, isDisabled?: boolean, buttonText?: string) => {
     return new Promise((resolve, reject) => {
         navigation.setOptions({
-            headerTitle: () => <CustomHeaderWithButtonComponent navigation={navigation} title={title} icon={icon} subtitle={subtitle} onClick={onClick as Function} isDisabled={isDisabled as boolean} />,
+            headerTitle: () => <CustomHeaderWithButtonComponent navigation={navigation} title={title} icon={icon} subtitle={subtitle} onClick={onClick as Function} isDisabled={isDisabled as boolean} buttonText={buttonText} />,
         })
-    });    
+    });
 }
 
 export const useCustomHeaderSaveButton = (navigation: any, title: string, onSave: Function, subtitle?: string, isDisabled?: boolean) => {

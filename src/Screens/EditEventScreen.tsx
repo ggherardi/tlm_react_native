@@ -7,7 +7,7 @@ import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { Utility } from '../lib/Utility';
 import dataContext from '../lib/models/DataContext';
-import { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
+import { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import { Currency, GetCurrencies, GetCurrency } from '../lib/data/Currencies';
 import { InputNumber } from '../lib/components/InputNumberComponent';
 
@@ -33,7 +33,8 @@ const EditEventScreen = ({ navigation, route }: any) => {
   const [isFormValid, setIsFormValid] = useState(true);  
 
   useEffect(() => {
-    useCustomHeaderSaveButton(navigation, event.name, () => saveEvent(), "Modifica evento", !isFormValid);
+    useCustomHeaderWithButtonAsync(navigation, Utility.GetEventHeaderTitle(event), () => saveEvent(), undefined, 'Modifica evento', !isFormValid, 'salva');
+    // useCustomHeaderSaveButton(navigation, event.name, () => saveEvent(), "Modifica evento", !isFormValid);
   });
 
   const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);

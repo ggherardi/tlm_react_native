@@ -24,7 +24,7 @@ const EventScreen = ({ route, navigation }: any) => {
     }, []);
 
     const refreshData = async () => {
-        useCustomHeaderWithButtonAsync(navigation.getParent(), event.name, () => viewPdf(), 'file-pdf', 'Nota spese');
+        useCustomHeaderWithButtonAsync(navigation.getParent(), Utility.GetEventHeaderTitle(event), () => viewPdf(), 'file-pdf', 'Nota spese');
         let data = dataContext.ExpenseReports.getAllData();
         Utility.SortByDate(data, 'date', false);
         setReports(data);

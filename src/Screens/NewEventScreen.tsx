@@ -1,13 +1,13 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, Input, NativeBaseProvider, Button, HStack, TextArea, Select } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { Utility } from '../lib/Utility';
 import dataContext from '../lib/models/DataContext';
-import { useCustomHeaderSaveButton, useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
+import { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import { Currency, GetCurrencies, GetCurrency } from '../lib/data/Currencies';
 import { Constants } from '../lib/Constants';
 import { PDFBuilder } from '../lib/PDFBuilder';
@@ -32,7 +32,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
   console.log(NavigationHelper.getHomeTabNavigation().getState());
 
   useEffect(() => {
-    useCustomHeaderWithButtonAsync(navigation, "Crea nuovo evento", () => saveEvent(), 'floppy-disk', undefined, isFormValid);
+    useCustomHeaderWithButtonAsync(navigation, "Crea nuovo evento", () => saveEvent(), undefined, undefined, isFormValid, 'salva');
   });
 
   const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);
@@ -80,7 +80,6 @@ const NewEventScreen = ({ navigation, route }: any) => {
   return (
     <NativeBaseProvider>
       <ScrollView contentContainerStyle={styles.container}>
-        <Button onPress={() => { NavigationHelper.getHomeTabNavigation().navigate(Constants.Navigation.AllEvents);  }}>Indietro</Button>
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Nome dell'evento</FormControl.Label>
           <Input placeholder="Nome evento" onChange={handleEventNameChange}></Input>

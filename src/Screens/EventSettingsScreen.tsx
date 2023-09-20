@@ -12,7 +12,7 @@ const EventSettingsScreen = ({ route, navigation }: any) => {
     const [event, setEvent] = useState<BusinessEvent>(route.params[0]);
 
     const refreshData = async () => {
-        useCustomHeaderWithButtonAsync(navigation.getParent(), event.name, () => { navigation.navigate(Constants.Navigation.EditEventScreen, { event: event }) }, 'pencil', 'Impostazioni evento');
+        useCustomHeaderWithButtonAsync(navigation.getParent(), Utility.GetEventHeaderTitle(event), () => { navigation.navigate(Constants.Navigation.EditEventScreen, { event: event }) }, 'pencil', 'Impostazioni evento');
         let refreshedEvent = Utility.GetEvent(event.id);
         if (refreshedEvent) {
             setEvent(refreshedEvent);

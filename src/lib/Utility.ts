@@ -3,6 +3,7 @@ import { PermissionsAndroid } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 import { UserProfile } from './models/UserProfile';
 import dataContext from './models/DataContext';
+import { BusinessEvent } from './models/BusinessEvent';
 
 export const Utility = {
   SortByDate: (array: any[], fieldToSort: string, ascending: boolean = true) => {
@@ -28,6 +29,10 @@ export const Utility = {
       userProfile = userProfileAllData[0];
     }
     return userProfile || new UserProfile;
+  },
+
+  GetEventHeaderTitle: (event: BusinessEvent) => {
+    return `${event.name} ${Utility.GetYear(event.startDate)}`
   },
 
   SanitizeString: (str: string) => {

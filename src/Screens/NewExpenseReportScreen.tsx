@@ -12,9 +12,10 @@ import { InputNumber } from '../lib/components/InputNumberComponent';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { Currency } from '../lib/data/Currencies';
 import { Constants } from '../lib/Constants';
-import { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
+import { useCustomHeaderSaveButton, useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import { FileManager } from '../lib/FileManager';
 import { PDFBuilder } from '../lib/PDFBuilder';
+import NavigationHelper from '../lib/NavigationHelper';
 
 const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
@@ -27,12 +28,12 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [amountCurrencyCode, setAmountCurrencyCode] = useState('EUR');
     const [isFormValid, setIsFormValid] = useState(false);
 
-    const event: BusinessEvent = route.params[0];
+    const event: BusinessEvent = route.params.event;
     const extraCurrencies: any[] = event.currencies ? event.currencies : [];
     const allCurrencies: Currency[] = [...extraCurrencies, event.mainCurrency];
 
     useEffect(() => {
-        useCustomHeaderSaveButton(navigation.getParent(), event.name, () => saveExpenseReport(), 'Crea nuova spesa', isFormValid);
+        useCustomHeaderWithButtonAsync(navigation, Utility.GetEventHeaderTitle(event), () => saveExpenseReport(), undefined, 'Crea nuova spesa', isFormValid, 'salva');
       });
 
     const handleExpenseNameChange = (value: any) => setExpenseName(value);
@@ -75,7 +76,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 dataContext.ExpenseReports.saveData(expenses);
                 setExpenses(dataContext.ExpenseReports.getAllData());
                 resetForm();
-                navigation.navigate(Constants.Navigation.Event);
+                NavigationHelper.getEventTabNavigation().navigate(Constants.Navigation.Event);
             } else {
                 console.log("Cannot save the expense report because the photo could not be added to external storage");
             }

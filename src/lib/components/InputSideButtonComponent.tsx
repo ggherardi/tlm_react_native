@@ -8,13 +8,13 @@ import { Utility } from '../Utility';
 
 interface IInputSideButtonProps {
   pressFunction: Function;
-  icon: IconProp;
+  icon: IconProp | undefined;
   iconColor?: string;
   iconStyle?: any;
   stretchHeight?: boolean;
   text?: string;
   size?: number;
-  isDisabled?: boolean;
+  isDisabled?: boolean;  
 }
 
 export const InputSideButton = ({ pressFunction, icon, iconColor = ThemeColors.primary, iconStyle, stretchHeight, text, size, isDisabled = false }: IInputSideButtonProps) => (
@@ -24,9 +24,12 @@ export const InputSideButton = ({ pressFunction, icon, iconColor = ThemeColors.p
   }, styles.btnBox]} disabled={isDisabled}>
     <View style={[GlobalStyles.flexRow]}>
       {Utility.IsNotNullOrUndefined(text) && (
-        <Text style={{ paddingRight: 10 }}>{text}</Text>
+        <Text style={{ color: isDisabled ? ThemeColors.inactive : ThemeColors.white }}>{text}</Text>
       )}
-      <FontAwesomeIcon style={[iconStyle ? iconStyle : GlobalStyles.iconPrimary, { color: isDisabled ? 'gray' : iconColor }]} icon={icon} size={size ? size : 20} />
+      {icon ? (
+        <FontAwesomeIcon style={[iconStyle ? iconStyle : GlobalStyles.iconPrimary, { color: isDisabled ? ThemeColors.inactive : iconColor }]} icon={icon} size={size ? size : 20} />
+      ) : (<></>)
+      }
     </View>
   </Pressable>);
 
