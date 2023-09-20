@@ -6,7 +6,6 @@ import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import { Constants } from '../lib/Constants';
 import { useState } from 'react';
-import dataContext from '../lib/models/DataContext';
 
 const EventSettingsScreen = ({ route, navigation }: any) => {
     const [event, setEvent] = useState<BusinessEvent>(route.params[0]);

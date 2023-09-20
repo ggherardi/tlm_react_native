@@ -1,15 +1,11 @@
 import { FormControl, Input, NativeBaseProvider, ScrollView } from 'native-base';
-import React, { StyleSheet, Text, View } from 'react-native';
-import GlobalStyles, { ThemeColors } from '../lib/GlobalStyles';
+import React, { StyleSheet } from 'react-native';
+import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
-import { useCustomHeaderSaveButton, useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
+import { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import { UserProfile } from '../lib/models/UserProfile';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import dataContext from '../lib/models/DataContext';
-import NavigationHelper from '../lib/NavigationHelper';
-import { ActionFeedbackComponent } from '../lib/components/ActionFeedbackComponent';
-import FlashMessage, { showMessage } from 'react-native-flash-message';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 const ProfileScreen = ({ navigation, route }: any) => {
     const [userProfile, setUserProfile] = useState<UserProfile>(Utility.GetUserProfile());

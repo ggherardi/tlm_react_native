@@ -1,11 +1,9 @@
-import React, { Pressable } from 'react-native';
+import React from 'react-native';
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Constants } from '../lib/Constants';
 import EventScreen from './EventScreen';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import NewExpenseReportScreen from './NewExpenseReportScreen';
 import { ThemeColors } from '../lib/GlobalStyles';
-import EventHistoryScreen from './EventHistoryScreen';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import EventSettingsScreen from './EventSettingsScreen';
 import { NavigationFakeButtonComponent } from '../lib/components/NavigationFakeButtonComponent';

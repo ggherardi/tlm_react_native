@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { ThemeColors } from '../lib/GlobalStyles';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import AllEventsScreen from './AllEventsScreen';
-import NewEventScreen from './NewEventScreen';
 import ProfileScreen from './ProfileScreen';
 import PlaceholderScreen from './PlaceholderScreen';
 import { NavigationFakeButtonComponent } from '../lib/components/NavigationFakeButtonComponent';

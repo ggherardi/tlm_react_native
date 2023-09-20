@@ -1,12 +1,12 @@
-import { Button, NativeBaseProvider } from 'native-base';
+import { NativeBaseProvider } from 'native-base';
 import React, { useState, useEffect } from 'react';
-import { Text, ScrollView, Alert, View, StyleSheet, Dimensions, StatusBar, Platform, Image } from 'react-native';
-import GlobalStyles, { ThemeColors } from '../lib/GlobalStyles';
+import { Text, ScrollView, Alert, View, StyleSheet, Dimensions, Image } from 'react-native';
+import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { HomeDataRowComponent } from '../lib/components/HomeDataRowComponent';
 import { Utility } from '../lib/Utility';
 import dataContext from '../lib/models/DataContext';
-import useCustomHeader, { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
+import useCustomHeader from '../lib/components/CustomHeaderComponent';
 import { Storage } from '../lib/DataStorage';
 import NavigationHelper from '../lib/NavigationHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';

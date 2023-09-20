@@ -1,4 +1,4 @@
-import React, { Text } from 'react-native';
+import React from 'react-native';
 import CameraComponent from '../lib/CameraManager';
 import { PhotoFile } from 'react-native-vision-camera';
 

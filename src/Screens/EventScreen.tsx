@@ -1,7 +1,7 @@
-import { HStack, NativeBaseProvider, View } from 'native-base';
+import { NativeBaseProvider, View } from 'native-base';
 import React from 'react';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
-import useCustomHeader, { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
+import { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import dataContext from '../lib/models/DataContext';
 import { useEffect, useState } from 'react';
 import { ExpenseDataRowComponent } from '../lib/components/ExpenseDataRowComponent';
@@ -13,9 +13,8 @@ import { PDFBuilder } from '../lib/PDFBuilder';
 import NavigationHelper from '../lib/NavigationHelper';
 import { Images } from '../assets/Images';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { ActivityIndicator, Dimensions, Image, StyleSheet, Text } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text } from 'react-native';
 import LoaderComponent from '../lib/components/LoaderComponent';
-import ModalLoaderComponent from '../lib/components/ModalWithLoader';
 
 const EventScreen = ({ route, navigation }: any) => {
     const [reports, setReports] = useState<ExpenseReport[]>();

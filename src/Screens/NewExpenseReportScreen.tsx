@@ -1,7 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FormControl, HStack, Input, NativeBaseProvider, Row, Select, TextArea } from 'native-base';
+import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from 'native-base';
 import { useEffect, useState } from 'react';
-import React, { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
@@ -12,7 +12,7 @@ import { InputNumber } from '../lib/components/InputNumberComponent';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { Currency } from '../lib/data/Currencies';
 import { Constants } from '../lib/Constants';
-import { useCustomHeaderSaveButton, useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
+import { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import { FileManager } from '../lib/FileManager';
 import { PDFBuilder } from '../lib/PDFBuilder';
 import NavigationHelper from '../lib/NavigationHelper';
@@ -82,7 +82,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 Utility.ShowSuccessMessage("Nota spesa creata correttamente");
                 NavigationHelper.getEventTabNavigation().navigate(Constants.Navigation.Event);
             } else {
-                
+
                 console.log("Cannot save the expense report because the photo could not be added to external storage");
             }
         }
