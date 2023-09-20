@@ -1,49 +1,65 @@
-import { Button, NativeBaseProvider } from 'native-base';
-import React, { useState, useEffect } from 'react';
-import { Text, ScrollView, Alert, View, StyleSheet, Dimensions } from 'react-native';
-import GlobalStyles from '../lib/GlobalStyles';
-import { BusinessEvent } from '../lib/models/BusinessEvent';
-import { HomeDataRowComponent } from '../lib/components/HomeDataRowComponent';
-import { Utility } from '../lib/Utility';
-import dataContext from '../lib/models/DataContext';
+import React from 'react-native';
+import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Constants } from '../lib/Constants';
-import useCustomHeader, { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
-import { Storage } from '../lib/DataStorage';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { ThemeColors } from '../lib/GlobalStyles';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import AllEventsScreen from './AllEventsScreen';
+import NewEventScreen from './NewEventScreen';
+import ProfileScreen from './ProfileScreen';
+import PlaceholderScreen from './PlaceholderScreen';
+import { NavigationFakeButtonComponent } from '../lib/components/NavigationFakeButtonComponent';
+import { useEffect } from 'react';
+import NavigationHelper from '../lib/NavigationHelper';
 
-const HomeScreen = ({ navigation }: any) => {
-  const [events, setEvents] = useState(dataContext.Events.getAllData());
+const Tab = createBottomTabNavigator();
+
+const HomeScreen = ({ navigation, route }: any) => {
+    useEffect(() => {
+        NavigationHelper.setHomeBaseNavigation(navigation);
+    }, []);
+
+    const commonTabOptions: BottomTabNavigationOptions = {
+        lazy: true,
+        headerShown: false,
+    }    
+
+    // @ts-ignore
+    const newEventTabOptions = ({ navigation }) => ({        
+        tabBarButton: () => <NavigationFakeButtonComponent icon={'plus'} pressFunction={() => { console.log(navigation.getState()); navigation.getParent().navigate(Constants.Navigation.NewEvent)}} />
+    });
     
-  useEffect(() => {    
-    useCustomHeaderWithButtonAsync(navigation, "Tutti gli eventi", () => { navigation.navigate(Constants.Navigation.UserProfile) }, 'user'); 
-  }, []);
-
-  const goToNewEvent = () => navigation.navigate(Constants.Navigation.NewEvent);
-  const refreshData = () => setEvents(dataContext.Events.getAllData());
-  const deleteAll = () => {
-    const onDeleteConfirm = () => {
-      Storage.clearAll();
-      refreshData();
-    }
-    Alert.alert("Conferma cancellazione", "Tutti i dati verranno rimossi dal dispositivo.", [
-      { text: "Ok", onPress: onDeleteConfirm },
-      { text: "Annulla", style: "cancel" }
-    ]);
-  };
-
-  Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
-
-  return (
-    <NativeBaseProvider>
-      <ScrollView contentContainerStyle={[GlobalStyles.container]}>
-        {events && events.length && events.map ? events.map((event: BusinessEvent, index: number) => (
-          <HomeDataRowComponent key={`homedatarow_${index}`} event={event} onDelete={refreshData} navigation={navigation} index={index} />
-        )) : (
-          <Text>Nessun evento trovato</Text>)}
-        <Button onPress={() => goToNewEvent()} style={[GlobalStyles.selfCenter, GlobalStyles.mt25]}>Nuovo evento</Button>        
-        <Button onPress={() => deleteAll()} style={[GlobalStyles.selfCenter, GlobalStyles.mt25]}>Delete all data</Button>
-      </ScrollView>
-    </NativeBaseProvider>
-  );
-};
+    return (
+        <Tab.Navigator
+        screenOptions={({ route }) => ({ tabBarIcon: ({ focused, color, size }) => {
+                let tabIcon: IconProp = "trash";
+                switch (route.name) {
+                    case Constants.Navigation.AllEvents:
+                        tabIcon = "folder-tree"
+                    break;
+                    case Constants.Navigation.UserProfile:
+                        tabIcon = "user";
+                    break;
+                }
+                return <FontAwesomeIcon icon={tabIcon} color={focused ? ThemeColors.primary : ThemeColors.inactive} />
+            },            
+            tabBarActiveTintColor: ThemeColors.primary,
+            tabBarInactiveTintColor: 'gray',
+        })}>
+            <Tab.Screen
+                name={"Tutti gli eventi"}
+                component={AllEventsScreen}
+                options={commonTabOptions}></Tab.Screen>
+            <Tab.Screen             
+                name={Constants.Navigation.NewEvent} 
+                component={PlaceholderScreen}
+                options={newEventTabOptions}></Tab.Screen>
+            <Tab.Screen                
+                name={Constants.Navigation.UserProfile}
+                component={ProfileScreen}         
+                options={commonTabOptions}></Tab.Screen>
+        </Tab.Navigator>
+    )
+}
 
 export default HomeScreen;

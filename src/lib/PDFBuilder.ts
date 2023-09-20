@@ -5,7 +5,7 @@ import { ExpenseReport } from './models/ExpenseReport';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { Constants } from './Constants';
 import dataContext from './models/DataContext';
-import { Images } from '../assets';
+import { Images } from '../assets/Images';
 
 export const PDFBuilder = {
   createExpensesPdfAsync: async (event: BusinessEvent, directoryName: string, fileName: string): Promise<RNHTMLtoPDF.Pdf> => {    

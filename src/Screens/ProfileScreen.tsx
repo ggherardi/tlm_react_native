@@ -2,18 +2,18 @@ import { FormControl, Input, NativeBaseProvider, ScrollView } from 'native-base'
 import React, { StyleSheet, Text, View } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
-import { BusinessEvent } from '../lib/models/BusinessEvent';
-import useCustomHeader, { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
+import { useCustomHeaderSaveButton, useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import { UserProfile } from '../lib/models/UserProfile';
 import { useEffect, useState } from 'react';
 import dataContext from '../lib/models/DataContext';
+import NavigationHelper from '../lib/NavigationHelper';
 
-const ProfileScreen = ({ route, navigation }: any) => {
+const ProfileScreen = ({ navigation, route }: any) => {
     const [userProfile, setUserProfile] = useState<UserProfile>(Utility.GetUserProfile());
     const [name, setName] = useState(userProfile.name);
     const [surname, setSurname] = useState(userProfile.surname);
-    const [email, setEmail] = useState(userProfile.email);
-
+    const [email, setEmail] = useState(userProfile.email);    
+    
     const save = () => {
         const profile = new UserProfile();
         profile.name = name ? name.trim() : '';
@@ -22,9 +22,12 @@ const ProfileScreen = ({ route, navigation }: any) => {
         dataContext.UserProfile.saveData([profile]);
     };
 
-    useEffect(() => {
-        useCustomHeaderSaveButton(navigation, `Profilo Tour Leader`, () => save());
-    });
+    const applyCustomHeader = () => {
+        console.log("WHAT")
+        useCustomHeaderWithButtonAsync(navigation.getParent(), `Profilo Tour Leader`, () => save(), 'floppy-disk');
+    }
+
+    Utility.OnFocus({ navigation: navigation, onFocusAction: () => applyCustomHeader() });
 
     return (
         <NativeBaseProvider>

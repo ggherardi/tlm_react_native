@@ -32,7 +32,7 @@ Validazione forms
 
 OK - Fix Altezza pdf viewer
 
-Splash page (https://blog.logrocket.com/building-splash-screens-react-native/ guide for IOS)
+OK - Splash page (https://blog.logrocket.com/building-splash-screens-react-native/ guide for IOS)
 
 
 

@@ -7,14 +7,15 @@ import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { Utility } from '../lib/Utility';
 import dataContext from '../lib/models/DataContext';
-import { useCustomHeaderSaveButton } from '../lib/components/CustomHeaderComponent';
+import { useCustomHeaderSaveButton, useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import { Currency, GetCurrencies, GetCurrency } from '../lib/data/Currencies';
 import { Constants } from '../lib/Constants';
 import { PDFBuilder } from '../lib/PDFBuilder';
 import { SaveConstants } from '../lib/DataStorage';
 import { InputNumber } from '../lib/components/InputNumberComponent';
+import NavigationHelper from '../lib/NavigationHelper';
 
-const NewEventScreen = ({ navigation }: any) => {
+const NewEventScreen = ({ navigation, route }: any) => {
   const [events, setEvents] = useState<BusinessEvent[]>(dataContext.Events.getAllData());
   const [eventName, setEventName] = useState('');
   const [eventDescription, setEventDescription] = useState('');
@@ -28,17 +29,18 @@ const NewEventScreen = ({ navigation }: any) => {
   const [cashFund, setCashFund] = useState();
   const [isFormValid, setIsFormValid] = useState(false);
 
+  console.log(NavigationHelper.getHomeTabNavigation().getState());
+
   useEffect(() => {
-    useCustomHeaderSaveButton(navigation, "Crea nuovo evento", () => saveEvent(), undefined, isFormValid);
+    useCustomHeaderWithButtonAsync(navigation, "Crea nuovo evento", () => saveEvent(), 'floppy-disk', undefined, isFormValid);
   });
-  
+
   const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);
   const handleEventDescriptionChange = (e: any) => setEventDescription(e.nativeEvent.text);
   const handleCityChange = (e: any) => setCity(e.nativeEvent.text);
   const handleCashFundChange = (e: any) => setCashFund(e.nativeEvent.text);
-
+  
   const saveEvent = async () => {
-    console.log(eventName);
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
@@ -52,7 +54,6 @@ const NewEventScreen = ({ navigation }: any) => {
     event.cashFund = cashFund ? cashFund : 0;
     event.expensesDataContextKey = `event-${event.id}_${event.name}-reports-${SaveConstants.expenseReport.key}`;
     events.push(event);
-    console.log(event.city, event.cashFund, event.startDate, event.endDate);
     const sanitizedEventName = Utility.SanitizeString(event.name);
     const pdfFileName = `nota_spese_${sanitizedEventName}_${Utility.GetYear(event.startDate)}_nomeTL`;
     const directoryName = `${sanitizedEventName}_${Utility.FormatDateDDMMYYYY(event.startDate, "-")}_${Utility.FormatDateDDMMYYYY(event.endDate, "-")}_${Utility.GenerateRandomGuid("")}`;
@@ -64,15 +65,22 @@ const NewEventScreen = ({ navigation }: any) => {
       event.fullFilePath = filePath;
       event.directoryPath = filePath.substring(0, filePath.lastIndexOf("/"));
       dataContext.Events.saveData(events);
-      navigation.navigate(Constants.Navigation.Home)
+      NavigationHelper.getHomeTabNavigation().navigate(Constants.Navigation.AllEvents);
     } else {
       console.log("Errore");
     }
   };
 
+  const refreshData = () => {
+    setEvents(dataContext.Events.getAllData());
+  }
+
+  Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
+
   return (
     <NativeBaseProvider>
       <ScrollView contentContainerStyle={styles.container}>
+        <Button onPress={() => { NavigationHelper.getHomeTabNavigation().navigate(Constants.Navigation.AllEvents);  }}>Indietro</Button>
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Nome dell'evento</FormControl.Label>
           <Input placeholder="Nome evento" onChange={handleEventNameChange}></Input>
@@ -80,7 +88,7 @@ const NewEventScreen = ({ navigation }: any) => {
 
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
-          <Input
+          <Input            
             placeholder="gg/mm/aaaa"
             value={Utility.FormatDateDDMMYYYY(eventStartDate.toString())}
             InputLeftElement={
@@ -98,7 +106,7 @@ const NewEventScreen = ({ navigation }: any) => {
 
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Data di fine dell'evento</FormControl.Label>
-          <Input
+          <Input            
             placeholder="gg/mm/aaaa"
             value={Utility.FormatDateDDMMYYYY(eventEndDate.toString())}
             InputLeftElement={

@@ -30,9 +30,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
   const [arrivalCity, setArrivalCity] = useState(event.refundArrivalCity);
   const [totalTravelledKms, setTotalTravelledKms] = useState(event.totalTravelledKms);
   const [refundForfait, setRefundForfait] = useState(event.travelRefundForfait);
-  const [isFormValid, setIsFormValid] = useState(true);
-
-  console.log("NeedCarRefund: ", needCarRefund);
+  const [isFormValid, setIsFormValid] = useState(true);  
 
   useEffect(() => {
     useCustomHeaderSaveButton(navigation, event.name, () => saveEvent(), "Modifica evento", !isFormValid);

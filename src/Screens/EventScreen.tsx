@@ -8,16 +8,11 @@ import { ExpenseDataRowComponent } from '../lib/components/ExpenseDataRowCompone
 import { Utility } from '../lib/Utility';
 import { ExpenseReport } from '../lib/models/ExpenseReport';
 import GlobalStyles from '../lib/GlobalStyles';
-import { BusinessEvent } from '../lib/models/BusinessEvent';
-import { EmailManager } from '../lib/EmailManager';
-import { InputSideButton } from '../lib/components/InputSideButtonComponent';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import { Attachment } from '../lib/models/Attachment';
 import { Constants } from '../lib/Constants';
 import { PDFBuilder } from '../lib/PDFBuilder';
+import NavigationHelper from '../lib/NavigationHelper';
 
 const EventScreen = ({ route, navigation }: any) => {
-    const [file, setFile] = useState<RNHTMLtoPDF.Pdf>();
     const [reports, setReports] = useState<ExpenseReport[]>();
     const [event, setEvent] = useState(route.params[0]);
 
@@ -25,6 +20,7 @@ const EventScreen = ({ route, navigation }: any) => {
 
     useEffect(() => {
         dataContext.setExpenseReportsKey(event.expensesDataContextKey);
+        NavigationHelper.setEventTabNavigation(navigation);
     }, []);
 
     const refreshData = async () => {
