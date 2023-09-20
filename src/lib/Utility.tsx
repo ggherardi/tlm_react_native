@@ -4,6 +4,9 @@ import RNFetchBlob from 'rn-fetch-blob';
 import { UserProfile } from './models/UserProfile';
 import dataContext from './models/DataContext';
 import { BusinessEvent } from './models/BusinessEvent';
+import { showMessage } from 'react-native-flash-message';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { ThemeColors } from './GlobalStyles';
 
 export const Utility = {
   SortByDate: (array: any[], fieldToSort: string, ascending: boolean = true) => {
@@ -155,5 +158,21 @@ export const Utility = {
 
   IsNotNullOrUndefined: (value: any) => {
     return value != undefined && value != null && value != '';
+  },
+
+  ShowSuccessMessage: (text: string) => {
+    showMessage({
+      message: text,
+      icon: props => <FontAwesomeIcon icon='check-circle' color={ThemeColors.white} size={20} style={{ marginRight: 10 }} />,
+      type: 'success'
+    })
+  },
+
+  ShowFailureMessage: (text: string) => {
+    showMessage({
+      message: text,
+      icon: props => <FontAwesomeIcon icon='xmark-circle' color={ThemeColors.white} size={20} style={{ marginRight: 10 }} />,
+      type: 'danger'
+    })
   }
 }

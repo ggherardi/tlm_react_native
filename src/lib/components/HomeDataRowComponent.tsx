@@ -42,6 +42,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
             dataContext.Events.deleteWhere(event.id);
             DataContext.deleteEntryWithKey(event.expensesDataContextKey);
             onDelete();
+            Utility.ShowSuccessMessage("Evento cancellato correttamente");
         }
         Alert.alert("Conferma cancellazione", "Tutti i dati legati all'evento verranno rimossi dal dispositivo.", [
             { text: "Ok", onPress: onDeleteConfirm },

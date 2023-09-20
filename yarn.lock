@@ -6830,6 +6830,14 @@ react-native-email@^2.1.0:
   dependencies:
     qs "6.10.3"
 
+react-native-flash-message@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.npmjs.org/react-native-flash-message/-/react-native-flash-message-0.4.2.tgz"
+  integrity sha512-YvdXRW9AGMTI99S3DJZhLO0mbk/ehKv/UQf4/Df+3dtGi8DlkidRbyqCQZk1WMtZ7rN85PMTGr/xEI9CF9z0YA==
+  dependencies:
+    prop-types "^15.8.1"
+    react-native-iphone-screen-helper "^2.0.2"
+
 react-native-gesture-handler@^2.12.1:
   version "2.12.1"
   resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.12.1.tgz"
@@ -6850,6 +6858,11 @@ react-native-image-picker@^5.6.1:
   version "5.6.1"
   resolved "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-5.6.1.tgz"
   integrity sha512-LPPlgJi97EzCDY4NWp7z0oUWmCbagnB6HSoKcLJHJD/DaFYN/dJPrqjqKaqqw8K/5Ze6DIsNg9PZohjNEYQQWQ==
+
+react-native-iphone-screen-helper@^2.0.2:
+  version "2.1.1"
+  resolved "https://registry.npmjs.org/react-native-iphone-screen-helper/-/react-native-iphone-screen-helper-2.1.1.tgz"
+  integrity sha512-geuw/bli83+tOg8UpoioLk1H1aEy0wnMDusWkCazsyH6fSk6qzmgaZ2cRyyJRU8s2tG87HctZFKGTkyYzcUcfA==
 
 react-native-mail@^6.1.1:
   version "6.1.1"
@@ -6921,7 +6934,7 @@ react-native-vision-camera@^2.15.5:
   resolved "https://registry.npmjs.org/react-native-vision-camera/-/react-native-vision-camera-2.15.5.tgz"
   integrity sha512-EtC3mlAOBgPTYa0AeTrp2wJCe6bnUlIMJe7rx9N2VxWQA7prOq+xb7Qdx7GPTep+YTgqnN6HoGobdDSJo0Dt5A==
 
-react-native@*, "react-native@>= 0.67", react-native@>=0.23.1, react-native@>=0.57.0, react-native@>=0.71.0, react-native@0.72.3:
+react-native@*, "react-native@>= 0.67", react-native@>=0.23.1, react-native@>=0.42.0, react-native@>=0.57.0, react-native@>=0.71.0, react-native@0.72.3:
   version "0.72.3"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.72.3.tgz"
   integrity sha512-QqISi+JVmCssNP2FlQ4MWhlc4O/I00MRE1/GClvyZ8h/6kdsyk/sOirkYdZqX3+DrJfI3q+OnyMnsyaXIQ/5tQ==

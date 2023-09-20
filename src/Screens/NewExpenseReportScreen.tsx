@@ -78,9 +78,11 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);
                 dataContext.ExpenseReports.saveData(expenses);
                 setExpenses(dataContext.ExpenseReports.getAllData());
-                resetForm();
+                // resetForm();
+                Utility.ShowSuccessMessage("Nota spesa creata correttamente");
                 NavigationHelper.getEventTabNavigation().navigate(Constants.Navigation.Event);
             } else {
+                
                 console.log("Cannot save the expense report because the photo could not be added to external storage");
             }
         }
@@ -91,14 +93,14 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         setExpenses(dataContext.ExpenseReports.getAllData());
     }
 
-    const resetForm = () => {
-        setExpenseName('');
-        setExpenseAmount('');
-        setExpenseDescription('');
-        setExpenseDate(new Date());
-        setPhoto(undefined);
-        setIsFormValid(false);
-    }
+    // const resetForm = () => {
+    //     setExpenseName('');
+    //     setExpenseAmount('');
+    //     setExpenseDescription('');
+    //     setExpenseDate(new Date());
+    //     setPhoto(undefined);
+    //     setIsFormValid(false);
+    // }
 
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 

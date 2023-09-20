@@ -68,6 +68,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
       event.fullFilePath = filePath;
       event.directoryPath = filePath.substring(0, filePath.lastIndexOf("/"));
       dataContext.Events.saveData(events);
+      Utility.ShowSuccessMessage("Evento creato correttamente");
       NavigationHelper.getHomeTabNavigation().navigate(Constants.Navigation.AllEvents);
     } else {
       console.log("Errore");

@@ -26,7 +26,7 @@ OK - Aggiungere email allo user profile
 
 Aggiungere un modo per inviare le notifiche all'utente ogni giorno per 3 giorni prima della scadenza dell'evento (data fine evento). Eventualmente tramite notifiche dello smartphone ma anche tramite email. Previo consenso.
 
-Messaggio di successo dopo salvataggio profilo (o redirect back)
+OK - Messaggio di successo dopo salvataggio profilo (o redirect back)
 
 Validazione forms
 
@@ -34,9 +34,13 @@ OK - Fix Altezza pdf viewer
 
 OK - Splash page (https://blog.logrocket.com/building-splash-screens-react-native/ guide for IOS)
 
+Pagina iniziale con creazione profilo
+
 ricerca eventi e spese
 
 modifica spese
+
+istruzioni e informazioni
 
 
 npm i @react-navigation/native

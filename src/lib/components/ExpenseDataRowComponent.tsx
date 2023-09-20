@@ -42,6 +42,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
         const onDeleteConfirm = () => {
             dataContext.ExpenseReports.deleteWhere(expense.id);
             onDelete();
+            Utility.ShowSuccessMessage("Spesa eliminata correttamente");
         }
         Alert.alert("Conferma cancellazione", "Tutti i dati legati alla spesa verranno rimossi dal dispositivo.", [
             { text: "Ok", onPress: onDeleteConfirm },

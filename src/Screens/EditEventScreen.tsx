@@ -60,6 +60,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
         eventToEdit.travelRefundForfait = refundForfait;
       }      
       dataContext.Events.saveData(events);
+      Utility.ShowSuccessMessage("Evento modificato correttamente");
       navigation.goBack();
     }
   };
