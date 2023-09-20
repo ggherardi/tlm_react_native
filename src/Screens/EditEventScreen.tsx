@@ -34,7 +34,6 @@ const EditEventScreen = ({ navigation, route }: any) => {
 
   useEffect(() => {
     useCustomHeaderWithButtonAsync(navigation, Utility.GetEventHeaderTitle(event), () => saveEvent(), undefined, 'Modifica evento', !isFormValid, 'salva');
-    // useCustomHeaderSaveButton(navigation, event.name, () => saveEvent(), "Modifica evento", !isFormValid);
   });
 
   const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);

@@ -34,6 +34,9 @@ OK - Fix Altezza pdf viewer
 
 OK - Splash page (https://blog.logrocket.com/building-splash-screens-react-native/ guide for IOS)
 
+ricerca eventi e spese
+
+modifica spese
 
 
 npm i @react-navigation/native
