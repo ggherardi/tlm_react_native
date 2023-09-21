@@ -22,6 +22,7 @@ interface IHomeDataRow {
 
 export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHomeDataRow) => {
     const [expenses, setExpenses] = useState<ExpenseReport[]>(Utility.GetExpensesForEvent(event));
+    const [stateEvent, setStateEvent] = useState<BusinessEvent>(event);
     const tempExpenses = expenses.slice();
     tempExpenses.push(ExpenseReport.generateKmRefund(event));
     const totalAmount = Utility.CalculateTotalAmount(tempExpenses, 'amount') - event.cashFund;
@@ -37,7 +38,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
         dragAnimatedValue: Animated.AnimatedInterpolation,
     ) => {
         return (
-            <View style={styles.deleteSwipedRow}>
+            <View style={[styles.swipedRow, styles.deleteSwipedRow]}>
                 <View style={styles.swipedConfirmationContainer}>
                     <Text style={styles.deleteConfirmationText}>Vuoi cancellare l'evento?</Text>
                 </View>
@@ -53,14 +54,45 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
         dragAnimatedValue: Animated.AnimatedInterpolation,
     ) => {
         return (
-            <View style={styles.setEmailSentSwipedRow}>
-                <InputSideButton icon="circle-check" pressFunction={() => console.log("Hey")} iconColor={ThemeColors.white} stretchHeight={true} />
-                <View style={styles.swipedConfirmationContainer}>
-                    <Text style={styles.deleteConfirmationText}>Nota spese inviata?</Text>
-                </View>                
+            <View style={[styles.swipedRow, !stateEvent.sentToCompany ? styles.setEmailSentSwipedRow : styles.restoreEmailSentSwipedRow]}>
+                {!stateEvent.sentToCompany ? (
+                    <>
+                        <InputSideButton icon="circle-check" pressFunction={() => setSentToCompany()} iconColor={ThemeColors.white} stretchHeight={true} />
+                        <View style={styles.swipedConfirmationContainer}>
+                            <Text style={styles.deleteConfirmationText}>Nota spese inviata?</Text>
+                        </View>
+                    </>
+                ) : (
+                    <>
+                        <InputSideButton icon="arrow-rotate-left" pressFunction={() => cancelSentToCompany()} iconColor={ThemeColors.white} stretchHeight={true} />
+                        <View style={styles.swipedConfirmationContainer}>
+                            <Text style={styles.deleteConfirmationText}>Nota spese ancora da inviare?</Text>
+                        </View>
+                    </>
+                )}
             </View>
         );
     };
+
+    const setSentToCompany = () => {
+        const events = dataContext.Events.getAllData();
+        const eventToEdit = events.find(e => e.id == event.id);
+        if (eventToEdit) {
+            eventToEdit.sentToCompany = true;
+            dataContext.Events.saveData(events);
+            setStateEvent(eventToEdit);
+        }
+    }
+
+    const cancelSentToCompany = () => {
+        const events = dataContext.Events.getAllData();
+        const eventToEdit = events.find(e => e.id == event.id);
+        if (eventToEdit) {
+            eventToEdit.sentToCompany = false;
+            dataContext.Events.saveData(events);
+            setStateEvent(eventToEdit);
+        }
+    }
 
     const deleteEvent = () => {
         const onDeleteConfirm = () => {
@@ -81,13 +113,13 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
 
     return (
         <GestureHandlerRootView>
-            <Swipeable key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions} renderLeftActions={renderLeftActions}>
+            <Swipeable key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions} renderLeftActions={renderLeftActions} leftThreshold={20}>
                 <Pressable key={`pressable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`}
                     onPress={goToEvent} style={({ pressed }) => [
                         styles.container, { backgroundColor: pressed ? ThemeColors.selected : ThemeColors.white }]}>
                     <Row>
                         <View style={{ justifyContent: 'center', paddingRight: 10 }}>
-                            <StatusIconComponent event={event} />
+                            <StatusIconComponent event={stateEvent} />
                         </View>
                         <VStack style={[styles.dateContainer, GlobalStyles.selfCenter]}>
                             <Text style={[styles.day]}>{Utility.FormatDateDDMM(event.startDate)}</Text>
@@ -99,7 +131,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                             <Text style={[styles.eventDescription]} numberOfLines={1}>{event.city}: {eventTotalDays} giorn{eventTotalDays > 1 ? 'i' : 'o'}</Text>
                         </VStack>
                         <VStack style={styles.totalAmountContainer}>
-                            {event.sentToCompany ? (
+                            {stateEvent.sentToCompany ? (
                                 <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{totalAmount >= 0 ? "hai ricevuto" : "hai restituito"}</Text>
                             ) : (
                                 <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{totalAmount >= 0 ? "devi ricevere" : "devi restituire"}</Text>
@@ -150,23 +182,23 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     eventDescription: {
-
+        
+    },
+    swipedRow: {
+        flexDirection: 'row',
+        flex: 1,
+        alignItems: 'center',
+        paddingLeft: 5,
+        minHeight: 50,
     },
     setEmailSentSwipedRow: {
-        flexDirection: 'row',
-        flex: 1,
-        alignItems: 'center',
-        paddingLeft: 5,
         backgroundColor: ThemeColors.green,
-        minHeight: 50,
+    },
+    restoreEmailSentSwipedRow: {
+        backgroundColor: ThemeColors.warning,
     },
     deleteSwipedRow: {
-        flexDirection: 'row',
-        flex: 1,
-        alignItems: 'center',
-        paddingLeft: 5,
         backgroundColor: '#d0342c',
-        minHeight: 50,
     },
     deleteConfirmationText: {
         color: '#fcfcfc',
