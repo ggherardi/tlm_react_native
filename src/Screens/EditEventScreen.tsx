@@ -47,6 +47,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
   const saveEvent = async () => {
     setIsLoading(true);
     if (!validate()) {
+      setIsLoading(false);
       return;
     }
     const eventToEdit = events.find(e => e.id == event.id);
