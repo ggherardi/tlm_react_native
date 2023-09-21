@@ -1,4 +1,4 @@
-import { NativeBaseProvider, View } from 'native-base';
+import { NativeBaseProvider, Row, View } from 'native-base';
 import React from 'react';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
@@ -46,20 +46,37 @@ const EventScreen = ({ route, navigation }: any) => {
         await PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);
         navigation.navigate(Constants.Navigation.ViewPdf, { event: event });
     }
-console.log(isLoading);
+
     return (
         <NativeBaseProvider>
             {reports && reports.length ? (
                 <GestureHandlerRootView>
                     <ScrollView contentContainerStyle={[GlobalStyles.container]}>
-                        {/* <ModalLoaderComponent isLoading={true} text="Creazione nuova spesa.."></ModalLoaderComponent> */}
-                        {isLoading && (<LoaderComponent />)}                        
+                        {isLoading && (<LoaderComponent />)}
                         <View style={[GlobalStyles.flexRow, { padding: 10, paddingBottom: 20 }]}>
                             <Text style={{ flex: 5, fontSize: 20 }}>Importo totale:</Text>
                             <Text style={{ flex: 2, fontSize: 20, fontWeight: 'bold' }}>{totalAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
                         </View>
                         {reports != undefined && reports.length > 0 && reports.map((report: ExpenseReport, index: number) => (
-                            <ExpenseDataRowComponent expense={report} event={event} onDelete={refreshData} navigation={navigation} index={index} />
+                            <>
+                                {index == 0 && (<></>
+                                    // <Row>
+                                    //     <View style={{ justifyContent: 'center', paddingRight: 10 }}>
+                                    //         <Text>Stato</Text>
+                                    //     </View>
+                                    //     <View style={{ justifyContent: 'center', paddingRight: 10 }}>
+                                    //         <Text>Stato</Text>
+                                    //     </View>
+                                    //     <View style={{ justifyContent: 'center', paddingRight: 10 }}>
+                                    //         <Text>Stato</Text>
+                                    //     </View>
+                                    //     <View style={{ justifyContent: 'center', paddingRight: 10 }}>
+                                    //         <Text>Stato</Text>
+                                    //     </View>
+                                    // </Row>
+                                )}
+                                <ExpenseDataRowComponent expense={report} event={event} onDelete={refreshData} navigation={navigation} index={index} />
+                            </>
                         ))}
                     </ScrollView>
                 </GestureHandlerRootView>

@@ -1,4 +1,4 @@
-import { NativeBaseProvider } from 'native-base';
+import { NativeBaseProvider, Row } from 'native-base';
 import React, { useState, useEffect } from 'react';
 import { Text, ScrollView, Alert, View, StyleSheet, Dimensions, Image } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
@@ -46,7 +46,25 @@ const AllEventsScreen = ({ navigation }: any) => {
       {events && events.length ? (
         <ScrollView contentContainerStyle={[GlobalStyles.container]}>
           {events != undefined && events.length > 0 && events.map((event: BusinessEvent, index: number) => (
-            <HomeDataRowComponent key={`homedatarow_${index}`} event={event} onDelete={refreshData} navigation={navigation} index={index} />
+            <>
+              {index == 0 && (
+                <Row key={`row-${index}`}>
+                  <View style={[styles.headerView, { flex: 2 }]}>
+                    <Text style={[styles.headerText]}>Stato</Text>
+                  </View>
+                  <View style={[styles.headerView, { flex: 2 }]}>
+                    <Text style={[styles.headerText]}>Date</Text>
+                  </View>
+                  <View style={[styles.headerView, { flex: 12, paddingLeft: 3 }]}>
+                    <Text style={[styles.headerText]}>Evento</Text>
+                  </View>
+                  <View style={[styles.headerView, { flex: 5 }]}>
+                    <Text style={[styles.headerText]}>Totale rimborso</Text>
+                  </View>
+                </Row>
+              )}
+              <HomeDataRowComponent key={`homedatarow_${index}`} event={event} onDelete={refreshData} navigation={navigation} index={index} />
+            </>
           ))}
         </ScrollView>
       ) : (
@@ -56,7 +74,7 @@ const AllEventsScreen = ({ navigation }: any) => {
             <Text style={[styles.text]}>La tua lista di eventi è vuota!</Text>
           </View>
           <View style={{ justifyContent: 'flex-end' }}>
-            <Text style={[styles.text ]}>Crea un nuovo evento</Text>
+            <Text style={[styles.text]}>Crea un nuovo evento</Text>
             <FontAwesomeIcon icon={'arrow-down-long'} size={50} color={"gray"} style={{ alignSelf: 'center', marginVertical: 10 }} />
           </View>
         </Context.Provider>
@@ -69,8 +87,16 @@ const styles = StyleSheet.create({
   text: {
     verticalAlign: 'middle',
     textAlign: 'center',
-    fontSize: 15,    
+    fontSize: 15,
   },
+  headerView: {
+    fontSize: 30,
+    justifyContent: 'center',
+    // marginHorizontal: 1
+  },
+  headerText: {
+    fontSize: 10,    
+  }
 });
 
 export default AllEventsScreen;

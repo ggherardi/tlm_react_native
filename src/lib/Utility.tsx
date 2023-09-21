@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
-import { PermissionsAndroid } from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
 import { UserProfile } from './models/UserProfile';
 import dataContext from './models/DataContext';
 import { BusinessEvent } from './models/BusinessEvent';
 import { showMessage } from 'react-native-flash-message';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { ThemeColors } from './GlobalStyles';
+import { ExpenseReport } from './models/ExpenseReport';
 
 export const Utility = {
   SortByDate: (array: any[], fieldToSort: string, ascending: boolean = true) => {
@@ -18,6 +17,11 @@ export const Utility = {
       }
       return new Date(a[fieldToSort]).getTime() - new Date(b[fieldToSort]).getTime();
     });
+  },
+
+  GetExpensesForEvent: (event: BusinessEvent): ExpenseReport[] => {
+    dataContext.setExpenseReportsKey(event.expensesDataContextKey);
+    return dataContext.ExpenseReports.getAllData();    
   },
 
   GetEvent: (id: number) => {
@@ -62,6 +66,20 @@ export const Utility = {
       const month = date.getMonth() + 1;
       const year = date.getFullYear();
       formattedDate = `${day < 10 ? `0${day}` : day}${separator}${month < 10 ? `0${month}` : month}${separator}${year}`;
+    } else {
+      formattedDate = '';
+    }
+    return formattedDate;
+  },
+
+  FormatDateDDMM: (dateString: string, separator: string = '/'): string => {
+    let formattedDate = '';
+    let date = new Date(dateString);
+    if (date && !isNaN(date.getDate())) {
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      // const year = date.getFullYear();
+      formattedDate = `${day < 10 ? `0${day}` : day}${separator}${month < 10 ? `0${month}` : month}`;
     } else {
       formattedDate = '';
     }
@@ -118,6 +136,15 @@ export const Utility = {
       returnValue = date.toLocaleDateString("it-it", { month: 'short' });
     }
     return returnValue;
+  },
+
+  GetShortYear: (dateString: string): string => {
+    let shortYearString = '';
+    let date = new Date(dateString);
+    if (Utility.IsDateValid(date)) {
+      shortYearString = new Date(dateString).getFullYear().toString().substr(-2)
+    }    
+    return shortYearString;
   },
 
   GetYear: (dateString: string): string => {

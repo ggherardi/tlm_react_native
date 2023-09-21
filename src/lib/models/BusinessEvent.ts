@@ -21,6 +21,7 @@ export class BusinessEvent extends BusinessDataTypeBase {
   totalTravelledKms: number = 0;
   travelRefundForfait: number = 0.2;
   cashFund: number = 0;
+  sentToCompany: boolean = false;
 
   // File properties
   directoryName!: string;

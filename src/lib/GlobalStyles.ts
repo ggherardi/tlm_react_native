@@ -5,7 +5,12 @@ export const ThemeColors = {
   secondary: 'blue',
   white: '#fff',
   selected: '#fafafa',
-  inactive: 'gray'
+  inactive: 'gray',
+  success: '#5cb85c',
+  green: '#4a934a',
+  info: "#5bc0de", //0d6efd
+  warning: "#f0ad4e",
+  danger: "#d9534f",
 };
 
 const GlobalStyles = StyleSheet.create({
@@ -31,9 +36,6 @@ const GlobalStyles = StyleSheet.create({
   // Positioning
   selfCenter: {
     alignSelf: 'center',
-    // alignContent: 'center',
-    // verticalAlign: 'middle',
-    // textAlignVertical: 'center'    
   },  
   flexRow: {
     flexDirection: 'row'

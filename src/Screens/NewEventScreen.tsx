@@ -31,8 +31,6 @@ const NewEventScreen = ({ navigation, route }: any) => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(NavigationHelper.getHomeTabNavigation().getState());
-
   useEffect(() => {
     useCustomHeaderWithButtonAsync(navigation, "Crea nuovo evento", () => saveEvent(), undefined, undefined, isFormValid, 'salva');
   });
