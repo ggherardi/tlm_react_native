@@ -36,7 +36,7 @@ OK - Fix Altezza pdf viewer
 
 OK - Splash page (https://blog.logrocket.com/building-splash-screens-react-native/ guide for IOS)
 
-Pagina iniziale con creazione profilo
+OK - Pagina iniziale con creazione profilo
 
 ricerca eventi e spese
 

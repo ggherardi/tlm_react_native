@@ -50,7 +50,6 @@ class DataSet<T extends BusinessDataTypeBase> {
     }
 
     saveData = (value: any) => {
-        console.log("Saving, ", value);
         Storage.save(this.storageKey, this.classRef.getDataContextKey(), value)
     }
 }

@@ -37,7 +37,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
         dragAnimatedValue: Animated.AnimatedInterpolation,
     ) => {
         return (
-            <View style={styles.swipedRow}>
+            <View style={styles.deleteSwipedRow}>
                 <View style={styles.swipedConfirmationContainer}>
                     <Text style={styles.deleteConfirmationText}>Vuoi cancellare l'evento?</Text>
                 </View>
@@ -45,6 +45,23 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
             </View>
         );
     };
+
+    const renderLeftActions = (
+        //@ts-ignore
+        progress: Animated.AnimatedInterpolation,
+        //@ts-ignore
+        dragAnimatedValue: Animated.AnimatedInterpolation,
+    ) => {
+        return (
+            <View style={styles.setEmailSentSwipedRow}>
+                <InputSideButton icon="circle-check" pressFunction={() => console.log("Hey")} iconColor={ThemeColors.white} stretchHeight={true} />
+                <View style={styles.swipedConfirmationContainer}>
+                    <Text style={styles.deleteConfirmationText}>Nota spese inviata?</Text>
+                </View>                
+            </View>
+        );
+    };
+
     const deleteEvent = () => {
         const onDeleteConfirm = () => {
             dataContext.Events.deleteWhere(event.id);
@@ -58,13 +75,13 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
         ]);
     };
 
-    Utility.OnFocus({navigation: navigation, onFocusAction: () => setExpenses(Utility.GetExpensesForEvent(event))});
+    Utility.OnFocus({ navigation: navigation, onFocusAction: () => setExpenses(Utility.GetExpensesForEvent(event)) });
 
     const eventTotalDays = Utility.GetNumberOfDaysBetweenDates(event.startDate, event.endDate);
 
     return (
         <GestureHandlerRootView>
-            <Swipeable key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions}>
+            <Swipeable key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions} renderLeftActions={renderLeftActions}>
                 <Pressable key={`pressable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`}
                     onPress={goToEvent} style={({ pressed }) => [
                         styles.container, { backgroundColor: pressed ? ThemeColors.selected : ThemeColors.white }]}>
@@ -77,18 +94,10 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                             <Text style={[styles.day, { marginVertical: -5 }]}>-</Text>
                             <Text style={[styles.day]}>{Utility.FormatDateDDMM(event.endDate)}</Text>
                         </VStack>
-                        {/* <VStack style={[styles.dateContainer, GlobalStyles.selfCenter]}>
-                            <Text style={[styles.day]}>{new Date(event.startDate).getDate()}</Text>
-                            <Text style={[GlobalStyles.selfCenter]}>{Utility.GetMonthShortName(event.startDate as string)}</Text>
-                        </VStack>             
-                        <VStack style={[styles.dateContainer, GlobalStyles.selfCenter]}>
-                            <Text style={[styles.day]}>{new Date(event.endDate).getDate()}</Text>
-                            <Text style={[GlobalStyles.selfCenter]}>{Utility.GetMonthShortName(event.endDate as string)}</Text>
-                        </VStack> */}
-                            <VStack style={styles.eventNameContainer}>
-                                <Text style={[styles.eventName]}>{event.name}</Text>
-                                <Text style={[styles.eventDescription]} numberOfLines={1}>{event.city}: {eventTotalDays} giorn{eventTotalDays > 1 ? 'i' : 'o'}</Text>
-                            </VStack>
+                        <VStack style={styles.eventNameContainer}>
+                            <Text style={[styles.eventName]}>{event.name}</Text>
+                            <Text style={[styles.eventDescription]} numberOfLines={1}>{event.city}: {eventTotalDays} giorn{eventTotalDays > 1 ? 'i' : 'o'}</Text>
+                        </VStack>
                         <VStack style={styles.totalAmountContainer}>
                             {event.sentToCompany ? (
                                 <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{totalAmount >= 0 ? "hai ricevuto" : "hai restituito"}</Text>
@@ -143,7 +152,15 @@ const styles = StyleSheet.create({
     eventDescription: {
 
     },
-    swipedRow: {
+    setEmailSentSwipedRow: {
+        flexDirection: 'row',
+        flex: 1,
+        alignItems: 'center',
+        paddingLeft: 5,
+        backgroundColor: ThemeColors.green,
+        minHeight: 50,
+    },
+    deleteSwipedRow: {
         flexDirection: 'row',
         flex: 1,
         alignItems: 'center',

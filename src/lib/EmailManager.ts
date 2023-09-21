@@ -10,7 +10,7 @@ export const EmailManager = {
       // attachments: attachments,
       attachments: attachments
     }, (error, event) => {
-      console.log(error, event);
+      console.log("Mail sent?", error, event);
       if (error != undefined) {
         console.log("Cannot open default email app");
       }
