@@ -13,20 +13,24 @@ const ProfileScreen = ({ navigation, route }: any) => {
     const [surname, setSurname] = useState(userProfile.surname);
     const [email, setEmail] = useState(userProfile.email);    
     
-    const save = () => {
-        const profile = new UserProfile();
+    const save = () => {        
+        let profile = new UserProfile();
         profile.name = name ? name.trim() : '';
         profile.surname = surname ? surname.trim() : '';
         profile.email = email ? email.trim() : '';
         dataContext.UserProfile.saveData([profile]);
-        Utility.ShowSuccessMessage("Profilo aggiornato correttamente");
+        setUserProfile(profile);
+        console.log("AH, ", profile);
+        Utility.ShowSuccessMessage("Profilo aggiornato correttamente");        
     };
-
-    const applyCustomHeader = () => {        
+    console.log(dataContext.UserProfile.getAllData());
+    console.log(surname);
+    const refreshData = () => {
+        setUserProfile(Utility.GetUserProfile());
         useCustomHeaderWithButtonAsync(navigation.getParent(), `Profilo Tour Leader`, () => save(), 'floppy-disk');
     }
 
-    Utility.OnFocus({ navigation: navigation, onFocusAction: () => applyCustomHeader() });    
+    Utility.OnFocus({ navigation: navigation, onFocusAction: () => refreshData() });    
 
     return (
         <NativeBaseProvider>

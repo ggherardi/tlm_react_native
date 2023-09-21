@@ -21,6 +21,7 @@ import AllEventsScreen from './src/Screens/AllEventsScreen';
 import NewExpenseReportScreen from './src/Screens/NewExpenseReportScreen';
 import FlashMessage from 'react-native-flash-message';
 import { faCircle } from '@fortawesome/free-regular-svg-icons';
+import LoginScreen from './src/Screens/LoginScreen';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
@@ -55,6 +56,7 @@ function App(): JSX.Element {
       <FlashMessage position='top' />
       <NavigationContainer theme={TLMTheme}>
         <Stack.Navigator>
+          <Stack.Screen name={Constants.Navigation.LoginScreen} component={LoginScreen} options={loginScreenOptions} />
           <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.AllEvents} component={AllEventsScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEventScreen} options={commonOptions} />
@@ -66,6 +68,11 @@ function App(): JSX.Element {
       </NavigationContainer>
     </>
   );
+}
+
+const loginScreenOptions = {
+  headerShown: false, 
+  statusBarColor: ThemeColors.white
 }
 
 const commonOptions = {
