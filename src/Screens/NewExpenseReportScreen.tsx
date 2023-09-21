@@ -2,7 +2,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from 'native-base';
 import { useEffect, useState } from 'react';
 import React, { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import GlobalStyles from '../lib/GlobalStyles';
+import GlobalStyles, { SelectDropdownStyle, ThemeColors } from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -17,6 +17,9 @@ import { FileManager } from '../lib/FileManager';
 import { PDFBuilder } from '../lib/PDFBuilder';
 import NavigationHelper from '../lib/NavigationHelper';
 import ModalLoaderComponent from '../lib/components/ModalWithLoader';
+import { FormErrorMessageComponent } from '../lib/components/FormErrorMessageComponent';
+import SelectDropdown from 'react-native-select-dropdown';
+import { ExpenseTypes } from '../lib/data/ExpenseTypes';
 
 const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
@@ -29,6 +32,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [amountCurrencyCode, setAmountCurrencyCode] = useState('EUR');
     const [isFormValid, setIsFormValid] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [validationErrors, setValidationErrors] = useState({});
 
     const event: BusinessEvent = route.params.event;
     const extraCurrencies: any[] = event.currencies ? event.currencies : [];
@@ -36,9 +40,9 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
 
     useEffect(() => {
         useCustomHeaderWithButtonAsync(navigation, Utility.GetEventHeaderTitle(event), () => saveExpenseReport(), undefined, 'Crea nuova spesa', isFormValid, 'salva');
-      });
+    });
 
-    const handleExpenseNameChange = (value: any) => setExpenseName(value);
+    // const handleExpenseNameChange = (value: any) => setExpenseName(value);
     const handleExpenseDescriptionChange = (e: any) => setExpenseDescription(e.nativeEvent.text);
     const handleExpenseAmount = (e: any) => setExpenseAmount(e.nativeEvent.text);
     const handleAmountCurrencyChange = (value: any) => setAmountCurrencyCode(value);
@@ -51,7 +55,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const onTakePhoto = () => launchCamera(imagePickerCommonOptions, onImageSelect);
     const deletePhoto = () => setPhoto(undefined);
 
-    const onImageSelect = async (media: any) => {        
+    const onImageSelect = async (media: any) => {
         if (!media.didCancel && media.assets[0]) {
             const photo = media.assets[0];
             setPhoto(photo);
@@ -60,47 +64,64 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
 
     const saveExpenseReport = async () => {
         setIsLoading(true);
+        if (!validate()) {
+            setIsLoading(false);
+            return;
+        }
         let expense: ExpenseReport = new ExpenseReport();
         if (expenses && expenses.map) {
-            let id = Math.max(...expenses.map((e: ExpenseReport) => e.id));
-            expense.id = id >= 0 ? id + 1 : 0;
-            expense.name = expenseName.trim();
-            expense.description = expenseDescription.trim();
-            expense.amount = Number(expenseAmount);
-            expense.date = expenseDate.toString();
-            expense.timeStamp = new Date().toString();            
-            const photoFileName = `${Utility.SanitizeString(event.name)}-${Utility.SanitizeString(expense.name)}-${Utility.FormatDateDDMMYYYY(expense.date, '-')}-${Utility.GenerateRandomGuid("")}.${Utility.GetExtensionFromType(photo.type)}`;
-            const photoFileFullPath = `${event.directoryPath}/${photoFileName}`;
-            const saveResult = await FileManager.saveFromBase64(photoFileFullPath, photo.base64);
-            if (saveResult) {                
-                expense.photoFilePath = photoFileFullPath;
-                expenses.push(expense);
-                PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);
-                dataContext.ExpenseReports.saveData(expenses);
-                setExpenses(dataContext.ExpenseReports.getAllData());
-                // resetForm();
-                Utility.ShowSuccessMessage("Nota spesa creata correttamente");
-                NavigationHelper.getEventTabNavigation().navigate(Constants.Navigation.Event);
-            } else {
+            try {
+                let id = Math.max(...expenses.map((e: ExpenseReport) => e.id));
+                expense.id = id >= 0 ? id + 1 : 0;
+                expense.name = expenseName.trim();
+                expense.description = expenseDescription.trim();
+                expense.amount = Number(expenseAmount);
+                expense.date = expenseDate.toString();
+                expense.timeStamp = new Date().toString();
+                const photoFileName = `${Utility.SanitizeString(event.name)}-${Utility.SanitizeString(expense.name)}-${Utility.FormatDateDDMMYYYY(expense.date, '-')}-${Utility.GenerateRandomGuid("")}.${Utility.GetExtensionFromType(photo.type)}`;
+                const photoFileFullPath = `${event.directoryPath}/${photoFileName}`;
+                const saveResult = await FileManager.saveFromBase64(photoFileFullPath, photo.base64);
+                if (saveResult) {
+                    expense.photoFilePath = photoFileFullPath;
+                    expenses.push(expense);
+                    PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);
+                    dataContext.ExpenseReports.saveData(expenses);
+                    setExpenses(dataContext.ExpenseReports.getAllData());
+                    Utility.ShowSuccessMessage("Nota spesa creata correttamente");
+                    NavigationHelper.getEventTabNavigation().navigate(Constants.Navigation.Event);
+                } else {
 
-                console.log("Cannot save the expense report because the photo could not be added to external storage");
+                    console.log("Cannot save the expense report because the photo could not be added to external storage");
+                }
+            } catch {
+                setIsLoading(false);
             }
         }
         setIsLoading(false);
     };
+        
+    const validate = (): boolean => {
+        let isValid = true;
+        let validationErrorsTemp = {};
+        if (!expenseName) {
+            validationErrorsTemp = { ...validationErrorsTemp, expenseName: 'Campo obbligatorio' };
+            isValid = false;
+        }
+        if (!expenseDate) {
+            validationErrorsTemp = { ...validationErrorsTemp, expenseDate: 'Campo obbligatorio' };
+            isValid = false;
+        }
+        if (!expenseAmount) {
+            validationErrorsTemp = { ...validationErrorsTemp, expenseAmount: 'Campo obbligatorio' };
+            isValid = false;
+        }
+        setValidationErrors(validationErrorsTemp);
+        return isValid;
+    }
 
     const refreshData = () => {
         setExpenses(dataContext.ExpenseReports.getAllData());
     }
-
-    // const resetForm = () => {
-    //     setExpenseName('');
-    //     setExpenseAmount('');
-    //     setExpenseDescription('');
-    //     setExpenseDate(new Date());
-    //     setPhoto(undefined);
-    //     setIsFormValid(false);
-    // }
 
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
@@ -124,20 +145,23 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
 
                 {photo ? (
                     <View style={{ width: "100%" }}>
-                        <FormControl style={GlobalStyles.mt15} isRequired>
+                        <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseName' in validationErrors}>
                             <FormControl.Label>Titolo spesa</FormControl.Label>
                         </FormControl>
-                        <Select width={"100%"} onValueChange={handleExpenseNameChange} selectedValue={expenseName}>
+                        <Select width={"100%"} onValueChange={(item) => setExpenseName(item)} selectedValue={expenseName} borderColor={'expenseName' in validationErrors ? 'red.500' : 'gray.300'} placeholder='Selezionare una voce'>
                             <Select.Item label="Pranzo" value="Pranzo" />
                             <Select.Item label="Cena" value="Cena" />
                             <Select.Item label="Taxi" value="Taxi" />
                         </Select>
-                        <FormControl style={GlobalStyles.mt15} isRequired>
+                        <FormErrorMessageComponent text='Campo obbligatorio' field='expenseName' validationArray={validationErrors} />
+
+                        <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseAmount' in validationErrors}>
                             <FormControl.Label>Importo della spesa ({event.mainCurrency.symbol})</FormControl.Label>
-                            <InputNumber placeholder='Importo' onChange={handleExpenseAmount} isRequired={true} />
+                            <InputNumber placeholder='es. 50.5' onChange={handleExpenseAmount} isRequired={true} />
+                            <FormErrorMessageComponent text='Campo obbligatorio' field='expenseAmount' validationArray={validationErrors} />
                         </FormControl>
 
-                        <FormControl style={GlobalStyles.mt15} isRequired>
+                        <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseDate' in validationErrors}>
                             <FormControl.Label>Data della spesa</FormControl.Label>
                             <Input
                                 placeholder="gg/mm/aaaa"
@@ -152,6 +176,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                                     />
                                 }
                             />
+                            <FormErrorMessageComponent text='Campo obbligatorio' field='expenseDate' validationArray={validationErrors} />
                         </FormControl>
 
                         {showDateTimePicker && (
@@ -167,7 +192,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                         )}
                         <FormControl style={GlobalStyles.mt15}>
                             <FormControl.Label>Descrizione della spesa</FormControl.Label>
-                            <TextArea placeholder="Descrizione della spesa" onChange={handleExpenseDescriptionChange} autoCompleteType={true}></TextArea>
+                            <TextArea placeholder="es. Taxi per trasferimento aeroporto" onChange={handleExpenseDescriptionChange} autoCompleteType={true}></TextArea>
                         </FormControl>
                     </View>
                 ) : (

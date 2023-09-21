@@ -10,10 +10,11 @@ import dataContext from '../lib/models/DataContext';
 import { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import { Currency, GetCurrencies, GetCurrency } from '../lib/data/Currencies';
 import { InputNumber } from '../lib/components/InputNumberComponent';
+import { FormErrorMessageComponent } from '../lib/components/FormErrorMessageComponent';
+import ModalLoaderComponent from '../lib/components/ModalWithLoader';
 
 const EditEventScreen = ({ navigation, route }: any) => {
-  const event: BusinessEvent = route.params.event;  
-
+  const event: BusinessEvent = route.params.event;
   const [events, setEvents] = useState(dataContext.Events.getAllData())
   const [eventName, setEventName] = useState(event.name);
   const [eventDescription, setEventDescription] = useState(event.description);
@@ -30,7 +31,9 @@ const EditEventScreen = ({ navigation, route }: any) => {
   const [arrivalCity, setArrivalCity] = useState(event.refundArrivalCity);
   const [totalTravelledKms, setTotalTravelledKms] = useState(event.totalTravelledKms);
   const [refundForfait, setRefundForfait] = useState(event.travelRefundForfait);
-  const [isFormValid, setIsFormValid] = useState(true);  
+  const [isFormValid, setIsFormValid] = useState(true);
+  const [validationErrors, setValidationErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     useCustomHeaderWithButtonAsync(navigation, Utility.GetEventHeaderTitle(event), () => saveEvent(), undefined, 'Modifica evento', !isFormValid, 'salva');
@@ -42,6 +45,10 @@ const EditEventScreen = ({ navigation, route }: any) => {
   const handleCashFundChange = (e: any) => setCashFund(e.nativeEvent.text);
 
   const saveEvent = async () => {
+    setIsLoading(true);
+    if (!validate()) {
+      return;
+    }
     const eventToEdit = events.find(e => e.id == event.id);
     if (eventToEdit) {
       eventToEdit.name = eventName.trim();
@@ -58,19 +65,40 @@ const EditEventScreen = ({ navigation, route }: any) => {
         eventToEdit.refundArrivalCity = arrivalCity;
         eventToEdit.totalTravelledKms = totalTravelledKms;
         eventToEdit.travelRefundForfait = refundForfait;
-      }      
+      }
       dataContext.Events.saveData(events);
       Utility.ShowSuccessMessage("Evento modificato correttamente");
       navigation.goBack();
+      setIsLoading(false);
     }
   };
 
+  const validate = (): boolean => {
+    let isValid = true;
+    let validationErrorsTemp = {};
+    if (!city) {
+      validationErrorsTemp = { ...validationErrorsTemp, city: 'Campo obbligatorio' };
+      isValid = false;
+    }
+    if (!eventStartDate) {
+      validationErrorsTemp = { ...validationErrorsTemp, eventStartDate: 'Campo obbligatorio' };
+      isValid = false;
+    }
+    if (!eventEndDate) {
+      validationErrorsTemp = { ...validationErrorsTemp, eventEndDate: 'Campo obbligatorio' };
+      isValid = false;
+    }
+    setValidationErrors(validationErrorsTemp);
+    return isValid;
+}
+
   return (
     <NativeBaseProvider>
+      <ModalLoaderComponent isLoading={isLoading} text='Modifica evento in corso..' />
       <ScrollView contentContainerStyle={styles.container}>
         <FormControl style={GlobalStyles.mt15}>
           <FormControl.Label>Nome dell'evento</FormControl.Label>
-          <Input defaultValue={event.name} placeholder="Nome evento" isDisabled onChange={handleEventNameChange}></Input>
+          <Input defaultValue={event.name} placeholder="Nome evento" isDisabled onChange={handleEventNameChange} maxLength={50}></Input>
         </FormControl>
 
         <FormControl style={GlobalStyles.mt15} isRequired>
@@ -124,7 +152,8 @@ const EditEventScreen = ({ navigation, route }: any) => {
 
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Destinazione (città)</FormControl.Label>
-          <Input defaultValue={event.city} placeholder="es. Roma" onChange={handleCityChange}></Input>
+          <Input defaultValue={event.city} placeholder="es. Roma" onChange={handleCityChange} isInvalid={'city' in validationErrors} maxLength={200}></Input>
+          <FormErrorMessageComponent text='Campo obbligatorio' field='city' validationArray={validationErrors} />
         </FormControl>
 
         <FormControl style={GlobalStyles.mt15}>
@@ -134,7 +163,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
 
         <FormControl style={GlobalStyles.mt15}>
           <FormControl.Label>Descrizione dell'evento</FormControl.Label>
-          <TextArea defaultValue={event.description} placeholder="Descrizione breve dell'evento" onChange={handleEventDescriptionChange} autoCompleteType={true}></TextArea>
+          <TextArea defaultValue={event.description} placeholder="Descrizione breve dell'evento" onChange={handleEventDescriptionChange} autoCompleteType={true} maxLength={500}></TextArea>
         </FormControl>
 
         <FormControl style={GlobalStyles.mt15}>

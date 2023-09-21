@@ -11,7 +11,18 @@ export const ThemeColors = {
   info: "#5bc0de", //0d6efd
   warning: "#f0ad4e",
   danger: "#d9534f",
+  lightGray: '#a2a5a0'
 };
+
+export const SelectDropdownStyle = StyleSheet.create({
+  button: {
+    backgroundColor: 'white', 
+    borderColor: 'gray', 
+    width: '100%', 
+    borderWidth: 1,
+    borderRadius: 5
+  }
+});
 
 const GlobalStyles = StyleSheet.create({
   // Common components styles

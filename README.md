@@ -30,7 +30,7 @@ Feedback invio mail per segnare che la nota spese è stata inviata
 
 OK - Messaggio di successo dopo salvataggio profilo (o redirect back)
 
-Validazione forms
+OK - Validazione forms
 
 OK - Fix Altezza pdf viewer
 
@@ -74,6 +74,7 @@ npm i --save react-native-html-to-pdf
 npm i --save react-native-pdf
 npm i --save react-native-blob-util
 npm i --save react-native-splash-screen
+npm i --save react-native-select-dropdown
 
 # TO NEXT: fixing all expenses formatting
 

@@ -10,12 +10,12 @@ import { useState } from 'react';
 const EventSettingsScreen = ({ route, navigation }: any) => {
     const [event, setEvent] = useState<BusinessEvent>(route.params[0]);
 
-    const refreshData = async () => {
-        useCustomHeaderWithButtonAsync(navigation.getParent(), Utility.GetEventHeaderTitle(event), () => { navigation.navigate(Constants.Navigation.EditEventScreen, { event: event }) }, 'pencil', 'Impostazioni evento');
+    const refreshData = async () => {        
         let refreshedEvent = Utility.GetEvent(event.id);
         if (refreshedEvent) {
             setEvent(refreshedEvent);
         }
+        useCustomHeaderWithButtonAsync(navigation.getParent(), Utility.GetEventHeaderTitle(event), () => { navigation.navigate(Constants.Navigation.EditEventScreen, { event: refreshedEvent }) }, 'pencil', 'Impostazioni evento');
     };
 
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });

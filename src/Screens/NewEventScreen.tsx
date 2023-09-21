@@ -15,6 +15,7 @@ import { SaveConstants } from '../lib/DataStorage';
 import { InputNumber } from '../lib/components/InputNumberComponent';
 import NavigationHelper from '../lib/NavigationHelper';
 import ModalLoaderComponent from '../lib/components/ModalWithLoader';
+import { FormErrorMessageComponent } from '../lib/components/FormErrorMessageComponent';
 
 const NewEventScreen = ({ navigation, route }: any) => {
   const [events, setEvents] = useState<BusinessEvent[]>(dataContext.Events.getAllData());
@@ -30,6 +31,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
   const [cashFund, setCashFund] = useState();
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     useCustomHeaderWithButtonAsync(navigation, "Crea nuovo evento", () => saveEvent(), undefined, undefined, isFormValid, 'salva');
@@ -39,9 +41,13 @@ const NewEventScreen = ({ navigation, route }: any) => {
   const handleEventDescriptionChange = (e: any) => setEventDescription(e.nativeEvent.text);
   const handleCityChange = (e: any) => setCity(e.nativeEvent.text);
   const handleCashFundChange = (e: any) => setCashFund(e.nativeEvent.text);
-  
+
   const saveEvent = async () => {
     setIsLoading(true);
+    if (!validate()) {
+      setIsLoading(false);
+      return;
+    }
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
@@ -74,6 +80,29 @@ const NewEventScreen = ({ navigation, route }: any) => {
     setIsLoading(false);
   };
 
+  const validate = (): boolean => {
+    let isValid = true;
+    let validationErrorsTemp = {};
+    if (!eventName) {
+      validationErrorsTemp = { ...validationErrorsTemp, eventName: 'Campo obbligatorio' };
+      isValid = false;
+    }
+    if (!city) {
+      validationErrorsTemp = { ...validationErrorsTemp, city: 'Campo obbligatorio' };
+      isValid = false;
+    }
+    if (!eventStartDate) {
+      validationErrorsTemp = { ...validationErrorsTemp, eventStartDate: 'Campo obbligatorio' };
+      isValid = false;
+    }
+    if (!eventEndDate) {
+      validationErrorsTemp = { ...validationErrorsTemp, eventEndDate: 'Campo obbligatorio' };
+      isValid = false;
+    }
+    setValidationErrors(validationErrorsTemp);
+    return isValid;
+  }
+
   const refreshData = () => {
     setEvents(dataContext.Events.getAllData());
   }
@@ -86,12 +115,13 @@ const NewEventScreen = ({ navigation, route }: any) => {
       <ScrollView contentContainerStyle={styles.container}>
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Nome dell'evento</FormControl.Label>
-          <Input placeholder="Nome evento" onChange={handleEventNameChange}></Input>
+          <Input placeholder="Nome evento" onChange={handleEventNameChange} isInvalid={'eventName' in validationErrors} maxLength={50}></Input>
+          <FormErrorMessageComponent text='Campo obbligatorio' field='eventName' validationArray={validationErrors} />
         </FormControl>
 
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
-          <Input            
+          <Input
             placeholder="gg/mm/aaaa"
             value={Utility.FormatDateDDMMYYYY(eventStartDate.toString())}
             InputLeftElement={
@@ -109,7 +139,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
 
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Data di fine dell'evento</FormControl.Label>
-          <Input            
+          <Input
             placeholder="gg/mm/aaaa"
             value={Utility.FormatDateDDMMYYYY(eventEndDate.toString())}
             InputLeftElement={
@@ -140,7 +170,8 @@ const NewEventScreen = ({ navigation, route }: any) => {
 
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Destinazione (città)</FormControl.Label>
-          <Input placeholder="es. Roma" onChange={handleCityChange}></Input>
+          <Input placeholder="es. Roma" onChange={handleCityChange} isInvalid={'city' in validationErrors} maxLength={200} />
+          <FormErrorMessageComponent text='Campo obbligatorio' field='city' validationArray={validationErrors} />
         </FormControl>
 
         <FormControl style={GlobalStyles.mt15}>

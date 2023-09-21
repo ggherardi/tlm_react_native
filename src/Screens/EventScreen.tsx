@@ -58,7 +58,7 @@ const EventScreen = ({ route, navigation }: any) => {
                             <Text style={{ flex: 2, fontSize: 20, fontWeight: 'bold', textAlign: 'right' }}>{totalAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
                         </View>
                         {reports != undefined && reports.length > 0 && reports.map((report: ExpenseReport, index: number) => (
-                            <>
+                            <View key={Utility.GenerateRandomGuid()}>
                                 {index == 0 && (
                                     <Row key={`row-${index}`}>
                                         <View style={[styles.headerView, { flex: 2 }]}>
@@ -76,7 +76,7 @@ const EventScreen = ({ route, navigation }: any) => {
                                     </Row>
                                 )}
                                 <ExpenseDataRowComponent expense={report} event={event} onDelete={refreshData} navigation={navigation} index={index} />
-                            </>
+                            </View>
                         ))}
                     </ScrollView>
                 </GestureHandlerRootView>

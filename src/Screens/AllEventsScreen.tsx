@@ -40,13 +40,13 @@ const AllEventsScreen = ({ navigation }: any) => {
   };
 
   Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
-
+  
   return (
     <NativeBaseProvider>
       {events && events.length ? (
         <ScrollView contentContainerStyle={[GlobalStyles.container]}>
           {events != undefined && events.length > 0 && events.map((event: BusinessEvent, index: number) => (
-            <>
+            <View key={Utility.GenerateRandomGuid()}>
               {index == 0 && (
                 <Row key={`row-${index}`}>
                   <View style={[styles.headerView, { flex: 2 }]}>
@@ -64,7 +64,7 @@ const AllEventsScreen = ({ navigation }: any) => {
                 </Row>
               )}
               <HomeDataRowComponent key={`homedatarow_${index}`} event={event} onDelete={refreshData} navigation={navigation} index={index} />
-            </>
+            </View>
           ))}
         </ScrollView>
       ) : (
