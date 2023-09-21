@@ -11,7 +11,7 @@ interface IStatusIconProps {
 }
 
 export const StatusIconComponent = (props: IStatusIconProps) => {
-  let icon: IconProp = 'circle-notch';
+  let icon: IconProp = 'hourglass-start';
   let color = ThemeColors.info;
   const todayDate = new Date();
   const daysToEventEnd = Utility.GetNumberOfDaysBetweenDates(todayDate.toString(), props.event.endDate);    
@@ -20,11 +20,11 @@ export const StatusIconComponent = (props: IStatusIconProps) => {
     color = ThemeColors.green;
   } else {
     if (daysToEventEnd >= 0 && daysToEventEnd <= 3) {
-      icon = 'circle-exclamation';
+      icon = 'hourglass-half';
       color = ThemeColors.warning;
     }
     if (daysToEventEnd < 0) {
-      icon = 'xmark-circle';
+      icon = 'hourglass-end';
       color = ThemeColors.danger;
     }
   }

@@ -22,7 +22,9 @@ interface IHomeDataRow {
 
 export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHomeDataRow) => {
     const [expenses, setExpenses] = useState<ExpenseReport[]>(Utility.GetExpensesForEvent(event));
-    const totalAmount = Utility.CalculateTotalAmount(expenses, 'amount') - event.cashFund;
+    const tempExpenses = expenses.slice();
+    tempExpenses.push(ExpenseReport.generateKmRefund(event));
+    const totalAmount = Utility.CalculateTotalAmount(tempExpenses, 'amount') - event.cashFund;
 
     const goToEvent = () => {
         navigation.navigate(Constants.Navigation.EventHome, { event: event });
@@ -56,6 +58,10 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
         ]);
     };
 
+    Utility.OnFocus({navigation: navigation, onFocusAction: () => setExpenses(Utility.GetExpensesForEvent(event))});
+
+    const eventTotalDays = Utility.GetNumberOfDaysBetweenDates(event.startDate, event.endDate);
+
     return (
         <GestureHandlerRootView>
             <Swipeable key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions}>
@@ -65,11 +71,12 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                     <Row>
                         <View style={{ justifyContent: 'center', paddingRight: 10 }}>
                             <StatusIconComponent event={event} />
-                        </View>           
+                        </View>
                         <VStack style={[styles.dateContainer, GlobalStyles.selfCenter]}>
                             <Text style={[styles.day]}>{Utility.FormatDateDDMM(event.startDate)}</Text>
+                            <Text style={[styles.day, { marginVertical: -5 }]}>-</Text>
                             <Text style={[styles.day]}>{Utility.FormatDateDDMM(event.endDate)}</Text>
-                        </VStack>                                     
+                        </VStack>
                         {/* <VStack style={[styles.dateContainer, GlobalStyles.selfCenter]}>
                             <Text style={[styles.day]}>{new Date(event.startDate).getDate()}</Text>
                             <Text style={[GlobalStyles.selfCenter]}>{Utility.GetMonthShortName(event.startDate as string)}</Text>
@@ -78,16 +85,16 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                             <Text style={[styles.day]}>{new Date(event.endDate).getDate()}</Text>
                             <Text style={[GlobalStyles.selfCenter]}>{Utility.GetMonthShortName(event.endDate as string)}</Text>
                         </VStack> */}
-                        {Utility.IsNotNullOrUndefined(event.city) ? (
                             <VStack style={styles.eventNameContainer}>
                                 <Text style={[styles.eventName]}>{event.name}</Text>
-                                <Text style={[styles.eventDescription]} numberOfLines={1}>{event.city} - {Utility.GetNumberOfDaysBetweenDates(event.startDate, event.endDate)} giorni</Text>
+                                <Text style={[styles.eventDescription]} numberOfLines={1}>{event.city}: {eventTotalDays} giorn{eventTotalDays > 1 ? 'i' : 'o'}</Text>
                             </VStack>
-                        ) : (
-                            <Text style={[styles.eventNameContainer, styles.eventName, GlobalStyles.pl10, GlobalStyles.selfCenter]}>{event.name}</Text>
-                        )}
                         <VStack style={styles.totalAmountContainer}>
-                            <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{totalAmount >= 0 ? "devi ricevere" : "devi restituire"}</Text>
+                            {event.sentToCompany ? (
+                                <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{totalAmount >= 0 ? "hai ricevuto" : "hai restituito"}</Text>
+                            ) : (
+                                <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{totalAmount >= 0 ? "devi ricevere" : "devi restituire"}</Text>
+                            )}
                             <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{Math.abs(totalAmount)} {event.mainCurrency.symbol}</Text>
                         </VStack>
                     </Row>
@@ -102,7 +109,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexWrap: 'wrap',
         maxWidth: '100%',
-        paddingHorizontal: 5,        
+        paddingHorizontal: 5,
         paddingVertical: 10,
         backgroundColor: ThemeColors.white
     },
@@ -135,7 +142,7 @@ const styles = StyleSheet.create({
     },
     eventDescription: {
 
-    },    
+    },
     swipedRow: {
         flexDirection: 'row',
         flex: 1,

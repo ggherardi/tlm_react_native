@@ -53,27 +53,27 @@ const EventScreen = ({ route, navigation }: any) => {
                 <GestureHandlerRootView>
                     <ScrollView contentContainerStyle={[GlobalStyles.container]}>
                         {isLoading && (<LoaderComponent />)}
-                        <View style={[GlobalStyles.flexRow, { padding: 10, paddingBottom: 20 }]}>
+                        <View style={[GlobalStyles.flexRow, { paddingHorizontal: 5, paddingBottom: 20 }]}>
                             <Text style={{ flex: 5, fontSize: 20 }}>Importo totale:</Text>
-                            <Text style={{ flex: 2, fontSize: 20, fontWeight: 'bold' }}>{totalAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
+                            <Text style={{ flex: 2, fontSize: 20, fontWeight: 'bold', textAlign: 'right' }}>{totalAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
                         </View>
                         {reports != undefined && reports.length > 0 && reports.map((report: ExpenseReport, index: number) => (
                             <>
-                                {index == 0 && (<></>
-                                    // <Row>
-                                    //     <View style={{ justifyContent: 'center', paddingRight: 10 }}>
-                                    //         <Text>Stato</Text>
-                                    //     </View>
-                                    //     <View style={{ justifyContent: 'center', paddingRight: 10 }}>
-                                    //         <Text>Stato</Text>
-                                    //     </View>
-                                    //     <View style={{ justifyContent: 'center', paddingRight: 10 }}>
-                                    //         <Text>Stato</Text>
-                                    //     </View>
-                                    //     <View style={{ justifyContent: 'center', paddingRight: 10 }}>
-                                    //         <Text>Stato</Text>
-                                    //     </View>
-                                    // </Row>
+                                {index == 0 && (
+                                    <Row key={`row-${index}`}>
+                                        <View style={[styles.headerView, { flex: 2 }]}>
+                                            <Text style={[styles.headerText]}>Data</Text>
+                                        </View>
+                                        <View style={[styles.headerView, { flex: 2 }]}>
+                                            <Text style={[styles.headerText]}>Foto</Text>
+                                        </View>
+                                        <View style={[styles.headerView, { flex: 10 }]}>
+                                            <Text style={[styles.headerText]}>Tipo spesa</Text>
+                                        </View>
+                                        <View style={[styles.headerView, { flex: 2, paddingRight: 10 }]}>
+                                            <Text style={[styles.headerText]}>Importo</Text>
+                                        </View>
+                                    </Row>
                                 )}
                                 <ExpenseDataRowComponent expense={report} event={event} onDelete={refreshData} navigation={navigation} index={index} />
                             </>
@@ -88,7 +88,7 @@ const EventScreen = ({ route, navigation }: any) => {
                     </View>
                     <View style={{ justifyContent: 'flex-end' }}>
                         <Text style={[styles.text]}>Inserisci una nuova spesa</Text>
-                        <FontAwesomeIcon icon={'arrow-down-long'} size={50} color={"gray"} style={{ alignSelf: 'center', marginVertical: 10 }} />
+                        <FontAwesomeIcon icon={'arrow-down-long'} size={20} color={"gray"} style={{ alignSelf: 'center', marginVertical: 10 }} />
                     </View>
                 </Context.Provider>
             )}
@@ -102,6 +102,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 15,
     },
+    headerView: {
+        fontSize: 30,
+        justifyContent: 'center',
+        // marginHorizontal: 1
+    },
+    headerText: {
+        fontSize: 10,
+    }
 });
 
 export default EventScreen;

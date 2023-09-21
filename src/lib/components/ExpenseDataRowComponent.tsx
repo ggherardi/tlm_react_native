@@ -56,32 +56,30 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
         <GestureHandlerRootView>
             <Swipeable key={`swipable_${expense.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions}>
                 <Pressable key={`${index}`} onPress={goToExpense} style={({ pressed }) => [styles.container, { opacity: pressed ? 1 : 1 }]}>
-                    <View style={[GlobalStyles.flexRow, { flex: 1 }]}>
-                        <View style={[GlobalStyles.flexRow, { flex: 1 }]}>
-                            <VStack space={2}>
+                    <View style={[GlobalStyles.flexRow]}>
+                        <View style={[styles.expenseDateContainer]}>
+                            <VStack>
                                 <Text style={[styles.day]}>{Utility.GetDay(expense.date as string)}</Text>
-                                <Text>{Utility.GetMonthShortName(expense.date as string)}</Text>
+                                <Text style={[styles.day]}>{Utility.GetMonthShortName(expense.date as string)}</Text>
                             </VStack>
                         </View>
-                        <View style={[GlobalStyles.flexRow, { flex: 1 }]}>
+                        <View style={[styles.expenseImageContainer]}>
                             {Utility.IsNotNullOrUndefined(expense.photoFilePath) && (
                                 <Image alt='noimage' source={{ uri: imageUri }} style={[styles.image]} />
                             )}
                         </View>
-                        <View style={[GlobalStyles.flexRow, { flex: 3 }]}>
+                        <View style={[styles.expenseNameContainer]}>
                             {expense.description != undefined && expense.description.length ? (
                                 <VStack style={styles.expenseNameContainer}>
-                                    <Text style={[styles.expenseName]}>{expense.name}</Text>
-                                    <View style={{}}>
-                                        <Text style={[styles.expenseDescription]} numberOfLines={1}>{expense.description}</Text>
-                                    </View>
+                                    <Text style={[styles.expenseName]}>{event.name}</Text>
+                                    <Text style={[styles.expenseDescription]} numberOfLines={1}>{expense.description}</Text>
                                 </VStack>
                             ) : (
-                                <Text style={[styles.expenseName, GlobalStyles.selfCenter]}>{expense.name}</Text>
+                                <Text style={[styles.expenseName]}>{expense.name}</Text>
                             )}
                         </View>
-                        <View style={[GlobalStyles.flexRow, GlobalStyles.selfCenter, { flex: 2 }]}>
-                            <Text style={{ fontSize: 20 }}>{expense.amount.toFixed(2)} {event.mainCurrency?.symbol}</Text>
+                        <View style={[styles.expenseAmountContainer]}>
+                            <Text style={{ fontSize: 15 }}>{expense.amount.toFixed(2)} {event.mainCurrency?.symbol}</Text>
                         </View>
                     </View>
                 </Pressable>
@@ -92,20 +90,36 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+        flexWrap: 'wrap',
         maxWidth: '100%',
-        padding: 10,
+        paddingHorizontal: 5,
+        paddingVertical: 10,
         backgroundColor: ThemeColors.white
     },
+    expenseDateContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'flex-start'
+    },
+    expenseImageContainer: {
+        flex: 2,
+        justifyContent: 'center'
+    },
     expenseNameContainer: {
-        // paddingLeft: 10,
-        paddingTop: 5
+        flex: 8,
+        justifyContent: 'center',
+    },
+    expenseAmountContainer: {
+        flex: 2,
+        justifyContent: 'center'
     },
     day: {
         alignSelf: 'center',
-        fontSize: 20
+        fontSize: 10
     },
     expenseName: {
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: 'bold'
     },
     expenseDescription: {
@@ -141,12 +155,12 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     image: {
-        height: 25,
-        width: 25,
+        height: 35,
+        width: 35,
         marginRight: 10,
         alignSelf: 'center',
         // marginLeft: 20
         // marginTop: 30,
-        // borderRadius: 10,
+        borderRadius: 5,
     },
 });

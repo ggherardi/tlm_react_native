@@ -75,7 +75,7 @@ const AllEventsScreen = ({ navigation }: any) => {
           </View>
           <View style={{ justifyContent: 'flex-end' }}>
             <Text style={[styles.text]}>Crea un nuovo evento</Text>
-            <FontAwesomeIcon icon={'arrow-down-long'} size={50} color={"gray"} style={{ alignSelf: 'center', marginVertical: 10 }} />
+            <FontAwesomeIcon icon={'arrow-down-long'} size={20} color={"gray"} style={{ alignSelf: 'center', marginVertical: 10 }} />
           </View>
         </Context.Provider>
       )}

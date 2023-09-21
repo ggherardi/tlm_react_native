@@ -31,15 +31,10 @@ export const PDFBuilder = {
   generateHtml: (event: BusinessEvent, expenses: ExpenseReport[]): string => {
     const userProfile = Utility.GetUserProfile();
     let travelledKmsRefund = 0;
-    if (event.needCarRefund && Utility.IsNotNullOrUndefined(event.refundStartingCity) && Utility.IsNotNullOrUndefined(event.refundArrivalCity) && event.totalTravelledKms > 0 && event.travelRefundForfait > 0) {      
-      travelledKmsRefund = event.totalTravelledKms * event.travelRefundForfait;
-      const expense = new ExpenseReport();
-      expense.amount = travelledKmsRefund;
-      expense.name = Constants.Generic.TravelRefundExpenseName;
-      expense.description = '';
-      expense.date = new Date().toString();
-      expenses.push(expense);
-    }
+    const refundExpense = ExpenseReport.generateKmRefund(event);
+    if (refundExpense) {
+      expenses.push(refundExpense);
+    }    
     Utility.SortByDate(expenses, 'date', false);
     const totalAmount: number = Utility.CalculateTotalAmount(expenses, 'amount')
     let html = `
