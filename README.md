@@ -26,7 +26,7 @@ OK - Aggiungere email allo user profile
 
 Aggiungere un modo per inviare le notifiche all'utente ogni giorno per 3 giorni prima della scadenza dell'evento (data fine evento). Eventualmente tramite notifiche dello smartphone ma anche tramite email. Previo consenso.
 
-Feedback invio mail per segnare che la nota spese è stata inviata
+OK - Feedback invio mail per segnare che la nota spese è stata inviata -> solo su IOS? Gestito con settaggio manuale
 
 OK - Messaggio di successo dopo salvataggio profilo (o redirect back)
 

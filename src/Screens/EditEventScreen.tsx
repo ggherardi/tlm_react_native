@@ -32,7 +32,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
   const [totalTravelledKms, setTotalTravelledKms] = useState(event.totalTravelledKms);
   const [refundForfait, setRefundForfait] = useState(event.travelRefundForfait);
   const [isFormValid, setIsFormValid] = useState(true);
-  const [validationErrors, setValidationErrors] = useState({});
+  const [validationErrors, setValidationErrors] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -88,9 +88,17 @@ const EditEventScreen = ({ navigation, route }: any) => {
       validationErrorsTemp = { ...validationErrorsTemp, eventEndDate: 'Campo obbligatorio' };
       isValid = false;
     }
+    if (eventStartDate.getTime() > eventEndDate.getTime()) {
+      validationErrorsTemp = {
+        ...validationErrorsTemp,
+        eventStartDate: 'La Data inizio evento non può essere maggiore della Data fine evento',
+        eventEndDate: 'La Data fine evento non può essere maggiore della Data inizio evento'
+      };
+      isValid = false;
+    }
     setValidationErrors(validationErrorsTemp);
     return isValid;
-}
+  }
 
   return (
     <NativeBaseProvider>
@@ -101,7 +109,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
           <Input defaultValue={event.name} placeholder="Nome evento" isDisabled onChange={handleEventNameChange} maxLength={50}></Input>
         </FormControl>
 
-        <FormControl style={GlobalStyles.mt15} isRequired>
+        <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'eventStartDate' in validationErrors}>
           <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
           <Input
             placeholder="gg/mm/aaaa"
@@ -117,9 +125,10 @@ const EditEventScreen = ({ navigation, route }: any) => {
               />
             }
           />
+          <FormErrorMessageComponent text={validationErrors.eventStartDate} field='eventStartDate' validationArray={validationErrors} />
         </FormControl>
 
-        <FormControl style={GlobalStyles.mt15} isRequired>
+        <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'eventEndDate' in validationErrors}>
           <FormControl.Label>Data di fine dell'evento</FormControl.Label>
           <Input
             placeholder="gg/mm/aaaa"
@@ -135,6 +144,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
               />
             }
           />
+          <FormErrorMessageComponent text={validationErrors.eventEndDate} field='eventEndDate' validationArray={validationErrors} />
         </FormControl>
 
         {showDateTimePicker && (
