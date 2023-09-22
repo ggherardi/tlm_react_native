@@ -9,8 +9,7 @@ import { Images } from '../assets/Images';
 
 export const PDFBuilder = {
   createExpensesPdfAsync: async (event: BusinessEvent, directoryName: string, fileName: string): Promise<RNHTMLtoPDF.Pdf> => {    
-    return new Promise(async (resolve, reject) => {
-      console.log("CREATING PDF");
+    return new Promise(async (resolve, reject) => {      
       const directory = `Documents/${directoryName}`;
       const expenses = dataContext.ExpenseReports ? dataContext.ExpenseReports.getAllData() : []      
       const options = {
@@ -28,11 +27,11 @@ export const PDFBuilder = {
     });
   },
 
-  generateHtml: (event: BusinessEvent, expenses: ExpenseReport[]): string => {
+  generateHtml: (event: BusinessEvent, expenses: ExpenseReport[]): string => {    
     const userProfile = Utility.GetUserProfile();
     let travelledKmsRefund = 0;
     const refundExpense = ExpenseReport.generateKmRefund(event);
-    if (refundExpense) {
+    if (refundExpense.name == Constants.Generic.TravelRefundExpenseName) {
       expenses.push(refundExpense);
     }    
     Utility.SortByDate(expenses, 'date', false);

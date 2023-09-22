@@ -21,7 +21,7 @@ const EventScreen = ({ route, navigation }: any) => {
     const [event, setEvent] = useState(route.params[0]);
     const [appHeight, setAppHeight] = useState(Dimensions.get('window').height);
     const [isLoading, setIsLoading] = useState(false);
-
+    
     // @ts-ignore
     const Context = React.createContext();
     let totalAmount = reports && reports.length && Utility.CalculateTotalAmount(reports, 'amount');
@@ -31,8 +31,11 @@ const EventScreen = ({ route, navigation }: any) => {
         NavigationHelper.setEventTabNavigation(navigation);
     }, []);
 
-    const refreshData = async () => {
+    useEffect(() => {
         useCustomHeaderWithButtonAsync(navigation.getParent(), Utility.GetEventHeaderTitle(event), () => viewPdf(), 'file-pdf', 'Nota spese');
+    });
+
+    const refreshData = async () => {
         setIsLoading(true);
         let data = dataContext.ExpenseReports.getAllData();
         Utility.SortByDate(data, 'date', false);

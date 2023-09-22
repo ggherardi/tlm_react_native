@@ -46,6 +46,10 @@ modifica spese
 
 istruzioni e informazioni
 
+Gestione permessi
+
+Validazione rimborso chilometrico
+
 
 npm i @react-navigation/native
 npm i @react-navigation/native-stack

@@ -178,7 +178,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
         </FormControl>
 
         <FormControl style={GlobalStyles.mt15}>
-          <Checkbox value="Rimborso chilometrico" isChecked={needCarRefund} onChange={(e) => setNeedCarRefund(e)}>Rimborso chilometrico</Checkbox>
+          <Checkbox value="Rimborso chilometrico" defaultIsChecked={needCarRefund} onChange={(e) => setNeedCarRefund(e)}>Rimborso chilometrico</Checkbox>
         </FormControl>
         {needCarRefund && (
           <View>

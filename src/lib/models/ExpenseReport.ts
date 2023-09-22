@@ -27,6 +27,7 @@ export class ExpenseReport extends BusinessDataTypeBase {
 
   static generateKmRefund(event: BusinessEvent): ExpenseReport {
     const expense = new ExpenseReport();
+    console.log("generateKmRefund: ", event.needCarRefund && Utility.IsNotNullOrUndefined(event.refundStartingCity) && Utility.IsNotNullOrUndefined(event.refundArrivalCity) && event.totalTravelledKms > 0 && event.travelRefundForfait > 0);
     if (event.needCarRefund && Utility.IsNotNullOrUndefined(event.refundStartingCity) && Utility.IsNotNullOrUndefined(event.refundArrivalCity) && event.totalTravelledKms > 0 && event.travelRefundForfait > 0) {      
       const travelledKmsRefund = event.totalTravelledKms * event.travelRefundForfait;      
       expense.amount = travelledKmsRefund;
