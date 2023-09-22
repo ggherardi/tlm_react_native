@@ -38,6 +38,8 @@ OK - Splash page (https://blog.logrocket.com/building-splash-screens-react-nativ
 
 OK - Pagina iniziale con creazione profilo
 
+OK - Nuove icone (https://aboutreact.com/react-native-change-app-icon/ guide of IOS)
+
 ricerca eventi e spese
 
 modifica spese
