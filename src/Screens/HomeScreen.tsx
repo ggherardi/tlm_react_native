@@ -10,13 +10,30 @@ import PlaceholderScreen from './PlaceholderScreen';
 import { NavigationFakeButtonComponent } from '../lib/components/NavigationFakeButtonComponent';
 import { useEffect } from 'react';
 import NavigationHelper from '../lib/NavigationHelper';
+import { FileManager } from '../lib/FileManager';
 
 const Tab = createBottomTabNavigator();
 
 const HomeScreen = ({ navigation, route }: any) => {
     useEffect(() => {
-        NavigationHelper.setHomeBaseNavigation(navigation);
+        NavigationHelper.setHomeBaseNavigation(navigation);                
+        const checkPermissions = async() => {
+            try {
+                const result = await FileManager.checkStoragePermissions();
+                if (result.success) {
+                    console.log("Permissions where granted in home screen");
+                } else {
+                    console.log("Permissions where NOT granted in home screen");
+                }
+            } catch (err) {
+                console.log("Permissions exception in home screen", err);
+            }           
+        }
+        checkPermissions();
     }, []);
+    // useEffect(async () => {
+    //     await FileManager.manageStoragePermissions();
+    // });
 
     const commonTabOptions: BottomTabNavigationOptions = {
         lazy: true,

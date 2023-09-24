@@ -1,7 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, Input, NativeBaseProvider, TextArea } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, Alert } from 'react-native';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
@@ -16,6 +16,7 @@ import { InputNumber } from '../lib/components/InputNumberComponent';
 import NavigationHelper from '../lib/NavigationHelper';
 import ModalLoaderComponent from '../lib/components/ModalWithLoader';
 import { FormErrorMessageComponent } from '../lib/components/FormErrorMessageComponent';
+import { FileManager } from '../lib/FileManager';
 
 const NewEventScreen = ({ navigation, route }: any) => {
   const [events, setEvents] = useState<BusinessEvent[]>(dataContext.Events.getAllData());
@@ -45,6 +46,18 @@ const NewEventScreen = ({ navigation, route }: any) => {
   const saveEvent = async () => {
     setIsLoading(true);
     if (!validate()) {
+      setIsLoading(false);
+      return;
+    }
+    let hasPermissions;
+    try {
+      const promiseResult = await FileManager.checkStoragePermissions();      
+      hasPermissions = promiseResult.success;
+    } catch (err) {
+      hasPermissions = false;
+    }
+    if (!hasPermissions) {      
+      Alert.alert("Impossibile creare un nuovo evento", "Per il salvataggio dell'evento, è necessario garantire permessi di scrittura sul dispositivo");
       setIsLoading(false);
       return;
     }

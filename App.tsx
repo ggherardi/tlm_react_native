@@ -52,8 +52,7 @@ function App(): JSX.Element {
   }, []);
 
   return (
-    <>
-      <FlashMessage position='top' />
+    <>      
       <NavigationContainer theme={TLMTheme}>
         <Stack.Navigator>
           <Stack.Screen name={Constants.Navigation.LoginScreen} component={LoginScreen} options={loginScreenOptions} />
@@ -66,6 +65,7 @@ function App(): JSX.Element {
           <Stack.Screen name={Constants.Navigation.NewExpenseReport} component={NewExpenseReportScreen} options={commonOptions} />
         </Stack.Navigator>
       </NavigationContainer>
+      <FlashMessage position='top' />
     </>
   );
 }

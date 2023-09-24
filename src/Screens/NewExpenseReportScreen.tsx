@@ -1,7 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from 'native-base';
 import { useEffect, useState } from 'react';
-import React, { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import GlobalStyles, { SelectDropdownStyle, ThemeColors } from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
@@ -18,8 +18,6 @@ import { PDFBuilder } from '../lib/PDFBuilder';
 import NavigationHelper from '../lib/NavigationHelper';
 import ModalLoaderComponent from '../lib/components/ModalWithLoader';
 import { FormErrorMessageComponent } from '../lib/components/FormErrorMessageComponent';
-import SelectDropdown from 'react-native-select-dropdown';
-import { ExpenseTypes } from '../lib/data/ExpenseTypes';
 
 const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
@@ -45,14 +43,38 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     // const handleExpenseNameChange = (value: any) => setExpenseName(value);
     const handleExpenseDescriptionChange = (e: any) => setExpenseDescription(e.nativeEvent.text);
     const handleExpenseAmount = (e: any) => setExpenseAmount(e.nativeEvent.text);
-    const handleAmountCurrencyChange = (value: any) => setAmountCurrencyCode(value);
 
-
-    const imagePickerCommonOptions = { mediaType: "photo", maxWidth: 800, maxHeight: 600, includeBase64: true };
-    //@ts-ignore
-    const onSelectImagePress = () => launchImageLibrary(imagePickerCommonOptions, onImageSelect);
-    //@ts-ignore
-    const onTakePhoto = () => launchCamera(imagePickerCommonOptions, onImageSelect);
+    const imagePickerCommonOptions = { mediaType: "photo", maxWidth: 800, maxHeight: 600, includeBase64: true };        
+    const onSelectImagePress = async () => {
+        let hasPermissions: boolean = false;
+        try {            
+            const permissions = await FileManager.checkStorageReadPermissions();
+            hasPermissions = permissions.success;
+        } catch (err) {
+            hasPermissions = false;
+            Alert.alert("Impossibile creare la nota spesa", "Per poter proseguire, è necessario fornire all'applicazione i permessi di lettura sulla memoria del dispositivo");            
+        }        
+        if (!hasPermissions) {
+            return;
+        }
+        //@ts-ignore
+        launchImageLibrary(imagePickerCommonOptions, onImageSelect);    
+    } 
+    const onTakePhoto = async () => { 
+        let hasPermissions: boolean = false;
+        try {            
+            const permissions = await FileManager.checkCameraAndStoragePermissions();
+            hasPermissions = permissions.success;
+        } catch (err) {
+            hasPermissions = false;
+            Alert.alert("Impossibile creare la nota spesa", "Per poter proseguire, è necessario fornire all'applicazione i permessi di accesso alla fotocamera e di scrittura sulla memoria del dispositivo");            
+        }        
+        if (!hasPermissions) {
+            return;
+        }
+        //@ts-ignore
+        launchCamera(imagePickerCommonOptions, onImageSelect);
+    }
     const deletePhoto = () => setPhoto(undefined);
 
     const onImageSelect = async (media: any) => {
@@ -63,8 +85,20 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     };
 
     const saveExpenseReport = async () => {
+        let hasPermissions = false;
         setIsLoading(true);
         if (!validate()) {
+            setIsLoading(false);
+            return;
+        }
+        try {
+            const promiseResult = await FileManager.checkStoragePermissions();
+            hasPermissions = promiseResult.success;
+        } catch (err) {
+            hasPermissions = false;
+        }
+        if (!hasPermissions) {
+            Alert.alert("Impossibile creare la nota spesa", "Per il salvataggio della nota spesa, è necessario garantire permessi di scrittura sul dispositivo");
             setIsLoading(false);
             return;
         }
@@ -99,7 +133,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         }
         setIsLoading(false);
     };
-        
+
     const validate = (): boolean => {
         let isValid = true;
         let validationErrorsTemp = {};
