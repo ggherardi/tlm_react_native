@@ -50,6 +50,7 @@ OK - Gestione permessi
 
 Validazione rimborso chilometrico
 
+Dark theme e modalità notte non si vedono le scritte!
 
 npm i @react-navigation/native
 npm i @react-navigation/native-stack
