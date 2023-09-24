@@ -46,7 +46,7 @@ modifica spese
 
 istruzioni e informazioni
 
-Gestione permessi
+OK - Gestione permessi
 
 Validazione rimborso chilometrico
 
@@ -80,6 +80,7 @@ npm i --save react-native-html-to-pdf
 npm i --save react-native-pdf
 npm i --save react-native-blob-util
 npm i --save react-native-splash-screen
+npm i --save react-native-flash-message
 npm i --save react-native-select-dropdown
 
 # TO NEXT: fixing all expenses formatting
