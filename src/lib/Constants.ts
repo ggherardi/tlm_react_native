@@ -17,4 +17,8 @@ export class Constants {
   static Generic = {
     TravelRefundExpenseName: 'Rimborso chilometrico',
   }
+
+  static NotificationChannel = {
+    Reminder: 'TLMReminder'
+  }
 }

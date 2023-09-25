@@ -52,7 +52,7 @@ function App(): JSX.Element {
   }, []);
 
   return (
-    <>      
+    <>
       <NavigationContainer theme={TLMTheme}>
         <Stack.Navigator>
           <Stack.Screen name={Constants.Navigation.LoginScreen} component={LoginScreen} options={loginScreenOptions} />
@@ -71,7 +71,7 @@ function App(): JSX.Element {
 }
 
 const loginScreenOptions = {
-  headerShown: false, 
+  headerShown: false,
   statusBarColor: ThemeColors.white
 }
 

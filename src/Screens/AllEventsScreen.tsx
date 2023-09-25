@@ -1,6 +1,6 @@
 import { NativeBaseProvider, Row } from 'native-base';
 import React, { useState, useEffect } from 'react';
-import { Text, ScrollView, Alert, View, StyleSheet, Dimensions, Image } from 'react-native';
+import { Text, ScrollView, Alert, View, StyleSheet, Dimensions, Image, Button } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { HomeDataRowComponent } from '../lib/components/HomeDataRowComponent';
@@ -11,6 +11,7 @@ import { Storage } from '../lib/DataStorage';
 import NavigationHelper from '../lib/NavigationHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Images } from '../assets/Images';
+import { LocalNotification } from '../lib/NotificationManager';
 
 const AllEventsScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData());
@@ -40,9 +41,12 @@ const AllEventsScreen = ({ navigation }: any) => {
   };
 
   Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
-  
+  const handleButtonPress = () => {
+    LocalNotification();
+  }
   return (
     <NativeBaseProvider>
+      <Button title={'Local Push Notification'} onPress={handleButtonPress} />
       {events && events.length ? (
         <ScrollView contentContainerStyle={[GlobalStyles.container]}>
           {events != undefined && events.length > 0 && events.map((event: BusinessEvent, index: number) => (
