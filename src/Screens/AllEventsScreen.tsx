@@ -41,29 +41,18 @@ const AllEventsScreen = ({ navigation }: any) => {
   };
 
   Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
-  const handleButtonPress = async () => {
-    // NotificationManager.getAllChannels();
-    // console.log(new Date().toString());
-    // NotificationManager.deleteAllChannels();
-    // console.log("Channels: ", await NotificationManager.getAllChannels());
-    // return;
-    NotificationManager.scheduleNotification({ title: "Evento in scadenza", text: "Non risulta ancora inviata la nota spesa!", date: new Date(Date.now() + 60 * 1000)});
-    NotificationManager.getScheduledLocalNotifications();
-    // NotificationManager.localNotification({ title: "Evento in scadenza", text: "Non risulta ancora inviata la nota spesa!" })
-  }
   const deleteNotification = async () => {
     // NotificationManager.cancelScheduledNotification('e02b2eb0-72d5-433d-902b-453c547414e9');
     console.log(await NotificationManager.getScheduledLocalNotifications());
   }
   return (
     <NativeBaseProvider>
-      <Button title={'Local Push Notification'} onPress={handleButtonPress} />
-      <Button title={'Delete scheduled notification'} onPress={deleteNotification} />
+      {/* <Button title={'Delete scheduled notification'} onPress={deleteNotification} /> */}
       {events && events.length ? (
         <ScrollView contentContainerStyle={[GlobalStyles.container]}>
           {events != undefined && events.length > 0 && events.map((event: BusinessEvent, index: number) => (
             <View key={Utility.GenerateRandomGuid()}>
-              {index == 0 && (
+              {/* {index == 0 && (
                 <Row key={`row-${index}`}>
                   <View style={[styles.headerView, { flex: 2 }]}>
                     <Text style={[styles.headerText]}>Stato</Text>
@@ -78,7 +67,7 @@ const AllEventsScreen = ({ navigation }: any) => {
                     <Text style={[styles.headerText]}>Totale rimborso</Text>
                   </View>
                 </Row>
-              )}
+              )} */}
               <HomeDataRowComponent key={`homedatarow_${index}`} event={event} onDelete={refreshData} navigation={navigation} index={index} />
             </View>
           ))}

@@ -4,6 +4,7 @@ export const ThemeColors = {
   primary: '#E22E2D',
   secondary: 'blue',
   white: '#fff',
+  black: '#000',
   selected: '#fafafa',
   inactive: 'gray',
   success: '#5cb85c',

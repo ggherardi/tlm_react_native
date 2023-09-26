@@ -65,7 +65,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
-    event.notificationIds = [(id * 100000000), (id * 100000000 + 1), (id * 100000000 + 2)];
+    event.notificationIds = [((event.id * 1000000) + 1), ((event.id * 1000000) + 2), ((event.id * 1000000) + 3)];
     event.name = eventName ? eventName.trim() : '';
     event.mainCurrency = GetCurrency(mainCurrencyCode) as Currency;
     event.currencies = GetCurrencies(currenciesCodes);
@@ -94,7 +94,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
       Utility.ShowSuccessMessage("Evento creato correttamente");
       
       console.log("Scheduling notifications for event..");
-      event.scheduleNotifications();
+      BusinessEvent.scheduleNotifications(event);
       
       NavigationHelper.getHomeTabNavigation().navigate(Constants.Navigation.AllEvents);
     } else {

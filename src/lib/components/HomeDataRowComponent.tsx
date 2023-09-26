@@ -12,6 +12,8 @@ import DataContext from '../models/DataContext';
 import { ExpenseReport } from '../models/ExpenseReport';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { StatusIconComponent } from './StatusIconComponent';
+import NotificationManager from '../NotificationManager';
+import { StatusTextComponent } from './StatusTextComponent';
 
 interface IHomeDataRow {
     event: BusinessEvent;
@@ -81,7 +83,8 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
             eventToEdit.sentToCompany = true;
             dataContext.Events.saveData(events);
             setStateEvent(eventToEdit);
-            eventToEdit.deleteNotifications();
+            // This is not working!
+            BusinessEvent.deleteNotifications(event);
         }
     }
 
@@ -92,7 +95,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
             eventToEdit.sentToCompany = false;
             dataContext.Events.saveData(events);
             setStateEvent(eventToEdit);
-            eventToEdit.scheduleNotifications();
+            BusinessEvent.scheduleNotifications(event);
         }
     }
 
@@ -112,22 +115,28 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
     Utility.OnFocus({ navigation: navigation, onFocusAction: () => setExpenses(Utility.GetExpensesForEvent(event)) });
 
     const eventTotalDays = Utility.GetNumberOfDaysBetweenDates(event.startDate, event.endDate);
+    const daysUntilEventEnd = Utility.GetNumberOfDaysBetweenDates(event.endDate, new Date().toISOString());
 
     return (
         <GestureHandlerRootView>
             <Swipeable key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions} renderLeftActions={renderLeftActions} leftThreshold={20}>
                 <Pressable key={`pressable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`}
                     onPress={goToEvent} style={({ pressed }) => [
-                        styles.container, { backgroundColor: pressed ? ThemeColors.selected : ThemeColors.white }]}>
+                        styles.container, { backgroundColor: pressed ? ThemeColors.selected : ThemeColors.white, borderBottomWidth: 1, borderBottomColor: ThemeColors.lightGray }]}>
+                    <Row style={{  }}>
+                        <Text style={[styles.day]}>{Utility.FormatDateDDMM(event.startDate)} - {Utility.FormatDateDDMM(event.endDate)}</Text>                   
+                        {/* <Text style={[styles.day, { marginLeft: 5 }]}>{daysUntilEventEnd} giorni rimanenti</Text>      */}
+                        <StatusTextComponent event={stateEvent} />
+                    </Row>
                     <Row>
-                        <View style={{ justifyContent: 'center', paddingRight: 10 }}>
-                            <StatusIconComponent event={stateEvent} />
-                        </View>
-                        <VStack style={[styles.dateContainer, GlobalStyles.selfCenter]}>
+                        {/* <View style={{ justifyContent: 'center', paddingRight: 10 }}>                             */}
+                            {/* <StatusIconComponent event={stateEvent} /> */}
+                        {/* </View> */}
+                        {/* <VStack style={[styles.dateContainer, GlobalStyles.selfCenter]}>
                             <Text style={[styles.day]}>{Utility.FormatDateDDMM(event.startDate)}</Text>
                             <Text style={[styles.day, { marginVertical: -5 }]}>-</Text>
                             <Text style={[styles.day]}>{Utility.FormatDateDDMM(event.endDate)}</Text>
-                        </VStack>
+                        </VStack> */}
                         <VStack style={styles.eventNameContainer}>
                             <Text style={[styles.eventName]}>{event.name}</Text>
                             <Text style={[styles.eventDescription]} numberOfLines={1}>{event.city}: {eventTotalDays} giorn{eventTotalDays > 1 ? 'i' : 'o'}</Text>
@@ -165,7 +174,7 @@ const styles = StyleSheet.create({
     },
     eventNameContainer: {
         flex: 7,
-        paddingLeft: 10,
+        // paddingLeft: 10,
     },
     totalAmountContainer: {
         justifyContent: 'center',
@@ -180,11 +189,11 @@ const styles = StyleSheet.create({
         fontSize: 10
     },
     eventName: {
-        fontSize: 15,
+        fontSize: 17,
         fontWeight: 'bold'
     },
     eventDescription: {
-        
+
     },
     swipedRow: {
         flexDirection: 'row',

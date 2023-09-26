@@ -46,24 +46,25 @@ export class BusinessEvent extends BusinessDataTypeBase {
     NotificationManager.cancelAllScheduledNotifications(element.notificationIds);
   }
 
-  scheduleNotifications = () => {
-    // GG: I'm scheduling 3 different notifications here, because iOS does not support the property "repeat" of react-native-push-notification
-    // TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: need to schedule only the correct number of notification, i.e. the end date is today, I probably don't need notifications, but if the end date is in 2 days, I would need 2 notifications!
-    const endDate = new Date(this.endDate);
-    console.log(this.notificationIds);
-    for (let i = 0; i < this.notificationIds.length; i++) {      
-      const notificationId = this.notificationIds[i];
+  static scheduleNotifications = (event: BusinessEvent) => {
+    // GG: I'm scheduling 3 different notifications here, because iOS does not support the property "repeat" of react-native-push-notification    
+    const endDate = new Date(event.endDate);
+    console.log(event.notificationIds);
+    for (let i = 0; i < event.notificationIds.length; i++) {      
+      const notificationId = event.notificationIds[i];
       NotificationManager.scheduleNotification({
         id: notificationId,
+        // GG: Production line
         // date: new Date(Utility.AddDays(endDate, -i).setHours(10, 0, 0)),
+        // GG: Debug line
         date: new Date(Date.now() + ((i + 1)* 10) * 1000),
-        title: `Evento ${this.name} in scadenza`,        
-        text: `L'evento ${this.name} scadrà in data ${Utility.FormatDateDDMMYYYY(this.endDate)}. Ricordati di inviare la nota spese!`,        
+        title: `Evento ${event.name} in scadenza`,
+        text: `L'evento ${event.name} scadrà in data ${Utility.FormatDateDDMMYYYY(event.endDate)}. Ricordati di inviare la nota spese!`,        
       });
     }
   }
 
-  deleteNotifications = () => {
-    NotificationManager.cancelAllScheduledNotifications(this.notificationIds);
+  static deleteNotifications = (event: BusinessEvent) => {
+    NotificationManager.cancelAllScheduledNotifications(event.notificationIds);
   }
 }
