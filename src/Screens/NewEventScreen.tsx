@@ -17,6 +17,7 @@ import NavigationHelper from '../lib/NavigationHelper';
 import ModalLoaderComponent from '../lib/components/ModalWithLoader';
 import { FormErrorMessageComponent } from '../lib/components/FormErrorMessageComponent';
 import { FileManager } from '../lib/FileManager';
+import NotificationManager from '../lib/NotificationManager';
 
 const NewEventScreen = ({ navigation, route }: any) => {
   const [events, setEvents] = useState<BusinessEvent[]>(dataContext.Events.getAllData());
@@ -64,6 +65,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
+    event.notificationIds = [(id * 100000000), (id * 100000000 + 1), (id * 100000000 + 2)];
     event.name = eventName ? eventName.trim() : '';
     event.mainCurrency = GetCurrency(mainCurrencyCode) as Currency;
     event.currencies = GetCurrencies(currenciesCodes);
@@ -73,19 +75,27 @@ const NewEventScreen = ({ navigation, route }: any) => {
     event.endDate = eventEndDate.toString();
     event.cashFund = cashFund ? cashFund : 0;
     event.expensesDataContextKey = `event-${event.id}_${event.name}-reports-${SaveConstants.expenseReport.key}`;
+    console.log("Adding new event to events list..");
     events.push(event);
     const sanitizedEventName = Utility.SanitizeString(event.name);
-    const pdfFileName = `nota_spese_${sanitizedEventName}_${Utility.GetYear(event.startDate)}_nomeTL`;
+    const userProfile = Utility.GetUserProfile();
+    const pdfFileName = `nota_spese_${sanitizedEventName}_${Utility.GetYear(event.startDate)}_${userProfile.surname}_${userProfile.surname}`;
     const directoryName = `${sanitizedEventName}_${Utility.FormatDateDDMMYYYY(event.startDate, "-")}_${Utility.FormatDateDDMMYYYY(event.endDate, "-")}_${Utility.GenerateRandomGuid("")}`;
+    console.log("Creating event pdf..");
     const createdFile = await PDFBuilder.createExpensesPdfAsync(event, directoryName, pdfFileName);
     event.reportFileName = pdfFileName;
-    if (createdFile) {
+    if (createdFile) {      
       const filePath = createdFile.filePath as string;
       event.directoryName = directoryName;
       event.fullFilePath = filePath;
       event.directoryPath = filePath.substring(0, filePath.lastIndexOf("/"));
+      console.log("Saving all events to memory..");
       dataContext.Events.saveData(events);
       Utility.ShowSuccessMessage("Evento creato correttamente");
+      
+      console.log("Scheduling notifications for event..");
+      event.scheduleNotifications();
+      
       NavigationHelper.getHomeTabNavigation().navigate(Constants.Navigation.AllEvents);
     } else {
       console.log("Errore");

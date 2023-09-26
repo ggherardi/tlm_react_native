@@ -58,6 +58,12 @@ export const Utility = {
     return array.length ? array.map(r => r[propertyToReduceName]).reduce((p, c) => Number(p) + Number(c)) : 0;
   },
 
+  AddDays: (date: Date, days: number): Date => {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  },
+
   FormatDateDDMMYYYY: (dateString: string, separator: string = '/'): string => {
     let formattedDate = '';
     let date = new Date(dateString);
@@ -181,6 +187,10 @@ export const Utility = {
           v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
       });
+  },
+
+  GenerateRandomNumber: () => {
+    return (Math.random() * 100000000000000).toFixed();
   },
 
   IsNotNullOrUndefined: (value: any) => {

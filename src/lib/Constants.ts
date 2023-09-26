@@ -18,7 +18,10 @@ export class Constants {
     TravelRefundExpenseName: 'Rimborso chilometrico',
   }
 
-  static NotificationChannel = {
-    Reminder: 'TLMReminder'
-  }
+  static Channels = {
+    Reminder: {
+      id: '0',
+      name: 'TLMReminder'
+    }
+  }  
 }

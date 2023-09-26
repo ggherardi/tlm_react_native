@@ -15,7 +15,7 @@ import { FileManager } from '../lib/FileManager';
 const Tab = createBottomTabNavigator();
 
 const HomeScreen = ({ navigation, route }: any) => {
-    useEffect(() => {
+    useEffect(() => {        
         NavigationHelper.setHomeBaseNavigation(navigation);                
         const checkPermissions = async() => {
             try {
@@ -31,9 +31,6 @@ const HomeScreen = ({ navigation, route }: any) => {
         }
         checkPermissions();
     }, []);
-    // useEffect(async () => {
-    //     await FileManager.manageStoragePermissions();
-    // });
 
     const commonTabOptions: BottomTabNavigationOptions = {
         lazy: true,

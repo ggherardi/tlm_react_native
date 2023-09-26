@@ -1,5 +1,7 @@
 import { SaveConstants } from '../DataStorage';
 import { FileManager } from '../FileManager';
+import NotificationManager from '../NotificationManager';
+import { Utility } from '../Utility';
 import { City } from '../data/Cities';
 import { Country } from '../data/Countries';
 import { Currency } from '../data/Currencies';
@@ -30,6 +32,9 @@ export class BusinessEvent extends BusinessDataTypeBase {
   reportFileName!: string;
   expensesDataContextKey!: string;
 
+  // Notification properties
+  notificationIds!: number[];
+
   static getDataContextKey = () => SaveConstants.events.key;
 
   static primaryKeyWhereCondition = (element: BusinessEvent, id: number) => {
@@ -38,5 +43,21 @@ export class BusinessEvent extends BusinessDataTypeBase {
 
   static extraDeleteSteps(element: BusinessEvent): void {
     FileManager.deleteFileOrFolder(element.directoryPath);
+  }
+
+  scheduleNotifications = () => {
+    // GG: I'm scheduling 3 different notifications here, because iOS does not support the property "repeat" of react-native-push-notification
+    const endDate = new Date(this.endDate);
+    console.log(this.notificationIds);
+    for (let i = 0; i < this.notificationIds.length; i++) {      
+      const notificationId = this.notificationIds[i];
+      NotificationManager.scheduleNotification({
+        id: notificationId,
+        // date: new Date(Utility.AddDays(endDate, -i).setHours(10, 0, 0)),
+        date: new Date(Date.now() + ((i + 1)* 10) * 1000),
+        title: `Evento ${this.name} in scadenza`,        
+        text: `L'evento ${this.name} scadrà in data ${Utility.FormatDateDDMMYYYY(this.endDate)}. Ricordati di inviare la nota spese!`,        
+      });
+    }
   }
 }

@@ -35,6 +35,6 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
       SplashScreen.show(this);  // Add this here
-      super.onCreate(savedInstanceState);
+      super.onCreate(null); // GG: Added as a workaround for crashes while the app is in background!
   }
 }

@@ -11,7 +11,7 @@ import { Storage } from '../lib/DataStorage';
 import NavigationHelper from '../lib/NavigationHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Images } from '../assets/Images';
-import { LocalNotification } from '../lib/NotificationManager';
+import NotificationManager from '../lib/NotificationManager';
 
 const AllEventsScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData());
@@ -41,12 +41,24 @@ const AllEventsScreen = ({ navigation }: any) => {
   };
 
   Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
-  const handleButtonPress = () => {
-    LocalNotification();
+  const handleButtonPress = async () => {
+    // NotificationManager.getAllChannels();
+    // console.log(new Date().toString());
+    // NotificationManager.deleteAllChannels();
+    // console.log("Channels: ", await NotificationManager.getAllChannels());
+    // return;
+    NotificationManager.scheduleNotification({ title: "Evento in scadenza", text: "Non risulta ancora inviata la nota spesa!", date: new Date(Date.now() + 60 * 1000)});
+    NotificationManager.getScheduledLocalNotifications();
+    // NotificationManager.localNotification({ title: "Evento in scadenza", text: "Non risulta ancora inviata la nota spesa!" })
+  }
+  const deleteNotification = async () => {
+    // NotificationManager.cancelScheduledNotification('e02b2eb0-72d5-433d-902b-453c547414e9');
+    console.log(await NotificationManager.getScheduledLocalNotifications());
   }
   return (
     <NativeBaseProvider>
       <Button title={'Local Push Notification'} onPress={handleButtonPress} />
+      <Button title={'Delete scheduled notification'} onPress={deleteNotification} />
       {events && events.length ? (
         <ScrollView contentContainerStyle={[GlobalStyles.container]}>
           {events != undefined && events.length > 0 && events.map((event: BusinessEvent, index: number) => (

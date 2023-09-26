@@ -22,6 +22,7 @@ import NewExpenseReportScreen from './src/Screens/NewExpenseReportScreen';
 import FlashMessage from 'react-native-flash-message';
 import { faCircle } from '@fortawesome/free-regular-svg-icons';
 import LoginScreen from './src/Screens/LoginScreen';
+import NotificationManager from './src/lib/NotificationManager';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
@@ -30,6 +31,7 @@ library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTra
   faArrowDown, faArrowDownLong, faFileCirclePlus, faCheckCircle, faXmarkCircle, faCircleInfo, faExclamationCircle,
   faCircle, faCircleNotch, faHourglassStart, faHourglassHalf, faHourglassEmpty, faHourglassEnd, faArrowRotateLeft)
 
+NotificationManager.createChannel(Constants.Channels.Reminder.id, Constants.Channels.Reminder.name);
 const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
@@ -48,7 +50,7 @@ function App(): JSX.Element {
   };
 
   useEffect(() => {
-    SplashScreen.hide();
+    SplashScreen.hide();        
   }, []);
 
   return (
