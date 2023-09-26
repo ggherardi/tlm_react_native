@@ -50,7 +50,16 @@ OK - Gestione permessi
 
 Validazione rimborso chilometrico
 
-Dark theme e modalità notte non si vedono le scritte!
+OK - Dark theme e modalità notte non si vedono le scritte!
+
+CAMBIARE LE LINEE DA DEBUG A RELEASE IN NOTIFICATIONS!
+
+Riconoscimento bordi quando si fa la foto degli scontrini per tagliare fuori il rest
+
+Grafica spese
+
+
+
 
 npm i @react-navigation/native
 npm i @react-navigation/native-stack

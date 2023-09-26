@@ -174,7 +174,8 @@ export const PDFBuilder = {
       if (expense.name == Constants.Generic.TravelRefundExpenseName) {
         continue;
       }
-      let isEven = i % 2 == 0;
+      // GG: If needCarRefund is true, a new expense is being pushed as first element in the array. This expense has no foto, but the following condition has to be adapted
+      let isEven = (event.needCarRefund ? (i + 1) % 2 : i % 2) == 0;
       html += `
       ${isEven ? '<div class="pagebreak"></div>' : ''}
       <div ${isEven ? '' : 'class="my-5"'}>
