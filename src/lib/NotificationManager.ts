@@ -61,8 +61,15 @@ const NotificationManager = {
     });
   },
 
-  cancelScheduledNotification: (id: string) => {
-    PushNotification.cancelLocalNotification(id);
+  cancelScheduledNotification: (id: number) => {
+    console.log("Deleting scheduled notification with id: ", id);
+    PushNotification.cancelLocalNotification(id.toString());
+  },
+
+  cancelAllScheduledNotifications: (ids: number[]) => {
+    for (const id of ids) {      
+      NotificationManager.cancelScheduledNotification(id);
+    }    
   },
 
   localNotification: (props: INotificationProps): string => {

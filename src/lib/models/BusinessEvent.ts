@@ -43,10 +43,12 @@ export class BusinessEvent extends BusinessDataTypeBase {
 
   static extraDeleteSteps(element: BusinessEvent): void {
     FileManager.deleteFileOrFolder(element.directoryPath);
+    NotificationManager.cancelAllScheduledNotifications(element.notificationIds);
   }
 
   scheduleNotifications = () => {
     // GG: I'm scheduling 3 different notifications here, because iOS does not support the property "repeat" of react-native-push-notification
+    // TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: need to schedule only the correct number of notification, i.e. the end date is today, I probably don't need notifications, but if the end date is in 2 days, I would need 2 notifications!
     const endDate = new Date(this.endDate);
     console.log(this.notificationIds);
     for (let i = 0; i < this.notificationIds.length; i++) {      
@@ -59,5 +61,9 @@ export class BusinessEvent extends BusinessDataTypeBase {
         text: `L'evento ${this.name} scadrà in data ${Utility.FormatDateDDMMYYYY(this.endDate)}. Ricordati di inviare la nota spese!`,        
       });
     }
+  }
+
+  deleteNotifications = () => {
+    NotificationManager.cancelAllScheduledNotifications(this.notificationIds);
   }
 }

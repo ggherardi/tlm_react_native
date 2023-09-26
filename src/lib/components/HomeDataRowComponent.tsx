@@ -81,6 +81,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
             eventToEdit.sentToCompany = true;
             dataContext.Events.saveData(events);
             setStateEvent(eventToEdit);
+            eventToEdit.deleteNotifications();
         }
     }
 
@@ -91,6 +92,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
             eventToEdit.sentToCompany = false;
             dataContext.Events.saveData(events);
             setStateEvent(eventToEdit);
+            eventToEdit.scheduleNotifications();
         }
     }
 
