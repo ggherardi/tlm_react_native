@@ -6835,6 +6835,11 @@ react-native-blob-util@^0.19.1, react-native-blob-util@>=0.13.7:
     base-64 "0.1.0"
     glob "^7.2.3"
 
+react-native-document-scanner-plugin@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.npmjs.org/react-native-document-scanner-plugin/-/react-native-document-scanner-plugin-0.9.1.tgz"
+  integrity sha512-iHqd/ZEHmKnPsA0X2DoSZ7B324WSDQO45I22busHHfc2vSRMHozP9fcIP34YTuNvfbvjJFhziCIw66YcGWLotA==
+
 react-native-email@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/react-native-email/-/react-native-email-2.1.0.tgz"

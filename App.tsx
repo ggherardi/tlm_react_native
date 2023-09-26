@@ -23,6 +23,7 @@ import FlashMessage from 'react-native-flash-message';
 import { faCircle } from '@fortawesome/free-regular-svg-icons';
 import LoginScreen from './src/Screens/LoginScreen';
 import NotificationManager from './src/lib/NotificationManager';
+import DebugScreen from './src/Screens/DebugScreen';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
@@ -57,6 +58,7 @@ function App(): JSX.Element {
     <>
       <NavigationContainer theme={TLMTheme}>
         <Stack.Navigator>
+          {/* <Stack.Screen name={Constants.Navigation.DebugScreen} component={DebugScreen} options={commonOptions} /> */}
           <Stack.Screen name={Constants.Navigation.LoginScreen} component={LoginScreen} options={loginScreenOptions} />
           <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.AllEvents} component={AllEventsScreen} options={commonOptions} />

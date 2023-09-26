@@ -2,7 +2,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from 'native-base';
 import { useEffect, useState } from 'react';
 import React, { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import GlobalStyles, { SelectDropdownStyle, ThemeColors } from '../lib/GlobalStyles';
+import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -18,6 +18,7 @@ import { PDFBuilder } from '../lib/PDFBuilder';
 import NavigationHelper from '../lib/NavigationHelper';
 import ModalLoaderComponent from '../lib/components/ModalWithLoader';
 import { FormErrorMessageComponent } from '../lib/components/FormErrorMessageComponent';
+import DocumentScanner, { ResponseType } from 'react-native-document-scanner-plugin'
 
 const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
@@ -27,6 +28,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenseAmount, setExpenseAmount] = useState('');
     const [showDateTimePicker, setShowDateTimePicker] = useState(false);
     const [photo, setPhoto] = useState<any>();
+    const [scannedImage, setScannedImage] = useState<string>();
     const [amountCurrencyCode, setAmountCurrencyCode] = useState('EUR');
     const [isFormValid, setIsFormValid] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -44,36 +46,52 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const handleExpenseDescriptionChange = (e: any) => setExpenseDescription(e.nativeEvent.text);
     const handleExpenseAmount = (e: any) => setExpenseAmount(e.nativeEvent.text);
 
-    const imagePickerCommonOptions = { mediaType: "photo", maxWidth: 800, maxHeight: 600, includeBase64: true };        
+    const imagePickerCommonOptions = { mediaType: "photo", maxWidth: 800, maxHeight: 600, includeBase64: true };
     const onSelectImagePress = async () => {
         let hasPermissions: boolean = false;
-        try {            
+        try {
             const permissions = await FileManager.checkStorageReadPermissions();
             hasPermissions = permissions.success;
         } catch (err) {
             hasPermissions = false;
-            Alert.alert("Impossibile creare la nota spesa", "Per poter proseguire, è necessario fornire all'applicazione i permessi di lettura sulla memoria del dispositivo");            
-        }        
+            Alert.alert("Impossibile creare la nota spesa", "Per poter proseguire, è necessario fornire all'applicazione i permessi di lettura sulla memoria del dispositivo");
+        }
         if (!hasPermissions) {
             return;
         }
         //@ts-ignore
-        launchImageLibrary(imagePickerCommonOptions, onImageSelect);    
-    } 
-    const onTakePhoto = async () => { 
+        launchImageLibrary(imagePickerCommonOptions, onImageSelect);
+    }
+    const onTakePhoto = async () => {
         let hasPermissions: boolean = false;
-        try {            
+        try {
             const permissions = await FileManager.checkCameraAndStoragePermissions();
             hasPermissions = permissions.success;
         } catch (err) {
             hasPermissions = false;
-            Alert.alert("Impossibile creare la nota spesa", "Per poter proseguire, è necessario fornire all'applicazione i permessi di accesso alla fotocamera e di scrittura sulla memoria del dispositivo");            
-        }        
+            Alert.alert("Impossibile creare la nota spesa", "Per poter proseguire, è necessario fornire all'applicazione i permessi di accesso alla fotocamera e di scrittura sulla memoria del dispositivo");
+        }
         if (!hasPermissions) {
             return;
         }
         //@ts-ignore
-        launchCamera(imagePickerCommonOptions, onImageSelect);
+        try {
+            const { scannedImages } = await DocumentScanner.scanDocument({
+                responseType: ResponseType.Base64
+            });
+            if (scannedImages && scannedImages.length > 0) {
+                const base64Image = scannedImages[0];
+                const tempPhoto = {
+                    base64: base64Image,
+                    uri: `data:image/png;base64,${base64Image}`,
+                    type: 'image/jpg'
+                }
+                setPhoto(tempPhoto);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+
     }
     const deletePhoto = () => setPhoto(undefined);
 
@@ -102,8 +120,8 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
             setIsLoading(false);
             return;
         }
-        let expense: ExpenseReport = new ExpenseReport();
-        if (expenses && expenses.map) {
+        let expense: ExpenseReport = new ExpenseReport();        
+        if (expenses && expenses.map) {            
             try {
                 let id = Math.max(...expenses.map((e: ExpenseReport) => e.id));
                 expense.id = id >= 0 ? id + 1 : 0;
@@ -111,7 +129,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 expense.description = expenseDescription.trim();
                 expense.amount = Number(expenseAmount);
                 expense.date = expenseDate.toString();
-                expense.timeStamp = new Date().toString();
+                expense.timeStamp = new Date().toString();                
                 const photoFileName = `${Utility.SanitizeString(event.name)}-${Utility.SanitizeString(expense.name)}-${Utility.FormatDateDDMMYYYY(expense.date, '-')}-${Utility.GenerateRandomGuid("")}.${Utility.GetExtensionFromType(photo.type)}`;
                 const photoFileFullPath = `${event.directoryPath}/${photoFileName}`;
                 const saveResult = await FileManager.saveFromBase64(photoFileFullPath, photo.base64);
@@ -168,7 +186,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                     <HStack style={[GlobalStyles.pt15]}>
                         {photo != undefined && photo != null && (
                             <HStack>
-                                <Image source={{ uri: `${photo.uri}` }} style={styles.image} resizeMode="contain"></Image>
+                                <Image source={{ uri: `${photo.uri ? photo.uri : photo.base64}` }} style={styles.image} resizeMode="contain"></Image>
                                 <InputSideButton icon={"x"} pressFunction={deletePhoto} />
                             </HStack>
                         )}

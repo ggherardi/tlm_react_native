@@ -94,5 +94,9 @@ export const FileManager = {
           reject(false);
         })
     });
+  },
+
+  resizeImage: async () => {
+    // ImageResizer
   }
 }

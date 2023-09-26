@@ -92,6 +92,9 @@ npm i --save react-native-blob-util
 npm i --save react-native-splash-screen
 npm i --save react-native-flash-message
 npm i --save react-native-select-dropdown
+npm i --save react-native-push-notification
+npm i --save @types/react-native-push-notification
+npm i --save react-native-document-scanner-plugin
 
 # TO NEXT: fixing all expenses formatting
 

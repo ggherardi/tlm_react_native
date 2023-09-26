@@ -41,13 +41,9 @@ const AllEventsScreen = ({ navigation }: any) => {
   };
 
   Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
-  const deleteNotification = async () => {
-    // NotificationManager.cancelScheduledNotification('e02b2eb0-72d5-433d-902b-453c547414e9');
-    console.log(await NotificationManager.getScheduledLocalNotifications());
-  }
+
   return (
-    <NativeBaseProvider>
-      {/* <Button title={'Delete scheduled notification'} onPress={deleteNotification} /> */}
+    <NativeBaseProvider>      
       {events && events.length ? (
         <ScrollView contentContainerStyle={[GlobalStyles.container]}>
           {events != undefined && events.length > 0 && events.map((event: BusinessEvent, index: number) => (

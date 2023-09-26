@@ -12,6 +12,7 @@ export class Constants {
     EventSettingsScreen: 'Impostazioni',
     EditEventScreen: 'Modifica evento',
     LoginScreen: 'Login',
+    DebugScreen: 'Debug',
   }
 
   static Generic = {
