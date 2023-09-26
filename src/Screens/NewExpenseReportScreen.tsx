@@ -28,7 +28,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenseAmount, setExpenseAmount] = useState('');
     const [showDateTimePicker, setShowDateTimePicker] = useState(false);
     const [photo, setPhoto] = useState<any>();
-    const [scannedImage, setScannedImage] = useState<string>();
+    const [scannedImageToDelete, setScannedImageToDelete] = useState<any>();
     const [amountCurrencyCode, setAmountCurrencyCode] = useState('EUR');
     const [isFormValid, setIsFormValid] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -77,15 +77,16 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         //@ts-ignore
         try {
             const { scannedImages } = await DocumentScanner.scanDocument({
-                responseType: ResponseType.Base64
+                responseType: ResponseType.ImageFilePath
             });
             if (scannedImages && scannedImages.length > 0) {
-                const base64Image = scannedImages[0];
+                // const base64Image = scannedImages[0];
+                const scannedImage = scannedImages[0];
                 const tempPhoto = {
-                    base64: base64Image,
-                    uri: `data:image/png;base64,${base64Image}`,
+                    uri: `${scannedImage}`,
                     type: 'image/jpg'
                 }
+                setScannedImageToDelete(tempPhoto);
                 setPhoto(tempPhoto);
             }
         } catch (err) {
@@ -132,11 +133,32 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 expense.timeStamp = new Date().toString();                
                 const photoFileName = `${Utility.SanitizeString(event.name)}-${Utility.SanitizeString(expense.name)}-${Utility.FormatDateDDMMYYYY(expense.date, '-')}-${Utility.GenerateRandomGuid("")}.${Utility.GetExtensionFromType(photo.type)}`;
                 const photoFileFullPath = `${event.directoryPath}/${photoFileName}`;
-                const saveResult = await FileManager.saveFromBase64(photoFileFullPath, photo.base64);
-                if (saveResult) {
+                let operationResult;
+                if (photo.base64) {
+                    operationResult = await FileManager.saveFromBase64(photoFileFullPath, photo.base64);                
+                }  else {                    
+                    // GG: If there is no base64, it means that DocumentScanner was used, hence we need to resize the image first
+                    let resizeOperation;                    
+                    try {               
+                        console.log("WHAT3");         
+                        console.log(scannedImageToDelete.uri, event.directoryPath);
+                        resizeOperation = await FileManager.resizeImage(scannedImageToDelete.uri, event.directoryPath, 800, 600);
+                        console.log(resizeOperation);
+                    } catch (err) {
+                        setIsLoading(false);
+                        return;
+                    }
+                    // If the resize was successful, we now need to move the resized image to the event folder while renaming it
+                    if (resizeOperation) {
+                        operationResult = await FileManager.moveFile(resizeOperation.path, photoFileFullPath);
+                    }                    
+                }               
+                if (operationResult) {                    
                     expense.photoFilePath = photoFileFullPath;
                     expenses.push(expense);
                     PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);
+                    // We now the delete the original saved image
+                    await FileManager.deleteFileOrFolder(scannedImageToDelete.uri);
                     dataContext.ExpenseReports.saveData(expenses);
                     setExpenses(dataContext.ExpenseReports.getAllData());
                     Utility.ShowSuccessMessage("Nota spesa creata correttamente");

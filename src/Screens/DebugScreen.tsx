@@ -11,7 +11,7 @@ const DebugScreen = ({ navigation }) => {
     // start the document scanner
     try {
       const { scannedImages } = await DocumentScanner.scanDocument({
-        responseType: ResponseType.Base64
+        responseType: ResponseType.ImageFilePath
       });
       if (scannedImages && scannedImages.length > 0) {
         // set the img src, so we can view the first scanned image

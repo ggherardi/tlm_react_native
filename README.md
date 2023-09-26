@@ -95,6 +95,7 @@ npm i --save react-native-select-dropdown
 npm i --save react-native-push-notification
 npm i --save @types/react-native-push-notification
 npm i --save react-native-document-scanner-plugin
+yarn add @bam.tech/react-native-image-resizer (FROM CMD)
 
 # TO NEXT: fixing all expenses formatting
 

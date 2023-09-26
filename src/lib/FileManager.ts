@@ -1,6 +1,7 @@
 import { PermissionsAndroid } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 import { PromiseResult } from './models/PromiseResult';
+import ImageResizer, { Response } from '@bam.tech/react-native-image-resizer';
 
 export const FileManager = {
   checkStoragePermissions: async (): Promise<PromiseResult> => {
@@ -82,6 +83,20 @@ export const FileManager = {
       .catch((err) => console.log(`Error deleting path ${path} (${err})`))
   },
 
+  moveFile: async (sourcePath: string, destinationPath: string) => {
+    return new Promise<boolean>((resolve, reject) => {
+      RNFetchBlob.fs.mv(sourcePath, destinationPath)
+        .then((v) => {
+          console.log(`${sourcePath} moved to (${destinationPath}) (${v})`);
+          resolve(true);
+        })
+        .catch(err => {
+          console.log(`Error while moving ${sourcePath} to ${destinationPath} (${err})`)
+          reject(false);
+        })
+    })    
+  },
+
   saveFromBase64: async (path: string, base64: string): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {
       RNFetchBlob.fs.writeFile(path, base64, 'base64')
@@ -96,7 +111,16 @@ export const FileManager = {
     });
   },
 
-  resizeImage: async () => {
-    // ImageResizer
+  resizeImage: async (imagePath: string, outputDirectory: string, width: number, height: number): Promise<Response> => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        console.log("starting resize");
+        const response = await ImageResizer.createResizedImage(imagePath, width, height, 'JPEG', 100, undefined, outputDirectory);
+        resolve(response);
+      } catch (err) {
+        console.log(`Could not resize image with path ${imagePath}: `, err);
+        reject(false);
+      }
+    });
   }
 }
