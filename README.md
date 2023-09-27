@@ -96,6 +96,11 @@ npm i --save react-native-push-notification
 npm i --save @types/react-native-push-notification
 npm i --save react-native-document-scanner-plugin
 yarn add @bam.tech/react-native-image-resizer (FROM CMD)
+npm i --save @react-native-firebase/app
+npm i --save @react-native-firebase/ml => TO DELETE
+npm i --save react-native-ml-kit 
+npm i --save @react-native-ml-kit/text-recognition
+npm i --save react-native-mlkit-ocr
 
 # TO NEXT: fixing all expenses formatting
 
