@@ -13,20 +13,24 @@ const DebugScreen = ({ navigation }) => {
   const [photo, setPhoto] = useState<any>();
 
   const scanDocument = async () => {
-    // start the document scanner
     try {
       const { scannedImages } = await DocumentScanner.scanDocument({
         responseType: ResponseType.ImageFilePath
       });
       if (scannedImages && scannedImages.length > 0) {
-        // set the img src, so we can view the first scanned image
-        setScannedImage(scannedImages[0]);
+        // const base64Image = scannedImages[0];
+        const scannedImage = scannedImages[0];
+        const tempPhoto = {
+          uri: `${scannedImage}`,
+          type: 'image/jpg'
+        }
+        setPhoto(tempPhoto);
+        const resultFromUri = await MlkitOcr.detectFromUri(photo.uri);
+        console.log(resultFromUri);
       }
     } catch (err) {
       console.log(err);
     }
-
-    // get back an array with scanned image file paths    
   }
 
   const imagePickerCommonOptions = { mediaType: "photo", maxWidth: 800, maxHeight: 600, includeBase64: true };
@@ -47,12 +51,25 @@ const DebugScreen = ({ navigation }) => {
 
   const onImageSelect = async (media: any) => {
     if (!media.didCancel && media.assets[0]) {
-        const photo = media.assets[0];
-        setPhoto(photo);       
-        const resultFromUri = await MlkitOcr.detectFromUri(photo.uri); 
-        console.log(resultFromUri);
+      const photo = media.assets[0];
+      setPhoto(photo);
+      const resultFromUri = await MlkitOcr.detectFromUri(photo.uri);
+      console.log(resultFromUri);
+            
+      /* GG: WIP total amount recognition */
+      let newArr: any[] = [];
+      resultFromUri.map(a => { 
+          const splittedText = a.text.replace(',', '.').split(' ');    
+          splittedText.map(st => { 
+              if (st.indexOf('.') > -1 && !isNaN(Number(st))) { 
+                  newArr = [...newArr, Number(st)];
+              }
+          });    
+          return splittedText;
+      })
+      const guessedTotalAmount = Math.max(...newArr);
     }
-};
+  };
 
   console.log("Image: ", scannedImage);
   useEffect(() => {

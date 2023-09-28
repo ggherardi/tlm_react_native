@@ -19,6 +19,7 @@ import NavigationHelper from '../lib/NavigationHelper';
 import ModalLoaderComponent from '../lib/components/ModalWithLoader';
 import { FormErrorMessageComponent } from '../lib/components/FormErrorMessageComponent';
 import DocumentScanner, { ResponseType } from 'react-native-document-scanner-plugin'
+import MlkitOcr from 'react-native-mlkit-ocr';
 
 const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
@@ -30,6 +31,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [photo, setPhoto] = useState<any>();
     const [scannedImageToDelete, setScannedImageToDelete] = useState<any>();
     const [amountCurrencyCode, setAmountCurrencyCode] = useState('EUR');
+    const [guessedTotalAmount, setGuessedTotalAmount] = useState<number>();
     const [isFormValid, setIsFormValid] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [validationErrors, setValidationErrors] = useState({});
@@ -37,6 +39,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const event: BusinessEvent = route.params.event;
     const extraCurrencies: any[] = event.currencies ? event.currencies : [];
     const allCurrencies: Currency[] = [...extraCurrencies, event.mainCurrency];
+    const imagePickerCommonOptions = { mediaType: "photo", maxWidth: 800, maxHeight: 600, includeBase64: true };
 
     useEffect(() => {
         useCustomHeaderWithButtonAsync(navigation, Utility.GetEventHeaderTitle(event), () => saveExpenseReport(), undefined, 'Crea nuova spesa', isFormValid, 'salva');
@@ -44,9 +47,10 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
 
     // const handleExpenseNameChange = (value: any) => setExpenseName(value);
     const handleExpenseDescriptionChange = (e: any) => setExpenseDescription(e.nativeEvent.text);
-    const handleExpenseAmount = (e: any) => setExpenseAmount(e.nativeEvent.text);
+    const handleExpenseAmount = (e: any) => setExpenseAmount(e.nativeEvent.text);    
 
-    const imagePickerCommonOptions = { mediaType: "photo", maxWidth: 800, maxHeight: 600, includeBase64: true };
+    const deletePhoto = () => setPhoto(undefined);
+
     const onSelectImagePress = async () => {
         let hasPermissions: boolean = false;
         try {
@@ -62,6 +66,15 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         //@ts-ignore
         launchImageLibrary(imagePickerCommonOptions, onImageSelect);
     }
+
+    const onImageSelect = async (media: any) => {
+        if (!media.didCancel && media.assets[0]) {
+            const photo = media.assets[0];
+            setPhoto(photo);
+            startOCR(photo);
+        }
+    };
+
     const onTakePhoto = async () => {
         let hasPermissions: boolean = false;
         try {
@@ -88,20 +101,37 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 }
                 setScannedImageToDelete(tempPhoto);
                 setPhoto(tempPhoto);
+                startOCR(tempPhoto);
             }
         } catch (err) {
             console.log(err);
         }
 
-    }
-    const deletePhoto = () => setPhoto(undefined);
+    }    
 
-    const onImageSelect = async (media: any) => {
-        if (!media.didCancel && media.assets[0]) {
-            const photo = media.assets[0];
-            setPhoto(photo);
-        }
-    };
+    const startOCR = async (picture: any) => {
+        const resultFromUri = await MlkitOcr.detectFromUri(picture.uri);
+        console.log(resultFromUri);
+              
+        /* GG: The logic I applied is the following: I take all the text from the picture (they are an array of texts). From this array, I create a new array containing numbers with decimals, which should be currencies. 
+        From this array I take the highest value, which should be the total amount */
+        let allValuesWithDecimalsInPicture: any[] = [];
+        resultFromUri.map(a => { 
+            const splittedText = a.text.replace(',', '.').split(' ');    
+            splittedText.map(st => { 
+                if (st.indexOf('.') > -1 && !isNaN(Number(st))) { 
+                    allValuesWithDecimalsInPicture = [...allValuesWithDecimalsInPicture, Number(st)];
+                }
+            });    
+            return splittedText;
+        })
+        console.log(allValuesWithDecimalsInPicture);
+        const guessedAmount = Math.max(...allValuesWithDecimalsInPicture);
+        if (guessedAmount && guessedAmount > 0) {
+            setGuessedTotalAmount(guessedAmount);
+            setExpenseAmount(guessedAmount.toString());
+        }                
+    }
 
     const saveExpenseReport = async () => {
         let hasPermissions = false;
@@ -231,7 +261,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
 
                         <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseAmount' in validationErrors}>
                             <FormControl.Label>Importo della spesa ({event.mainCurrency.symbol})</FormControl.Label>
-                            <InputNumber placeholder='es. 50.5' onChange={handleExpenseAmount} isRequired={true} />
+                            <InputNumber defaultValue={guessedTotalAmount} placeholder='es. 50.5' onChange={handleExpenseAmount} isRequired={true} />
                             <FormErrorMessageComponent text='Campo obbligatorio' field='expenseAmount' validationArray={validationErrors} />
                         </FormControl>
 

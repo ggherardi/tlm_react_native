@@ -6,7 +6,7 @@ interface IInputNumber {
     placeholder: string;
     isRequired?: boolean;
     style?: any;
-    defaultValue?: number;
+    defaultValue?: number | undefined;
 }
 
 export const InputNumber = (config: IInputNumber) => {

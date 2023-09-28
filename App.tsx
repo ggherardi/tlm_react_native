@@ -58,7 +58,7 @@ function App(): JSX.Element {
     <>
       <NavigationContainer theme={TLMTheme}>
         <Stack.Navigator>
-          <Stack.Screen name={Constants.Navigation.DebugScreen} component={DebugScreen} options={commonOptions} />
+          {/* <Stack.Screen name={Constants.Navigation.DebugScreen} component={DebugScreen} options={commonOptions} /> */}
           <Stack.Screen name={Constants.Navigation.LoginScreen} component={LoginScreen} options={loginScreenOptions} />
           <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.AllEvents} component={AllEventsScreen} options={commonOptions} />

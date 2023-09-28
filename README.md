@@ -24,7 +24,7 @@ OK - Eliminare la firma
 
 OK - Aggiungere email allo user profile
 
-Aggiungere un modo per inviare le notifiche all'utente ogni giorno per 3 giorni prima della scadenza dell'evento (data fine evento). Eventualmente tramite notifiche dello smartphone ma anche tramite email. Previo consenso.
+OK - Aggiungere un modo per inviare le notifiche all'utente ogni giorno per 3 giorni prima della scadenza dell'evento (data fine evento). Eventualmente tramite notifiche dello smartphone ma anche tramite email. Previo consenso.
 
 OK - Feedback invio mail per segnare che la nota spese è stata inviata -> solo su IOS? Gestito con settaggio manuale
 
@@ -54,7 +54,7 @@ OK - Dark theme e modalità notte non si vedono le scritte!
 
 CAMBIARE LE LINEE DA DEBUG A RELEASE IN NOTIFICATIONS!
 
-Riconoscimento bordi quando si fa la foto degli scontrini per tagliare fuori il rest
+OK - Riconoscimento bordi quando si fa la foto degli scontrini per tagliare fuori il resto
 
 Grafica spese
 
