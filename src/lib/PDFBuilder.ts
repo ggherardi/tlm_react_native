@@ -136,54 +136,72 @@ export const PDFBuilder = {
             </td>
           </tr>
         </tbody>
-      </table>`
+      </table>`;
 
     // Cash fund table
     html += `
-      <div style="width: 40%" class="mt-5">
-        <table class="table table-striped">
-          <tbody>
-            <tr>
-              <td>Totale nota spese</td>
-              <td class="text-right">${totalAmount?.toFixed(2)} ${event.mainCurrency.symbol}</td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td>Fondo cassa ricevuto</td>
-              <td class="text-right">${event.cashFund && Number(event.cashFund).toFixed(2)} ${event.mainCurrency.symbol}</td>
-              <td>=</td>
-            </tr>
-            <tr class="border-bottom">
-              <td>Totale dovuto al Tour Leader</td>
-              <td class="text-right">${(totalAmount - Number(event.cashFund)).toFixed(2)} ${event.mainCurrency.symbol}</td>
-              <td />
-            </tr>
-          </tbody>
-        <table>   
+      <div class="mt-5 row">
+        <div class="col-6">
+          <table class="table table-striped">
+            <tbody>
+              <tr>
+                <td>Totale nota spese</td>
+                <td class="text-right">${totalAmount?.toFixed(2)} ${event.mainCurrency.symbol}</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>Fondo cassa ricevuto</td>
+                <td class="text-right">${event.cashFund && Number(event.cashFund).toFixed(2)} ${event.mainCurrency.symbol}</td>
+                <td>=</td>
+              </tr>
+              <tr class="border-bottom">
+                <td>Totale dovuto al Tour Leader</td>
+                <td class="text-right">${(totalAmount - Number(event.cashFund)).toFixed(2)} ${event.mainCurrency.symbol}</td>
+                <td />
+              </tr>
+            </tbody>
+          </table>   
+        </div>
       </div>
-    `;
-
-    // Photos
+      <div class="pagebreak"></div>`;
+    
     html += `
     </div>
     `;
 
     // GG: I know this is slower, but it's much more readable this way
-    for (let i = 0; i < expenses.length; i++) {            
+    for (let i = 0; i < expenses.length; i = i + 2) {            
       const expense = expenses[i];
+      const expense_right_col = expenses[i + 1];
       if (expense.name == Constants.Generic.TravelRefundExpenseName) {
         continue;
       }
       // GG: If needCarRefund is true, a new expense is being pushed as first element in the array. This expense has no foto, but the following condition has to be adapted
       let isEven = (event.needCarRefund ? (i + 1) % 2 : i % 2) == 0;
       html += `
-      ${isEven ? '<div class="pagebreak"></div>' : ''}
       <div ${isEven ? '' : 'class="my-5"'}>
         <div class="mb-5">
-          <span>Scontrino per la spesa:</span>
-          <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
-        </div>
-        <img src="file:///${expense.photoFilePath}">
+          <div class="row">     
+            <div class="col-6 text-center">
+              <span>Scontrino per la spesa:</span>
+              <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
+              <div>
+                <img src="file:///${expense.photoFilePath}" height="680">
+              </div>              
+            </div>`;
+      if (expense_right_col) {
+        html += `
+            <div class="col-6 text-center">
+              <span>Scontrino per la spesa:</span>
+              <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense_right_col.date)} - ${expense_right_col.amount} ${event.mainCurrency.symbol}</span>
+              <div>
+                <img src="file:///${expense_right_col.photoFilePath}" height="680">
+              </div>
+            </div>`;
+      }      
+      html += `
+          </div>
+        </div>        
       </div>          
       `;
     }
