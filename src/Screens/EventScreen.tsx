@@ -56,28 +56,12 @@ const EventScreen = ({ route, navigation }: any) => {
                 <GestureHandlerRootView>
                     <ScrollView contentContainerStyle={[GlobalStyles.container]}>
                         {isLoading && (<LoaderComponent />)}
-                        <View style={[GlobalStyles.flexRow, { paddingHorizontal: 5, paddingBottom: 20 }]}>
+                        <View style={[GlobalStyles.flexRow, { paddingHorizontal: 5, paddingBottom: 10 }]}>
                             <Text style={{ flex: 5, fontSize: 20 }}>Importo totale:</Text>
                             <Text style={{ flex: 2, fontSize: 20, fontWeight: 'bold', textAlign: 'right' }}>{totalAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
                         </View>
                         {reports != undefined && reports.length > 0 && reports.map((report: ExpenseReport, index: number) => (
                             <View key={Utility.GenerateRandomGuid()}>
-                                {index == 0 && (
-                                    <Row key={`row-${index}`}>
-                                        <View style={[styles.headerView, { flex: 2 }]}>
-                                            <Text style={[styles.headerText]}>Data</Text>
-                                        </View>
-                                        <View style={[styles.headerView, { flex: 2 }]}>
-                                            <Text style={[styles.headerText]}>Foto</Text>
-                                        </View>
-                                        <View style={[styles.headerView, { flex: 10 }]}>
-                                            <Text style={[styles.headerText]}>Tipo spesa</Text>
-                                        </View>
-                                        <View style={[styles.headerView, { flex: 2, paddingRight: 10 }]}>
-                                            <Text style={[styles.headerText]}>Importo</Text>
-                                        </View>
-                                    </Row>
-                                )}
                                 <ExpenseDataRowComponent expense={report} event={event} onDelete={refreshData} navigation={navigation} index={index} />
                             </View>
                         ))}

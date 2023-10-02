@@ -123,20 +123,11 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                 <Pressable key={`pressable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`}
                     onPress={goToEvent} style={({ pressed }) => [
                         styles.container, { backgroundColor: pressed ? ThemeColors.selected : ThemeColors.white, borderBottomWidth: 1, borderBottomColor: ThemeColors.lightGray }]}>
-                    <Row style={{  }}>
+                    <Row>
                         <Text style={[styles.day]}>{Utility.FormatDateDDMM(event.startDate)} - {Utility.FormatDateDDMM(event.endDate)}</Text>                   
-                        {/* <Text style={[styles.day, { marginLeft: 5 }]}>{daysUntilEventEnd} giorni rimanenti</Text>      */}
                         <StatusTextComponent event={stateEvent} />
                     </Row>
                     <Row>
-                        {/* <View style={{ justifyContent: 'center', paddingRight: 10 }}>                             */}
-                            {/* <StatusIconComponent event={stateEvent} /> */}
-                        {/* </View> */}
-                        {/* <VStack style={[styles.dateContainer, GlobalStyles.selfCenter]}>
-                            <Text style={[styles.day]}>{Utility.FormatDateDDMM(event.startDate)}</Text>
-                            <Text style={[styles.day, { marginVertical: -5 }]}>-</Text>
-                            <Text style={[styles.day]}>{Utility.FormatDateDDMM(event.endDate)}</Text>
-                        </VStack> */}
                         <VStack style={styles.eventNameContainer}>
                             <Text style={[styles.eventName]}>{event.name}</Text>
                             <Text style={[styles.eventDescription]} numberOfLines={1}>{event.city}: {eventTotalDays} giorn{eventTotalDays > 1 ? 'i' : 'o'}</Text>

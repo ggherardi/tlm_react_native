@@ -56,7 +56,7 @@ CAMBIARE LE LINEE DA DEBUG A RELEASE IN NOTIFICATIONS!
 
 OK - Riconoscimento bordi quando si fa la foto degli scontrini per tagliare fuori il resto
 
-Grafica spese
+OK - Grafica spese
 
 
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ExpenseReport } from '../models/ExpenseReport';
 import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity, TouchableHighlight } from 'react-native';
-import { HStack, Image, VStack } from 'native-base';
+import { HStack, Image, Row, VStack } from 'native-base';
 import { Utility } from '../Utility';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 import { InputSideButton } from './InputSideButtonComponent';
@@ -55,14 +55,12 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
     return (
         <GestureHandlerRootView>
             <Swipeable key={`swipable_${expense.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions}>
-                <Pressable key={`${index}`} onPress={goToExpense} style={({ pressed }) => [styles.container, { opacity: pressed ? 1 : 1 }]}>
-                    <View style={[GlobalStyles.flexRow]}>
-                        <View style={[styles.expenseDateContainer]}>
-                            <VStack>
-                                <Text style={[styles.day]}>{Utility.GetDay(expense.date as string)}</Text>
-                                <Text style={[styles.day]}>{Utility.GetMonthShortName(expense.date as string)}</Text>
-                            </VStack>
-                        </View>
+                <Pressable key={`${index}`} onPress={goToExpense} style={({ pressed }) => [
+                    styles.container, { opacity: pressed ? 1 : 1, borderBottomWidth: 1, borderBottomColor: ThemeColors.lightGray }]}>
+                    <Row>
+                        <Text style={[styles.day]}>{Utility.FormatDateDDMMYYYY(expense.date)}</Text>
+                    </Row>
+                    <Row style={[GlobalStyles.pt5]}>
                         <View style={[styles.expenseImageContainer]}>
                             {Utility.IsNotNullOrUndefined(expense.photoFilePath) && (
                                 <Image alt='noimage' source={{ uri: imageUri }} style={[styles.image]} />
@@ -81,7 +79,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
                         <View style={[styles.expenseAmountContainer]}>
                             <Text style={{ fontSize: 15 }}>{expense.amount.toFixed(2)} {event.mainCurrency?.symbol}</Text>
                         </View>
-                    </View>
+                    </Row>
                 </Pressable>
             </Swipeable>
         </GestureHandlerRootView>
@@ -103,7 +101,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start'
     },
     expenseImageContainer: {
-        flex: 2,
+        flex: 3,
         justifyContent: 'center'
     },
     expenseNameContainer: {
@@ -119,7 +117,7 @@ const styles = StyleSheet.create({
         fontSize: 10
     },
     expenseName: {
-        fontSize: 15,
+        fontSize: 17,
         fontWeight: 'bold'
     },
     expenseDescription: {
@@ -132,7 +130,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: 5,
         backgroundColor: '#d0342c',
-        // margin: 20,
         minHeight: 50,
     },
     deleteConfirmationText: {
@@ -155,12 +152,9 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     image: {
-        height: 35,
-        width: 35,
+        height: 40,
+        width: 40,
         marginRight: 10,
-        alignSelf: 'center',
-        // marginLeft: 20
-        // marginTop: 30,
         borderRadius: 5,
     },
 });
