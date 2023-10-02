@@ -48,7 +48,7 @@ istruzioni e informazioni
 
 OK - Gestione permessi
 
-Validazione rimborso chilometrico
+OK - Validazione rimborso chilometrico
 
 OK - Dark theme e modalità notte non si vedono le scritte!
 

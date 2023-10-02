@@ -97,10 +97,28 @@ const EditEventScreen = ({ navigation, route }: any) => {
       };
       isValid = false;
     }
+    if (needCarRefund) {
+      if (!startingCity) {
+        validationErrorsTemp = { ...validationErrorsTemp, startingCity: 'Campo obbligatorio' };
+        isValid = false;
+      }
+      if (!arrivalCity) {
+        validationErrorsTemp = { ...validationErrorsTemp, arrivalCity: 'Campo obbligatorio' };
+        isValid = false;
+      }
+      if (!totalTravelledKms) {
+        validationErrorsTemp = { ...validationErrorsTemp, totalTravelledKms: 'Campo obbligatorio' };
+        isValid = false;
+      }
+      if (!refundForfait || refundForfait == 0) {        
+        validationErrorsTemp = { ...validationErrorsTemp, refundForfait: 'Campo obbligatorio' };
+        isValid = false;
+      }
+    }
     setValidationErrors(validationErrorsTemp);
     return isValid;
   }
-
+  
   return (
     <NativeBaseProvider>
       <ModalLoaderComponent isLoading={isLoading} text='Modifica evento in corso..' />
@@ -182,21 +200,25 @@ const EditEventScreen = ({ navigation, route }: any) => {
         </FormControl>
         {needCarRefund && (
           <View>
-            <FormControl style={GlobalStyles.mt15} isRequired>
+            <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'startingCity' in validationErrors}>
               <FormControl.Label>Località di partenza (città)</FormControl.Label>
               <Input defaultValue={event.refundStartingCity} placeholder="es. Roma" onChange={(e) => setStartingCity(e.nativeEvent.text)}></Input>
+              <FormErrorMessageComponent text='Campo obbligatorio' field='startingCity' validationArray={validationErrors} />
             </FormControl>
-            <FormControl style={GlobalStyles.mt15} isRequired>
+            <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'arrivalCity' in validationErrors}>
               <FormControl.Label>Località di arrivo (città)</FormControl.Label>
               <Input defaultValue={event.refundArrivalCity} placeholder="es. Firenze" onChange={(e) => setArrivalCity(e.nativeEvent.text)}></Input>
+              <FormErrorMessageComponent text='Campo obbligatorio' field='arrivalCity' validationArray={validationErrors} />
             </FormControl>
-            <FormControl style={GlobalStyles.mt15} isRequired>
+            <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'totalTravelledKms' in validationErrors}>
               <FormControl.Label>Totale KM percorsi</FormControl.Label>
               <InputNumber defaultValue={event.totalTravelledKms} placeholder="es. 35.8" onChange={(e: any) => setTotalTravelledKms(e.nativeEvent.text)}></InputNumber>
+              <FormErrorMessageComponent text='Campo obbligatorio' field='totalTravelledKms' validationArray={validationErrors} />
             </FormControl>
-            <FormControl style={GlobalStyles.mt15} isRequired>
-              <FormControl.Label>Importo rimborso forfetetario (€)</FormControl.Label>
-              <InputNumber defaultValue={0.20} placeholder="es. 0.20" onChange={(e: any) => setRefundForfait(e.nativeEvent.text)}></InputNumber>
+            <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'refundForfait' in validationErrors}>
+              <FormControl.Label>Importo rimborso forfetario (€)</FormControl.Label>
+              <InputNumber defaultValue={event.travelRefundForfait} placeholder="es. 0.20" onChange={(e: any) => { console.log("Setting: ", e.nativeEvent.text); setRefundForfait(e.nativeEvent.text) }}></InputNumber>
+              <FormErrorMessageComponent text='Campo obbligatorio' field='refundForfait' validationArray={validationErrors} />
             </FormControl>
           </View>
         )}
