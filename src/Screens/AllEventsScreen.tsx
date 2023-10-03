@@ -1,6 +1,6 @@
-import { NativeBaseProvider, Row } from 'native-base';
+import { NativeBaseProvider } from 'native-base';
 import React, { useState, useEffect } from 'react';
-import { Text, ScrollView, Alert, View, StyleSheet, Dimensions, Image, Button } from 'react-native';
+import { Text, ScrollView, Alert, View, StyleSheet, Dimensions, Image } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { HomeDataRowComponent } from '../lib/components/HomeDataRowComponent';
@@ -11,7 +11,8 @@ import { Storage } from '../lib/DataStorage';
 import NavigationHelper from '../lib/NavigationHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Images } from '../assets/Images';
-import NotificationManager from '../lib/NotificationManager';
+import { InputSideButton } from '../lib/components/InputSideButtonComponent';
+import { LinkHelper } from '../lib/Linking';
 
 const AllEventsScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData());
@@ -43,27 +44,17 @@ const AllEventsScreen = ({ navigation }: any) => {
   Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
   return (
-    <NativeBaseProvider>      
+    <NativeBaseProvider>
       {events && events.length ? (
         <ScrollView contentContainerStyle={[GlobalStyles.container]}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <Text style={{ paddingBottom: 10, fontSize: 12, alignSelf: 'center', verticalAlign: 'middle' }}>Se non hai sostenuto spese, avvisa comunque TLM</Text>
+            <View>
+              <InputSideButton icon='envelope' pressFunction={() => LinkHelper.OpenWhatsapp()} />
+            </View>
+          </View>
           {events != undefined && events.length > 0 && events.map((event: BusinessEvent, index: number) => (
             <View key={Utility.GenerateRandomGuid()}>
-              {/* {index == 0 && (
-                <Row key={`row-${index}`}>
-                  <View style={[styles.headerView, { flex: 2 }]}>
-                    <Text style={[styles.headerText]}>Stato</Text>
-                  </View>
-                  <View style={[styles.headerView, { flex: 2 }]}>
-                    <Text style={[styles.headerText]}>Date</Text>
-                  </View>
-                  <View style={[styles.headerView, { flex: 12, paddingLeft: 3 }]}>
-                    <Text style={[styles.headerText]}>Evento</Text>
-                  </View>
-                  <View style={[styles.headerView, { flex: 5 }]}>
-                    <Text style={[styles.headerText]}>Totale rimborso</Text>
-                  </View>
-                </Row>
-              )} */}
               <HomeDataRowComponent key={`homedatarow_${index}`} event={event} onDelete={refreshData} navigation={navigation} index={index} />
             </View>
           ))}
@@ -96,7 +87,7 @@ const styles = StyleSheet.create({
     // marginHorizontal: 1
   },
   headerText: {
-    fontSize: 10,    
+    fontSize: 10,
   }
 });
 

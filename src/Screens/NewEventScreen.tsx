@@ -79,7 +79,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
     events.push(event);
     const sanitizedEventName = Utility.SanitizeString(event.name);
     const userProfile = Utility.GetUserProfile();
-    const pdfFileName = `nota_spese_${sanitizedEventName}_${Utility.GetYear(event.startDate)}_${userProfile.surname}_${userProfile.surname}`;
+    const pdfFileName = `nota_spese_${sanitizedEventName}_${Utility.GetYear(event.startDate)}_${userProfile.surname}_${userProfile.name}`;
     const directoryName = `${sanitizedEventName}_${Utility.FormatDateDDMMYYYY(event.startDate, "-")}_${Utility.FormatDateDDMMYYYY(event.endDate, "-")}_${Utility.GenerateRandomGuid("")}`;
     console.log("Creating event pdf..");
     const createdFile = await PDFBuilder.createExpensesPdfAsync(event, directoryName, pdfFileName);

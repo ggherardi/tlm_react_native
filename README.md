@@ -58,11 +58,11 @@ OK - Riconoscimento bordi quando si fa la foto degli scontrini per tagliare fuor
 
 OK - Grafica spese
 
-Reimpostare notifiche correttamente da Home (dalla barra orizzontale gialla)
+Reimpostare le date delle notifiche correttamente da Home (dalla barra orizzontale gialla)
 
-Se spesa inviata, togliere la possibilità di inviare il pdf
+OK - Se spesa inviata, togliere la possibilità di inviare il pdf
 
-Nome pdf il nome TL prende solo nome anziché cognome
+OK - Nome pdf il nome TL prende solo nome anziché cognome
 
 Suggerire all'utente che si possono scorrere le barre orizzontali per eliminare o modificare
 
@@ -78,9 +78,9 @@ OK - Cambiare icona in PDF in testo "inviare"
 
 OK - Inserire voci nuove (con voce "altro" rendere obbligatoria descrizione)
 
-- Testo da inserire sopra gli eventi e sotto la scritta "Tutti gli eventi": Se non hai sostenuto spese, avvisa comunque TLM
+OK - Testo da inserire sopra gli eventi e sotto la scritta "Tutti gli eventi": Se non hai sostenuto spese, avvisa comunque TLM
 
-- Testo email: Mail inviata dall'APP "Nota spese TLM"
+OK - Testo email: Mail inviata dall'APP "Nota spese TLM"
 
 BUG
 

@@ -23,7 +23,7 @@ const ViewPdfScreen = ({ navigation, route }: any) => {
     const subject = `Nota spese ${event.city} ${event.name} ${Utility.FormatDateDDMMYYYY(event.startDate)} - ${Utility.FormatDateDDMMYYYY(event.endDate)} ${userProfile.surname} ${userProfile.name}`;
     // EmailManager.send(["info@tourleadermanagement.ch", "giamalfred@gmail.com"], subject, "Mail inviata dall'app", attachments);
     // EmailManager.send(["info@tourleadermanagement.ch", "giamalfred@gmail.com", "enricogherardi@hotmail.com"], subject, "Mail inviata dall'app con pdf generato", attachments);
-    EmailManager.send(["giamalfred@gmail.com"], subject, "Mail inviata dall'app con pdf generato", attachments);
+    EmailManager.send(["giamalfred@gmail.com"], subject, `Mail inviata dall'APP "Nota spese TLM"`, attachments);
   }
 
   const [pdfSource, setPdfSource] = useState<any>({ uri: `file:///${event.fullFilePath}`, cache: true });

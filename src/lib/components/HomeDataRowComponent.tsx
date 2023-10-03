@@ -1,18 +1,15 @@
 import React, { useRef, useState } from 'react';
 import { BusinessEvent } from '../models/BusinessEvent';
-import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity, TouchableHighlight } from 'react-native';
-import { HStack, Row, VStack } from 'native-base';
+import { Pressable, StyleSheet, Text, Alert, Animated, View } from 'react-native';
+import { Row, VStack } from 'native-base';
 import { Utility } from '../Utility';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 import { InputSideButton } from './InputSideButtonComponent';
 import dataContext from '../models/DataContext';
-import GlobalStyles, { ThemeColors } from '../GlobalStyles';
+import { ThemeColors } from '../GlobalStyles';
 import { Constants } from '../Constants';
 import DataContext from '../models/DataContext';
 import { ExpenseReport } from '../models/ExpenseReport';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { StatusIconComponent } from './StatusIconComponent';
-import NotificationManager from '../NotificationManager';
 import { StatusTextComponent } from './StatusTextComponent';
 
 interface IHomeDataRow {
