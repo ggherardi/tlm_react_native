@@ -70,13 +70,13 @@ CHANGES
 
 OK - Icona automobile che porta a uno Screen contenente unicamente i dati del rimborso chilometrico (eliminarlo dal salvataggio degli eventi)
 
-- Icone foto e gallery nere anziché rosse
+OK - Icone foto e gallery nere anziché rosse
 
-- Cambiare "hai ricevuto" in "rimborso"
+OK - Cambiare "hai ricevuto" in "rimborso"
 
-- Cambiare icona in PDF in testo "inviare"
+OK - Cambiare icona in PDF in testo "inviare"
 
-- Inserire voci nuove (altro rendere obbligatoria descrizione)
+OK - Inserire voci nuove (con voce "altro" rendere obbligatoria descrizione)
 
 - Testo da inserire sopra gli eventi e sotto la scritta "Tutti gli eventi": Se non hai sostenuto spese, avvisa comunque TLM
 
@@ -84,7 +84,7 @@ OK - Icona automobile che porta a uno Screen contenente unicamente i dati del ri
 
 BUG
 
-- Non si riesce ad accedere alla gallery per selezionare le foto
+OK - Non si riesce ad accedere alla gallery per selezionare le foto
 
 
 npm i @react-navigation/native

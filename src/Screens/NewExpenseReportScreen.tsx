@@ -2,7 +2,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from 'native-base';
 import { useEffect, useState } from 'react';
 import React, { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import GlobalStyles from '../lib/GlobalStyles';
+import GlobalStyles, { ThemeColors } from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -43,6 +43,18 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     useEffect(() => {
         useCustomHeaderWithButtonAsync(navigation, Utility.GetEventHeaderTitle(event), () => saveExpenseReport(), undefined, 'Crea nuova spesa', isFormValid, 'salva');
     });
+
+    const expenseItems = [        
+        "cena",
+        "pagamento serivizi per ospiti",
+        "parcheggio",
+        "pedaggi",
+        "pranzo",
+        "stampe brief/materiale",
+        "taxi",
+        "ticket mezzi pubblici",                
+        "altro"
+    ];
 
     const handleExpenseDescriptionChange = (e: any) => setExpenseDescription(e.nativeEvent.text);
     const handleExpenseAmount = (e: any) => setExpenseAmount(e.nativeEvent.text);
@@ -167,32 +179,33 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 } else {
                     // GG: If there is no base64, it means that DocumentScanner was used, hence we need to resize the image first
                     let resizeOperation;
-                    try {
-                        console.log("WHAT3");
+                    try {                        
                         console.log(scannedImageToDelete.uri, event.directoryPath);
                         resizeOperation = await FileManager.resizeImage(scannedImageToDelete.uri, event.directoryPath, 800, 600);
                         console.log(resizeOperation);
                     } catch (err) {
+                        console.log("error");
                         setIsLoading(false);
                         return;
                     }
-                    // If the resize was successful, we now need to move the resized image to the event folder while renaming it
+                    // GG: If the resize was successful, we now need to move the resized image to the event folder while renaming it
                     if (resizeOperation) {
                         operationResult = await FileManager.moveFile(resizeOperation.path, photoFileFullPath);
                     }
                 }
-                if (operationResult) {
+                if (operationResult) {                    
                     expense.photoFilePath = photoFileFullPath;
                     expenses.push(expense);
-                    PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);
-                    // We now the delete the original saved image
-                    await FileManager.deleteFileOrFolder(scannedImageToDelete.uri);
+                    PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);                                                         
+                    if (scannedImageToDelete) {
+                        // GG: If we used DocumentScanner, we delete the original saved image from the pictures folder
+                        await FileManager.deleteFileOrFolder(scannedImageToDelete.uri);
+                    }                    
                     dataContext.ExpenseReports.saveData(expenses);
                     setExpenses(dataContext.ExpenseReports.getAllData());
                     Utility.ShowSuccessMessage("Nota spesa creata correttamente");
                     NavigationHelper.getEventTabNavigation().navigate(Constants.Navigation.Event);
                 } else {
-
                     console.log("Cannot save the expense report because the photo could not be added to external storage");
                 }
             } catch {
@@ -217,6 +230,10 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
             validationErrorsTemp = { ...validationErrorsTemp, expenseAmount: 'Campo obbligatorio' };
             isValid = false;
         }
+        if (expenseName == "altro" && !expenseDescription) {
+            validationErrorsTemp = { ...validationErrorsTemp, expenseDescription: 'Campo obbligatorio' };
+            isValid = false;
+        }
         setValidationErrors(validationErrorsTemp);
         return isValid;
     }
@@ -237,13 +254,13 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                         {photo != undefined && photo != null ? (
                             <HStack>
                                 <Image source={{ uri: `${photo.uri ? photo.uri : photo.base64}` }} style={styles.image} resizeMode="contain"></Image>
-                                <InputSideButton icon={"x"} pressFunction={deletePhoto} />
+                                <InputSideButton icon={"x"} iconColor={ThemeColors.black} pressFunction={deletePhoto} />
                             </HStack>
                         ) : (
                             <>
-                                <InputSideButton icon={"camera-retro"} pressFunction={onTakePhoto} />
-                                <InputSideButton icon={"images"} pressFunction={onSelectImagePress} />
-                                <InputSideButton icon={"car-side"} pressFunction={() => navigation.navigate(Constants.Navigation.RefundKmScreen, { event: event })} />
+                                <InputSideButton icon={"camera-retro"} iconColor={ThemeColors.black} pressFunction={onTakePhoto} />
+                                <InputSideButton icon={"images"} iconColor={ThemeColors.black} pressFunction={onSelectImagePress} />
+                                <InputSideButton icon={"car-side"} iconColor={ThemeColors.black} pressFunction={() => navigation.navigate(Constants.Navigation.RefundKmScreen, { event: event })} />
                             </>
                         )}
                     </HStack>
@@ -255,9 +272,9 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                             <FormControl.Label>Titolo spesa</FormControl.Label>
                         </FormControl>
                         <Select width={"100%"} onValueChange={(item) => setExpenseName(item)} selectedValue={expenseName} borderColor={'expenseName' in validationErrors ? 'red.500' : 'gray.300'} placeholder='Selezionare una voce'>
-                            <Select.Item label="Pranzo" value="Pranzo" />
-                            <Select.Item label="Cena" value="Cena" />
-                            <Select.Item label="Taxi" value="Taxi" />
+                            {expenseItems != undefined && expenseItems.length > 0 && expenseItems.map(item => (
+                                <Select.Item key={item} label={item} value={item} />
+                            ))}
                         </Select>
                         <FormErrorMessageComponent text='Campo obbligatorio' field='expenseName' validationArray={validationErrors} />
 
@@ -296,9 +313,10 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                                 }}
                             />
                         )}
-                        <FormControl style={GlobalStyles.mt15}>
+                        <FormControl style={GlobalStyles.mt15} isRequired={expenseName == "altro"} isInvalid={'expenseDescription' in validationErrors}>
                             <FormControl.Label>Descrizione della spesa</FormControl.Label>
-                            <TextArea placeholder="es. Taxi per trasferimento aeroporto" onChange={handleExpenseDescriptionChange} autoCompleteType={true}></TextArea>
+                            <TextArea placeholder="es. Taxi per trasferimento aeroporto" onChange={handleExpenseDescriptionChange} autoCompleteType={true} isInvalid={'expenseDescription' in validationErrors}></TextArea>
+                            <FormErrorMessageComponent text='Campo obbligatorio con voce "altro" selezionata' field='expenseDescription' validationArray={validationErrors} />
                         </FormControl>
                     </View>
                 ) : (

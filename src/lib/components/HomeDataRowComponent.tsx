@@ -134,7 +134,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                         </VStack>
                         <VStack style={styles.totalAmountContainer}>
                             {stateEvent.sentToCompany ? (
-                                <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{totalAmount >= 0 ? "hai ricevuto" : "hai restituito"}</Text>
+                                <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{totalAmount >= 0 ? "rimborso" : "rimborso"}</Text>
                             ) : (
                                 <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{totalAmount >= 0 ? "devi ricevere" : "devi restituire"}</Text>
                             )}

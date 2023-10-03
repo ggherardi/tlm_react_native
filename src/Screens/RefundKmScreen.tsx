@@ -43,14 +43,13 @@ const RefundKmScreen = ({ navigation, route }: any) => {
       eventToEdit.refundArrivalCity = arrivalCity;
       eventToEdit.totalTravelledKms = totalTravelledKms;
       eventToEdit.travelRefundForfait = refundForfait;
-      console.log("eventToEdit: ", eventToEdit);
       dataContext.Events.saveData(events);
       Utility.ShowSuccessMessage("Rimborso chilometrico modificato correttamente");
       navigation.navigate(Constants.Navigation.EventHome, { event: eventToEdit });
       setIsLoading(false);
     }
   };
-  console.log("needCarRefund: ", needCarRefund);
+  
   const validate = (): boolean => {
     let isValid = true;
     let validationErrorsTemp = {};

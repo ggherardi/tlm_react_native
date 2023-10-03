@@ -14,7 +14,7 @@ const ViewPdfScreen = ({ navigation, route }: any) => {
   const userProfile: UserProfile = Utility.GetUserProfile();
 
   useEffect(() => {
-    useCustomHeaderWithButtonAsync(navigation, event.name, () => { sendEmail() }, 'paper-plane', 'PDF Nota spese');
+    useCustomHeaderWithButtonAsync(navigation, event.name, () => { sendEmail() }, 'envelope', 'PDF Nota spese');
   }, []);
 
   const sendEmail = async () => {
