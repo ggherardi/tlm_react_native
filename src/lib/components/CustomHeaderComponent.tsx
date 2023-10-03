@@ -57,7 +57,7 @@ const CustomHeaderWithButtonComponent = ({ navigation, title, subtitle, onClick,
                     {subtitle != undefined && subtitle != "" ? (
                         <VStack>
                             <Text style={[styles.eventName, GlobalStyles.colorWhite]} numberOfLines={1}>{title}</Text>
-                            <Text style={[GlobalStyles.colorWhite, { maxWidth: "70%" }]} numberOfLines={1}>{subtitle}</Text>
+                            <Text style={[GlobalStyles.colorWhite, { maxWidth: "90%" }]} numberOfLines={1}>{subtitle}</Text>
                         </VStack>
                     ) : (
                         <Text style={[styles.eventName, GlobalStyles.colorWhite]} numberOfLines={1}>{title}</Text>

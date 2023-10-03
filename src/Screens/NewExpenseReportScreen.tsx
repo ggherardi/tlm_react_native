@@ -38,16 +38,14 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
 
     const event: BusinessEvent = route.params.event;
     const extraCurrencies: any[] = event.currencies ? event.currencies : [];
-    const allCurrencies: Currency[] = [...extraCurrencies, event.mainCurrency];
     const imagePickerCommonOptions = { mediaType: "photo", maxWidth: 800, maxHeight: 600, includeBase64: true };
 
     useEffect(() => {
         useCustomHeaderWithButtonAsync(navigation, Utility.GetEventHeaderTitle(event), () => saveExpenseReport(), undefined, 'Crea nuova spesa', isFormValid, 'salva');
     });
 
-    // const handleExpenseNameChange = (value: any) => setExpenseName(value);
     const handleExpenseDescriptionChange = (e: any) => setExpenseDescription(e.nativeEvent.text);
-    const handleExpenseAmount = (e: any) => setExpenseAmount(e.nativeEvent.text);    
+    const handleExpenseAmount = (e: any) => setExpenseAmount(e.nativeEvent.text);
 
     const deletePhoto = () => setPhoto(undefined);
 
@@ -107,22 +105,22 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
             console.log(err);
         }
 
-    }    
+    }
 
     const startOCR = async (picture: any) => {
         const resultFromUri = await MlkitOcr.detectFromUri(picture.uri);
         console.log(resultFromUri);
-              
+
         /* GG: The logic I applied is the following: I take all the text from the picture (they are an array of texts). From this array, I create a new array containing numbers with decimals, which should be currencies. 
         From this array I take the highest value, which should be the total amount */
         let allValuesWithDecimalsInPicture: any[] = [];
-        resultFromUri.map(a => { 
-            const splittedText = a.text.replace(',', '.').split(' ');    
-            splittedText.map(st => { 
-                if (st.indexOf('.') > -1 && !isNaN(Number(st))) { 
+        resultFromUri.map(a => {
+            const splittedText = a.text.replace(',', '.').split(' ');
+            splittedText.map(st => {
+                if (st.indexOf('.') > -1 && !isNaN(Number(st))) {
                     allValuesWithDecimalsInPicture = [...allValuesWithDecimalsInPicture, Number(st)];
                 }
-            });    
+            });
             return splittedText;
         })
         console.log(allValuesWithDecimalsInPicture);
@@ -130,7 +128,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         if (guessedAmount && guessedAmount > 0) {
             setGuessedTotalAmount(guessedAmount);
             setExpenseAmount(guessedAmount.toString());
-        }                
+        }
     }
 
     const saveExpenseReport = async () => {
@@ -151,8 +149,8 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
             setIsLoading(false);
             return;
         }
-        let expense: ExpenseReport = new ExpenseReport();        
-        if (expenses && expenses.map) {            
+        let expense: ExpenseReport = new ExpenseReport();
+        if (expenses && expenses.map) {
             try {
                 let id = Math.max(...expenses.map((e: ExpenseReport) => e.id));
                 expense.id = id >= 0 ? id + 1 : 0;
@@ -160,17 +158,17 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 expense.description = expenseDescription.trim();
                 expense.amount = Number(expenseAmount);
                 expense.date = expenseDate.toString();
-                expense.timeStamp = new Date().toString();                
+                expense.timeStamp = new Date().toString();
                 const photoFileName = `${Utility.SanitizeString(event.name)}-${Utility.SanitizeString(expense.name)}-${Utility.FormatDateDDMMYYYY(expense.date, '-')}-${Utility.GenerateRandomGuid("")}.${Utility.GetExtensionFromType(photo.type)}`;
                 const photoFileFullPath = `${event.directoryPath}/${photoFileName}`;
                 let operationResult;
                 if (photo.base64) {
-                    operationResult = await FileManager.saveFromBase64(photoFileFullPath, photo.base64);                
-                }  else {                    
+                    operationResult = await FileManager.saveFromBase64(photoFileFullPath, photo.base64);
+                } else {
                     // GG: If there is no base64, it means that DocumentScanner was used, hence we need to resize the image first
-                    let resizeOperation;                    
-                    try {               
-                        console.log("WHAT3");         
+                    let resizeOperation;
+                    try {
+                        console.log("WHAT3");
                         console.log(scannedImageToDelete.uri, event.directoryPath);
                         resizeOperation = await FileManager.resizeImage(scannedImageToDelete.uri, event.directoryPath, 800, 600);
                         console.log(resizeOperation);
@@ -181,9 +179,9 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                     // If the resize was successful, we now need to move the resized image to the event folder while renaming it
                     if (resizeOperation) {
                         operationResult = await FileManager.moveFile(resizeOperation.path, photoFileFullPath);
-                    }                    
-                }               
-                if (operationResult) {                    
+                    }
+                }
+                if (operationResult) {
                     expense.photoFilePath = photoFileFullPath;
                     expenses.push(expense);
                     PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);
@@ -236,14 +234,18 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 <FormControl style={GlobalStyles.mt15} isRequired isDisabled>
                     <FormControl.Label>Foto</FormControl.Label>
                     <HStack style={[GlobalStyles.pt15]}>
-                        {photo != undefined && photo != null && (
+                        {photo != undefined && photo != null ? (
                             <HStack>
                                 <Image source={{ uri: `${photo.uri ? photo.uri : photo.base64}` }} style={styles.image} resizeMode="contain"></Image>
                                 <InputSideButton icon={"x"} pressFunction={deletePhoto} />
                             </HStack>
+                        ) : (
+                            <>
+                                <InputSideButton icon={"camera-retro"} pressFunction={onTakePhoto} />
+                                <InputSideButton icon={"images"} pressFunction={onSelectImagePress} />
+                                <InputSideButton icon={"car-side"} pressFunction={() => navigation.navigate(Constants.Navigation.RefundKmScreen, { event: event })} />
+                            </>
                         )}
-                        <InputSideButton icon={"camera"} pressFunction={onTakePhoto} />
-                        <InputSideButton icon={"upload"} pressFunction={onSelectImagePress} />
                     </HStack>
                 </FormControl>
 

@@ -13,6 +13,7 @@ export class Constants {
     EditEventScreen: 'Modifica evento',
     LoginScreen: 'Login',
     DebugScreen: 'Debug',
+    RefundKmScreen: 'Rimborso chilometrico',
   }
 
   static Generic = {

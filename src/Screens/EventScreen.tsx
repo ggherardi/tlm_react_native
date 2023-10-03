@@ -15,16 +15,21 @@ import { Images } from '../assets/Images';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Dimensions, Image, StyleSheet, Text } from 'react-native';
 import LoaderComponent from '../lib/components/LoaderComponent';
+import { BusinessEvent } from '../lib/models/BusinessEvent';
 
 const EventScreen = ({ route, navigation }: any) => {
     const [reports, setReports] = useState<ExpenseReport[]>();
-    const [event, setEvent] = useState(route.params[0]);
+    const [event, setEvent] = useState<BusinessEvent>(route.params[0]);
     const [appHeight, setAppHeight] = useState(Dimensions.get('window').height);
     const [isLoading, setIsLoading] = useState(false);
-    
+
     // @ts-ignore
     const Context = React.createContext();
-    let totalAmount = reports && reports.length && Utility.CalculateTotalAmount(reports, 'amount');
+    let refundKmAmount = 0;
+    if (event.needCarRefund) {
+        refundKmAmount = Utility.CalculateKmRefund(event);
+    }    
+    let totalAmount = reports && reports.length && Utility.CalculateTotalAmount(reports, 'amount') + refundKmAmount;
 
     useEffect(() => {
         dataContext.setExpenseReportsKey(event.expensesDataContextKey);
@@ -40,7 +45,7 @@ const EventScreen = ({ route, navigation }: any) => {
         let data = dataContext.ExpenseReports.getAllData();
         Utility.SortByDate(data, 'date', false);
         setReports(data);
-        setEvent(Utility.GetEvent(event.id));
+        setEvent(Utility.GetEvent(event.id) as BusinessEvent);
         setIsLoading(false);
     };
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
@@ -60,6 +65,12 @@ const EventScreen = ({ route, navigation }: any) => {
                             <Text style={{ flex: 5, fontSize: 20 }}>Importo totale:</Text>
                             <Text style={{ flex: 2, fontSize: 20, fontWeight: 'bold', textAlign: 'right' }}>{totalAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
                         </View>
+                        {event.needCarRefund && (
+                            <View style={[GlobalStyles.flexRow, { paddingHorizontal: 5, paddingBottom: 10 }]}>
+                                <Text style={{ flex: 5, fontSize: 12 }}>Rimborso chilometrico:</Text>
+                                <Text style={{ flex: 2, fontSize: 12, textAlign: 'right' }}>{refundKmAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
+                            </View>
+                        )}
                         {reports != undefined && reports.length > 0 && reports.map((report: ExpenseReport, index: number) => (
                             <View key={Utility.GenerateRandomGuid()}>
                                 <ExpenseDataRowComponent expense={report} event={event} onDelete={refreshData} navigation={navigation} index={index} />

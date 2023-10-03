@@ -58,6 +58,10 @@ export const Utility = {
     return array.length ? array.map(r => r[propertyToReduceName]).reduce((p, c) => Number(p) + Number(c)) : 0;
   },
 
+  CalculateKmRefund: (event: BusinessEvent): number => {
+    return event.totalTravelledKms * event.travelRefundForfait;
+  },
+
   AddDays: (date: Date, days: number): Date => {
     const result = new Date(date);
     result.setDate(result.getDate() + days);

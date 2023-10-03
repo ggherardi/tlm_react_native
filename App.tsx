@@ -6,11 +6,11 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Constants } from './src/lib/Constants';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { fab } from '@fortawesome/free-brands-svg-icons'
+import { faWhatsapp, fab } from '@fortawesome/free-brands-svg-icons'
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons/faSquareCheck'
 import { faBeerMugEmpty } from '@fortawesome/free-solid-svg-icons/faBeerMugEmpty'
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar'
-import { faArrowDown, faArrowDownLong, faArrowRotateLeft, faCalendarDay, faCalendarWeek, faCamera, faCheck, faCheckCircle, faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faCircleInfo, faCircleNotch, faCog, faExclamation, faExclamationCircle, faFileCirclePlus, faFilePdf, faFloppyDisk, faFolderPlus, faFolderTree, faHourglassEmpty, faHourglassEnd, faHourglassHalf, faHourglassStart, faPaperPlane, faPencil, faPlus, faSave, faSearch, faTable, faTableCells, faTableCellsLarge, faTableColumns, faTableList, faTableTennis, faTimeline, faTrash, faUpload, faUser, faWarning, faX, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowDownLong, faArrowRotateLeft, faCalendarDay, faCalendarWeek, faCamera, faCameraRetro, faCarSide, faCheck, faCheckCircle, faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faCircleInfo, faCircleNotch, faCog, faEnvelope, faExclamation, faExclamationCircle, faFileCirclePlus, faFilePdf, faFloppyDisk, faFolderPlus, faFolderTree, faHourglassEmpty, faHourglassEnd, faHourglassHalf, faHourglassStart, faImages, faPaperPlane, faPencil, faPlus, faSave, faSearch, faTable, faTableCells, faTableCellsLarge, faTableColumns, faTableList, faTableTennis, faTimeline, faTrash, faUpload, faUser, faWarning, faX, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import NewEventScreen from './src/Screens/NewEventScreen';
 import EventHomeScreen from './src/Screens/EventHomeScreen';
 import { ThemeColors } from './src/lib/GlobalStyles';
@@ -24,13 +24,15 @@ import { faCircle } from '@fortawesome/free-regular-svg-icons';
 import LoginScreen from './src/Screens/LoginScreen';
 import NotificationManager from './src/lib/NotificationManager';
 import DebugScreen from './src/Screens/DebugScreen';
+import RefundKmScreen from './src/Screens/RefundKmScreen';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
   faTimeline, faCamera, faUpload, faX, faSearch, faChevronDown, faChevronLeft, faChevronRight, faChevronUp,
   faCheck, faSave, faFloppyDisk, faCog, faPaperPlane, faFilePdf, faUser, faPencil, faFolderPlus, faFolderTree,
   faArrowDown, faArrowDownLong, faFileCirclePlus, faCheckCircle, faXmarkCircle, faCircleInfo, faExclamationCircle,
-  faCircle, faCircleNotch, faHourglassStart, faHourglassHalf, faHourglassEmpty, faHourglassEnd, faArrowRotateLeft)
+  faCircle, faCircleNotch, faHourglassStart, faHourglassHalf, faHourglassEmpty, faHourglassEnd, faArrowRotateLeft,
+  faCameraRetro, faEnvelope, faCarSide, faImages, faWhatsapp)
 
 NotificationManager.createChannel(Constants.Channels.Reminder.id, Constants.Channels.Reminder.name);
 const Stack = createNativeStackNavigator();
@@ -66,6 +68,7 @@ function App(): JSX.Element {
           <Stack.Screen name={Constants.Navigation.EventHome} component={EventHomeScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.ViewPdf} component={ViewPdfScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.EditEventScreen} component={EditEventScreen} options={commonOptions} />
+          <Stack.Screen name={Constants.Navigation.RefundKmScreen} component={RefundKmScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.NewExpenseReport} component={NewExpenseReportScreen} options={commonOptions} />
         </Stack.Navigator>
       </NavigationContainer>

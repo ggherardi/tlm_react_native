@@ -58,7 +58,33 @@ OK - Riconoscimento bordi quando si fa la foto degli scontrini per tagliare fuor
 
 OK - Grafica spese
 
+Reimpostare notifiche correttamente da Home (dalla barra orizzontale gialla)
 
+Se spesa inviata, togliere la possibilità di inviare il pdf
+
+Nome pdf il nome TL prende solo nome anziché cognome
+
+Suggerire all'utente che si possono scorrere le barre orizzontali per eliminare o modificare
+
+CHANGES
+
+OK - Icona automobile che porta a uno Screen contenente unicamente i dati del rimborso chilometrico (eliminarlo dal salvataggio degli eventi)
+
+- Icone foto e gallery nere anziché rosse
+
+- Cambiare "hai ricevuto" in "rimborso"
+
+- Cambiare icona in PDF in testo "inviare"
+
+- Inserire voci nuove (altro rendere obbligatoria descrizione)
+
+- Testo da inserire sopra gli eventi e sotto la scritta "Tutti gli eventi": Se non hai sostenuto spese, avvisa comunque TLM
+
+- Testo email: Mail inviata dall'APP "Nota spese TLM"
+
+BUG
+
+- Non si riesce ad accedere alla gallery per selezionare le foto
 
 
 npm i @react-navigation/native

@@ -55,9 +55,9 @@ export class BusinessEvent extends BusinessDataTypeBase {
       NotificationManager.scheduleNotification({
         id: notificationId,
         // GG: Production line
-        // date: new Date(Utility.AddDays(endDate, -i).setHours(10, 0, 0)),
+        date: new Date(Utility.AddDays(endDate, -i).setHours(10, 0, 0)),
         // GG: Debug line
-        date: new Date(Date.now() + ((i + 1)* 10) * 1000),
+        // date: new Date(Date.now() + ((i + 1)* 10) * 1000),
         title: `Evento ${event.name} in scadenza`,
         text: `L'evento ${event.name} scadrà in data ${Utility.FormatDateDDMMYYYY(event.endDate)}. Ricordati di inviare la nota spese!`,        
       });
