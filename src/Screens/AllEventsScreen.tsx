@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Images } from '../assets/Images';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import { LinkHelper } from '../lib/Linking';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
 const AllEventsScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData());
@@ -50,7 +51,7 @@ const AllEventsScreen = ({ navigation }: any) => {
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <Text style={{ paddingBottom: 10, fontSize: 12, alignSelf: 'center', verticalAlign: 'middle' }}>Se non hai sostenuto spese, avvisa comunque TLM</Text>
             <View>
-              <InputSideButton icon='envelope' pressFunction={() => LinkHelper.OpenWhatsapp()} />
+              <InputSideButton icon={faWhatsapp} iconColor='#25D366' pressFunction={() => LinkHelper.OpenWhatsapp()} />
             </View>
           </View>
           {events != undefined && events.length > 0 && events.map((event: BusinessEvent, index: number) => (

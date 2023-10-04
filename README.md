@@ -64,7 +64,7 @@ OK - Se spesa inviata, togliere la possibilità di inviare il pdf
 
 OK - Nome pdf il nome TL prende solo nome anziché cognome
 
-Suggerire all'utente che si possono scorrere le barre orizzontali per eliminare o modificare
+OK - Suggerire all'utente che si possono scorrere le barre orizzontali per eliminare o modificare
 
 CHANGES
 

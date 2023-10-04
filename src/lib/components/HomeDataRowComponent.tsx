@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BusinessEvent } from '../models/BusinessEvent';
-import { Pressable, StyleSheet, Text, Alert, Animated, View } from 'react-native';
+import { Pressable, StyleSheet, Text, Alert, Animated, View, Button, I18nManager } from 'react-native';
 import { Row, VStack } from 'native-base';
 import { Utility } from '../Utility';
-import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, RectButton, Swipeable } from 'react-native-gesture-handler';
 import { InputSideButton } from './InputSideButtonComponent';
 import dataContext from '../models/DataContext';
 import { ThemeColors } from '../GlobalStyles';
@@ -11,6 +11,7 @@ import { Constants } from '../Constants';
 import DataContext from '../models/DataContext';
 import { ExpenseReport } from '../models/ExpenseReport';
 import { StatusTextComponent } from './StatusTextComponent';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface IHomeDataRow {
     event: BusinessEvent;
@@ -25,53 +26,55 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
     const tempExpenses = expenses.slice();
     tempExpenses.push(ExpenseReport.generateKmRefund(event));
     const totalAmount = Utility.CalculateTotalAmount(tempExpenses, 'amount') - event.cashFund;
+    const swipableRef = useRef<Swipeable>(null);
 
     const goToEvent = () => {
         navigation.navigate(Constants.Navigation.EventHome, { event: event });
     };
 
-    const renderRightActions = (
-        //@ts-ignore
-        progress: Animated.AnimatedInterpolation,
-        //@ts-ignore
-        dragAnimatedValue: Animated.AnimatedInterpolation,
-    ) => {
+    useEffect(() => {        
+        const userProfile = Utility.GetUserProfile();
+        if (!userProfile.swipeTutorialSeen && index == 0) {
+            setTimeout(hintSwipe, 100);
+            userProfile.swipeTutorialSeen = true;
+            dataContext.UserProfile.saveData([userProfile]);
+        }
+    }, []);
+    
+    const hintSwipe = () => {
+        swipableRef.current?.openRight();
+        setTimeout(() => swipableRef.current?.close(), 400);                
+    };
+
+    const renderRightAction = (text: string, icon: IconProp, color: string, action: Function) => {
+        const pressHandler = () => {
+            swipableRef.current?.close();            
+        };
         return (
-            <View style={[styles.swipedRow, styles.deleteSwipedRow]}>
-                <View style={styles.swipedConfirmationContainer}>
-                    <Text style={styles.deleteConfirmationText}>Vuoi cancellare l'evento?</Text>
-                </View>
-                <InputSideButton icon="trash" pressFunction={deleteEvent} iconColor={ThemeColors.white} stretchHeight={true} />
-            </View>
+            <Animated.View style={{ flex: 1, transform: [{ translateX: 0 }] }}>
+                <RectButton
+                    style={[styles.rightAction, { backgroundColor: color }]}
+                    onPress={pressHandler}>
+                    <InputSideButton text={text} fontSize={10} textPosition={'bottom'} icon={icon} pressFunction={action} iconColor={ThemeColors.white} stretchHeight={true} />
+                </RectButton>
+            </Animated.View>
         );
     };
 
-    const renderLeftActions = (
-        //@ts-ignore
-        progress: Animated.AnimatedInterpolation,
-        //@ts-ignore
-        dragAnimatedValue: Animated.AnimatedInterpolation,
-    ) => {
-        return (
-            <View style={[styles.swipedRow, !stateEvent.sentToCompany ? styles.setEmailSentSwipedRow : styles.restoreEmailSentSwipedRow]}>
-                {!stateEvent.sentToCompany ? (
-                    <>
-                        <InputSideButton icon="circle-check" pressFunction={() => setSentToCompany()} iconColor={ThemeColors.white} stretchHeight={true} />
-                        <View style={styles.swipedConfirmationContainer}>
-                            <Text style={styles.deleteConfirmationText}>Nota spese inviata?</Text>
-                        </View>
-                    </>
-                ) : (
-                    <>
-                        <InputSideButton icon="arrow-rotate-left" pressFunction={() => cancelSentToCompany()} iconColor={ThemeColors.white} stretchHeight={true} />
-                        <View style={styles.swipedConfirmationContainer}>
-                            <Text style={styles.deleteConfirmationText}>Nota spese ancora da inviare?</Text>
-                        </View>
-                    </>
-                )}
-            </View>
-        );
-    };
+    const renderRightActions = () => (
+        <View style={{ width: 160, flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row' }}>
+            {!stateEvent.sentToCompany ? (
+                <>
+                    {renderRightAction("Nota spesa inviata?", 'circle-check', ThemeColors.green, setSentToCompany)}
+                </>
+            ) : (
+                <>
+                    {renderRightAction("Nota spese da inviare?", 'arrow-rotate-left', '#ffab00', cancelSentToCompany)}
+                </>
+            )}
+            {renderRightAction("Cancellare l'evento?", 'trash', '#dd2c00', deleteEvent)}
+        </View>
+    );
 
     const setSentToCompany = () => {
         const events = dataContext.Events.getAllData();
@@ -111,17 +114,16 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
 
     Utility.OnFocus({ navigation: navigation, onFocusAction: () => setExpenses(Utility.GetExpensesForEvent(event)) });
 
-    const eventTotalDays = Utility.GetNumberOfDaysBetweenDates(event.startDate, event.endDate);
-    const daysUntilEventEnd = Utility.GetNumberOfDaysBetweenDates(event.endDate, new Date().toISOString());
+    const eventTotalDays = Math.floor(Utility.GetNumberOfDaysBetweenDates(event.startDate, event.endDate));
 
     return (
         <GestureHandlerRootView>
-            <Swipeable key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions} renderLeftActions={renderLeftActions} leftThreshold={20}>
+            <Swipeable ref={swipableRef} key={`swipable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions} overshootRight={false}>
                 <Pressable key={`pressable_${event.name}_${index}_${Utility.GenerateRandomGuid()}`}
                     onPress={goToEvent} style={({ pressed }) => [
-                        styles.container, { backgroundColor: pressed ? ThemeColors.selected : ThemeColors.white, borderBottomWidth: 1, borderBottomColor: ThemeColors.lightGray }]}>
+                        styles.container, { backgroundColor: pressed ? ThemeColors.selected : ThemeColors.white, borderTopWidth: index == 0 ? 1 : 0, borderBottomWidth: 1, borderColor: ThemeColors.lightGray }]}>
                     <Row>
-                        <Text style={[styles.day]}>{Utility.FormatDateDDMM(event.startDate)} - {Utility.FormatDateDDMM(event.endDate)}</Text>                   
+                        <Text style={[styles.day]}>{Utility.FormatDateDDMM(event.startDate)} - {Utility.FormatDateDDMM(event.endDate)}</Text>
                         <StatusTextComponent event={stateEvent} />
                     </Row>
                     <Row>
@@ -217,5 +219,15 @@ const styles = StyleSheet.create({
     },
     swipedConfirmationContainer: {
         flex: 1,
+    },
+    actionText: {
+        color: 'white',
+        fontSize: 16,
+        backgroundColor: 'transparent',        
+    },
+    rightAction: {
+        alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
     },
 });

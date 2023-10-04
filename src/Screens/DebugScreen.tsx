@@ -6,6 +6,8 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ml from '@react-native-firebase/ml';
 import TextRecognition from '@react-native-ml-kit/text-recognition';
 import MlkitOcr from 'react-native-mlkit-ocr';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons/faWhatsapp';
 
 // @ts-ignore
 const DebugScreen = ({ navigation }) => {
@@ -85,6 +87,7 @@ const DebugScreen = ({ navigation }) => {
     <ScrollView>
       <Button title={'Debug button'} onPress={scanDocument} />
       <Button title={'Pick image'} onPress={onSelectImagePress} />
+      <FontAwesomeIcon icon={faWhatsapp} />
       {/* <Image
         resizeMode="contain"
         style=

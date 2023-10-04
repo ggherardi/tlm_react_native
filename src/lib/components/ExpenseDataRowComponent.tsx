@@ -31,7 +31,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
         return (
             <View style={styles.swipedRow}>
                 <View style={styles.swipedConfirmationContainer}>
-                    <Text style={styles.deleteConfirmationText}>Vuoi cancellare la spesa?</Text>
+                    <Text style={styles.deleteConfirmationText}>Cancellare la spesa?</Text>
                 </View>
                 <InputSideButton icon="trash" pressFunction={deleteExpense} iconColor={ThemeColors.white} stretchHeight={true} />
             </View>

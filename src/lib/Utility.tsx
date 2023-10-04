@@ -31,7 +31,7 @@ export const Utility = {
 
   GetUserProfile: (): UserProfile => {
     let userProfile;
-    const userProfileAllData = dataContext.UserProfile.getAllData();
+    const userProfileAllData = dataContext.UserProfile.getAllData();    
     if (userProfileAllData && userProfileAllData.length) {
       userProfile = userProfileAllData[0];
     }

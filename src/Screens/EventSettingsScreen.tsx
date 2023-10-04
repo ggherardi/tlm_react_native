@@ -10,7 +10,7 @@ import { useState } from 'react';
 const EventSettingsScreen = ({ route, navigation }: any) => {
     const [event, setEvent] = useState<BusinessEvent>(route.params[0]);
 
-    const refreshData = async () => {        
+    const refreshData = async () => {
         let refreshedEvent = Utility.GetEvent(event.id);
         if (refreshedEvent) {
             setEvent(refreshedEvent);
@@ -19,10 +19,11 @@ const EventSettingsScreen = ({ route, navigation }: any) => {
     };
 
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
-    
+
     return (
         <NativeBaseProvider>
             <ScrollView contentContainerStyle={[GlobalStyles.container]}>
+                <Text style={{ fontSize: 18, marginBottom: 10 }}>Dati relativi all'evento:</Text>
                 <View style={[styles.section]}>
                     <Text style={[styles.caption]}>Nome evento</Text>
                     <Text style={[styles.text]}>{event.name}</Text>

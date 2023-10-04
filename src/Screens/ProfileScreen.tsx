@@ -16,7 +16,7 @@ const ProfileScreen = ({ navigation, route }: any) => {
     const [validationErrors, setValidationErrors] = useState({});
 
     useEffect(() => {
-        useCustomHeaderWithButtonAsync(navigation.getParent(), `Profilo Tour Leader`, () => save(), 'floppy-disk');
+        useCustomHeaderWithButtonAsync(navigation.getParent(), `Profilo Tour Leader`, () => save(), undefined, undefined, false, 'salva');
     });
 
     const save = () => {

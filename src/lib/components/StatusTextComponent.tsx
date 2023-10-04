@@ -16,20 +16,20 @@ export const StatusTextComponent = (props: IStatusTextProps) => {
   let text = 'evento in corso';  
 
   const todayDate = new Date();
-  const daysToEventEnd = Utility.GetNumberOfDaysBetweenDates(todayDate.toString(), props.event.endDate);
+  const daysToEventEnd = Math.floor(Utility.GetNumberOfDaysBetweenDates(todayDate.toString(), props.event.endDate));
   let remainingDaysText = `${daysToEventEnd == 1 ? 'giorno rimanente' : 'giorni rimanenti'}`;
 
   if (props.event.sentToCompany) {
     text = 'nota spese inviata';
     backgroundColor = ThemeColors.green;
   } else {
-    if (daysToEventEnd >= 0 && daysToEventEnd <= 3) {
+    if (daysToEventEnd > 1 && daysToEventEnd <= 3) {
       text = 'evento in conclusione';
       backgroundColor = ThemeColors.warning;
       textColor = ThemeColors.black;
     }
-    if (daysToEventEnd < 0) {
-      text = 'evento terminato';
+    if (daysToEventEnd <= 1) {
+      text = 'nota spese da inviare';
       backgroundColor = ThemeColors.danger;
     }
   }

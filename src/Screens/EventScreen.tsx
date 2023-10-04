@@ -37,7 +37,7 @@ const EventScreen = ({ route, navigation }: any) => {
     }, []);
 
     useEffect(() => {
-        useCustomHeaderWithButtonAsync(navigation.getParent(), Utility.GetEventHeaderTitle(event), () => viewPdf(), undefined, 'Nota spese', event.sentToCompany, 'inviare');
+        useCustomHeaderWithButtonAsync(navigation.getParent(), Utility.GetEventHeaderTitle(event), () => viewPdf(), undefined, 'Nota spese', event.sentToCompany, event.sentToCompany ? 'inviato' : 'inviare');
     });
 
     const refreshData = async () => {
