@@ -46,7 +46,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
 
     const expenseItems = [        
         "cena",
-        "pagamento serivizi per ospiti",
+        "pagamento servizi per ospiti",
         "parcheggio",
         "pedaggi",
         "pranzo",

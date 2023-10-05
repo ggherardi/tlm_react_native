@@ -162,26 +162,30 @@ export const PDFBuilder = {
             </tbody>
           </table>   
         </div>
-      </div>
-      <div class="pagebreak"></div>`;
+      </div>`;
     
     html += `
     </div>
     `;
 
     // GG: I know this is slower, but it's much more readable this way
-    for (let i = 0; i < expenses.length; i = i + 2) {            
+    if (expenses.length && expenses[0].name == Constants.Generic.TravelRefundExpenseName) {
+      expenses.shift();
+    }
+    for (let i = 0; i < expenses.length; i++) {      
+      if (i == 0) {
+        html += 
+      `<div class="pagebreak"></div>`;
+      }
       const expense = expenses[i];
       const expense_right_col = expenses[i + 1];
-      if (expense.name == Constants.Generic.TravelRefundExpenseName) {
-        continue;
-      }
-      // GG: If needCarRefund is true, a new expense is being pushed as first element in the array. This expense has no foto, but the following condition has to be adapted
-      let isEven = (event.needCarRefund ? (i + 1) % 2 : i % 2) == 0;
+      const isEven = i % 2 == 0;
       html += `
       <div ${isEven ? '' : 'class="my-5"'}>
-        <div class="mb-5">
-          <div class="row">     
+        <div class="mb-5">`;
+      html += isEven ? `
+          <div class="row">` : ``;     
+      html += `
             <div class="col-6 text-center">
               <span>Scontrino per la spesa:</span>
               <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
@@ -199,8 +203,9 @@ export const PDFBuilder = {
               </div>
             </div>`;
       }      
+      html += isEven ? `
+          </div>` : ``;
       html += `
-          </div>
         </div>        
       </div>          
       `;

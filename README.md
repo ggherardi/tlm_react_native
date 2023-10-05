@@ -58,7 +58,7 @@ OK - Riconoscimento bordi quando si fa la foto degli scontrini per tagliare fuor
 
 OK - Grafica spese
 
-Reimpostare le date delle notifiche correttamente da Home (dalla barra orizzontale gialla)
+OK - Reimpostare le date delle notifiche correttamente da Home (dalla barra orizzontale gialla)
 
 OK - Se spesa inviata, togliere la possibilità di inviare il pdf
 
@@ -85,6 +85,12 @@ OK - Testo email: Mail inviata dall'APP "Nota spese TLM"
 BUG
 
 OK - Non si riesce ad accedere alla gallery per selezionare le foto
+
+verificare che lo scontrino non abbia l'iva con la virgola
+
+testare con schermo zoomato (accessibilità)
+
+OK - le foto non vengono aggiunte correttamente al PDF (controllare anche la chiusura del pdf, errore su android studio)
 
 
 npm i @react-navigation/native

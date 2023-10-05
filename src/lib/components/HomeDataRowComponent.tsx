@@ -12,6 +12,7 @@ import DataContext from '../models/DataContext';
 import { ExpenseReport } from '../models/ExpenseReport';
 import { StatusTextComponent } from './StatusTextComponent';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { renderRightAction } from './SwipableActionsComponent';
 
 interface IHomeDataRow {
     event: BusinessEvent;
@@ -35,44 +36,24 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
     useEffect(() => {        
         const userProfile = Utility.GetUserProfile();
         if (!userProfile.swipeTutorialSeen && index == 0) {
-            setTimeout(hintSwipe, 100);
+            setTimeout(() => Utility.SwipableHint(swipableRef), 100);
             userProfile.swipeTutorialSeen = true;
             dataContext.UserProfile.saveData([userProfile]);
         }
-    }, []);
-    
-    const hintSwipe = () => {
-        swipableRef.current?.openRight();
-        setTimeout(() => swipableRef.current?.close(), 400);                
-    };
-
-    const renderRightAction = (text: string, icon: IconProp, color: string, action: Function) => {
-        const pressHandler = () => {
-            swipableRef.current?.close();            
-        };
-        return (
-            <Animated.View style={{ flex: 1, transform: [{ translateX: 0 }] }}>
-                <RectButton
-                    style={[styles.rightAction, { backgroundColor: color }]}
-                    onPress={pressHandler}>
-                    <InputSideButton text={text} fontSize={10} textPosition={'bottom'} icon={icon} pressFunction={action} iconColor={ThemeColors.white} stretchHeight={true} />
-                </RectButton>
-            </Animated.View>
-        );
-    };
+    }, []);    
 
     const renderRightActions = () => (
         <View style={{ width: 160, flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row' }}>
             {!stateEvent.sentToCompany ? (
                 <>
-                    {renderRightAction("Nota spesa inviata?", 'circle-check', ThemeColors.green, setSentToCompany)}
+                    {renderRightAction("Nota spesa inviata?", 'circle-check', ThemeColors.green, setSentToCompany, swipableRef)}
                 </>
             ) : (
                 <>
-                    {renderRightAction("Nota spese da inviare?", 'arrow-rotate-left', '#ffab00', cancelSentToCompany)}
+                    {renderRightAction("Nota spese da inviare?", 'arrow-rotate-left', '#ffab00', cancelSentToCompany, swipableRef)}
                 </>
             )}
-            {renderRightAction("Cancellare l'evento?", 'trash', '#dd2c00', deleteEvent)}
+            {renderRightAction("Cancellare l'evento?", 'trash', '#dd2c00', deleteEvent, swipableRef)}
         </View>
     );
 
@@ -224,10 +205,5 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         backgroundColor: 'transparent',        
-    },
-    rightAction: {
-        alignItems: 'center',
-        flex: 1,
-        justifyContent: 'center',
     },
 });

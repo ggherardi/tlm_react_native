@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ExpenseReport } from '../models/ExpenseReport';
-import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity, TouchableHighlight, I18nManager } from 'react-native';
 import { HStack, Image, Row, VStack } from 'native-base';
 import { Utility } from '../Utility';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
-import { InputSideButton } from './InputSideButtonComponent';
 import dataContext from '../models/DataContext';
 import GlobalStyles, { ThemeColors } from '../GlobalStyles';
 import { BusinessEvent } from '../models/BusinessEvent';
+import { renderRightAction } from './SwipableActionsComponent';
 
 interface IExpenseDataRow {
     expense: ExpenseReport;
@@ -21,22 +21,22 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
     const goToExpense = () => {
         // navigation.navigate(Constants.Navigation.EventHome, { expense: expense });
     };
+    const swipableRef = useRef<Swipeable>(null);
 
-    const renderRightActions = (
-        //@ts-ignore
-        progress: Animated.AnimatedInterpolation,
-        //@ts-ignore
-        dragAnimatedValue: Animated.AnimatedInterpolation,
-    ) => {
-        return (
-            <View style={styles.swipedRow}>
-                <View style={styles.swipedConfirmationContainer}>
-                    <Text style={styles.deleteConfirmationText}>Cancellare la spesa?</Text>
-                </View>
-                <InputSideButton icon="trash" pressFunction={deleteExpense} iconColor={ThemeColors.white} stretchHeight={true} />
-            </View>
-        );
-    };
+    useEffect(() => {        
+        const userProfile = Utility.GetUserProfile();
+        if (!userProfile.swipeExpenseTutorialSeen && index == 0) {
+            setTimeout(() => Utility.SwipableHint(swipableRef), 100);
+            userProfile.swipeExpenseTutorialSeen = true;
+            dataContext.UserProfile.saveData([userProfile]);
+        }
+    }, []);    
+
+    const renderRightActions = () => (
+        <View style={{ width: 80, flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row' }}>
+            {renderRightAction("Cancellare l'evento?", 'trash', '#dd2c00', deleteExpense, swipableRef)}
+        </View>
+    );
 
     const deleteExpense = () => {
         const onDeleteConfirm = () => {
@@ -54,9 +54,9 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
 
     return (
         <GestureHandlerRootView>
-            <Swipeable key={`swipable_${expense.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions}>
+            <Swipeable ref={swipableRef} key={`swipable_${expense.name}_${index}_${Utility.GenerateRandomGuid()}`} renderRightActions={renderRightActions} overshootRight={false}>
                 <Pressable key={`${index}`} onPress={goToExpense} style={({ pressed }) => [
-                    styles.container, { opacity: pressed ? 1 : 1, borderBottomWidth: 1, borderBottomColor: ThemeColors.lightGray }]}>
+                    styles.container, { opacity: pressed ? 1 : 1, borderBottomWidth: 1, borderTopWidth: index == 0 ? 1 : 0, borderColor: ThemeColors.lightGray }]}>
                     <Row>
                         <Text style={[styles.day]}>{Utility.FormatDateDDMMYYYY(expense.date)}</Text>
                     </Row>

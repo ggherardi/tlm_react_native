@@ -28,8 +28,8 @@ const EventScreen = ({ route, navigation }: any) => {
     let refundKmAmount = 0;
     if (event.needCarRefund) {
         refundKmAmount = Utility.CalculateKmRefund(event);
-    }    
-    let totalAmount = reports && reports.length && Utility.CalculateTotalAmount(reports, 'amount') + refundKmAmount;
+    }
+    let totalAmount = reports && Utility.CalculateTotalAmount(reports, 'amount') + refundKmAmount;
 
     useEffect(() => {
         dataContext.setExpenseReportsKey(event.expensesDataContextKey);
@@ -57,20 +57,22 @@ const EventScreen = ({ route, navigation }: any) => {
 
     return (
         <NativeBaseProvider>
+            <View style={[GlobalStyles.container]}>
+                {isLoading && (<LoaderComponent />)}
+                <View style={[GlobalStyles.flexRow, { paddingHorizontal: 5, paddingBottom: 10 }]}>
+                    <Text style={{ flex: 5, fontSize: 20 }}>Importo totale:</Text>
+                    <Text style={{ flex: 2, fontSize: 20, fontWeight: 'bold', textAlign: 'right' }}>{totalAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
+                </View>
+                {event.needCarRefund && (
+                    <View style={[GlobalStyles.flexRow, { paddingHorizontal: 5, paddingBottom: 10 }]}>
+                        <Text style={{ flex: 5, fontSize: 12 }}>Rimborso chilometrico:</Text>
+                        <Text style={{ flex: 2, fontSize: 12, textAlign: 'right' }}>{refundKmAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
+                    </View>
+                )}
+            </View>
             {reports && reports.length ? (
                 <GestureHandlerRootView>
                     <ScrollView contentContainerStyle={[GlobalStyles.container]}>
-                        {isLoading && (<LoaderComponent />)}
-                        <View style={[GlobalStyles.flexRow, { paddingHorizontal: 5, paddingBottom: 10 }]}>
-                            <Text style={{ flex: 5, fontSize: 20 }}>Importo totale:</Text>
-                            <Text style={{ flex: 2, fontSize: 20, fontWeight: 'bold', textAlign: 'right' }}>{totalAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
-                        </View>
-                        {event.needCarRefund && (
-                            <View style={[GlobalStyles.flexRow, { paddingHorizontal: 5, paddingBottom: 10 }]}>
-                                <Text style={{ flex: 5, fontSize: 12 }}>Rimborso chilometrico:</Text>
-                                <Text style={{ flex: 2, fontSize: 12, textAlign: 'right' }}>{refundKmAmount?.toFixed(2)} {event.mainCurrency.symbol}</Text>
-                            </View>
-                        )}
                         {reports != undefined && reports.length > 0 && reports.map((report: ExpenseReport, index: number) => (
                             <View key={Utility.GenerateRandomGuid()}>
                                 <ExpenseDataRowComponent expense={report} event={event} onDelete={refreshData} navigation={navigation} index={index} />

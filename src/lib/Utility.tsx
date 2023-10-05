@@ -21,7 +21,7 @@ export const Utility = {
 
   GetExpensesForEvent: (event: BusinessEvent): ExpenseReport[] => {
     dataContext.setExpenseReportsKey(event.expensesDataContextKey);
-    return dataContext.ExpenseReports.getAllData();    
+    return dataContext.ExpenseReports.getAllData();
   },
 
   GetEvent: (id: number) => {
@@ -31,7 +31,7 @@ export const Utility = {
 
   GetUserProfile: (): UserProfile => {
     let userProfile;
-    const userProfileAllData = dataContext.UserProfile.getAllData();    
+    const userProfileAllData = dataContext.UserProfile.getAllData();
     if (userProfileAllData && userProfileAllData.length) {
       userProfile = userProfileAllData[0];
     }
@@ -153,7 +153,7 @@ export const Utility = {
     let date = new Date(dateString);
     if (Utility.IsDateValid(date)) {
       shortYearString = new Date(dateString).getFullYear().toString().substr(-2)
-    }    
+    }
     return shortYearString;
   },
 
@@ -215,5 +215,10 @@ export const Utility = {
       icon: props => <FontAwesomeIcon icon='xmark-circle' color={ThemeColors.white} size={20} style={{ marginRight: 10 }} />,
       type: 'danger'
     })
+  },
+
+  SwipableHint: (swipableRef: any) => {
+    swipableRef.current?.openRight();
+    setTimeout(() => swipableRef.current?.close(), 400);
   }
 }

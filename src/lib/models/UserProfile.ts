@@ -10,6 +10,7 @@ export class UserProfile extends BusinessDataTypeBase {
   surname!: string;
   email!: string;
   swipeTutorialSeen!: boolean;
+  swipeExpenseTutorialSeen!: boolean;
   
   static getDataContextKey = () => SaveConstants.userProfile.key;
 
