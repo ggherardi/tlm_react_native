@@ -35,7 +35,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
 
     useEffect(() => {        
         const userProfile = Utility.GetUserProfile();
-        if (!userProfile.swipeTutorialSeen && index == 0) {
+        if (index == 0) {
             setTimeout(() => Utility.SwipableHint(swipableRef), 100);
             userProfile.swipeTutorialSeen = true;
             dataContext.UserProfile.saveData([userProfile]);

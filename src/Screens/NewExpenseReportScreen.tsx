@@ -49,8 +49,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         "pagamento servizi per ospiti",
         "parcheggio",
         "pedaggi",
-        "pranzo",
-        "stampe brief/materiale",
+        "pranzo",        
         "taxi",
         "ticket mezzi pubblici",                
         "altro"

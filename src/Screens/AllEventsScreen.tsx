@@ -49,7 +49,7 @@ const AllEventsScreen = ({ navigation }: any) => {
       {events && events.length ? (
         <ScrollView contentContainerStyle={[GlobalStyles.container]}>
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-            <Text style={{ paddingBottom: 10, fontSize: 12, alignSelf: 'center', verticalAlign: 'middle' }}>Se non hai sostenuto spese, avvisa comunque TLM</Text>
+            <Text style={{ paddingBottom: 10, paddingLeft: 10, fontSize: 13, alignSelf: 'center', verticalAlign: 'middle', fontWeight: 'bold' }}>Se non hai sostenuto spese, avvisa comunque TLM</Text>
             <View>
               <InputSideButton icon={faWhatsapp} iconColor='#25D366' pressFunction={() => LinkHelper.OpenWhatsapp()} />
             </View>

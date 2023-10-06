@@ -82,6 +82,14 @@ OK - Testo da inserire sopra gli eventi e sotto la scritta "Tutti gli eventi": S
 
 OK - Testo email: Mail inviata dall'APP "Nota spese TLM"
 
+- In nuova spesa, lasciare di default vuota la data della spesa, ma sempre obbligatoria
+
+- Aggiungere data rimborso chilometrico
+
+- Cliccando su whatsapp, su alcuni dispositivi, da la scritta "Link alla chat non valido"
+
+- Hint swipe solo dopo creazione evento e creazione spesa
+
 BUG
 
 OK - Non si riesce ad accedere alla gallery per selezionare le foto
