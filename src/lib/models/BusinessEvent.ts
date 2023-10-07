@@ -17,13 +17,16 @@ export class BusinessEvent extends BusinessDataTypeBase {
   city?: string;
   currencies?: (Currency | undefined)[];
   mainCurrency!: Currency;
+  cashFund: number = 0;
+  sentToCompany: boolean = false;
+
+  // km refund properties
   needCarRefund?: boolean;
   refundStartingCity?: string;
   refundArrivalCity?: string;
   totalTravelledKms: number = 0;
-  travelRefundForfait: number = 0.2;
-  cashFund: number = 0;
-  sentToCompany: boolean = false;
+  travelRefundForfait: number = 0.2;  
+  travelDate!: string;
 
   // File properties
   directoryName!: string;
@@ -55,7 +58,7 @@ export class BusinessEvent extends BusinessDataTypeBase {
     const daysUntilEventEnd = Utility.GetNumberOfDaysBetweenDates(today.toString(), endDate.toString());
     console.log("daysUntilEventEnd: ", daysUntilEventEnd);
     console.log(event.notificationIds);
-    for (let i = 0; i < daysUntilEventEnd; i++) {       
+    for (let i = 0; i < 3 && i < daysUntilEventEnd; i++) {       
       const notificationId = event.notificationIds[i];
       NotificationManager.scheduleNotification({
         id: notificationId,

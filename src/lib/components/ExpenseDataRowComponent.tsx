@@ -26,7 +26,8 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
     useEffect(() => {        
         const userProfile = Utility.GetUserProfile();
         if (!userProfile.swipeExpenseTutorialSeen && index == 0) {
-            setTimeout(() => Utility.SwipableHint(swipableRef), 100);
+            console.log("hinting");
+            setTimeout(() => Utility.SwipableHint(swipableRef), 400);
             userProfile.swipeExpenseTutorialSeen = true;
             dataContext.UserProfile.saveData([userProfile]);
         }

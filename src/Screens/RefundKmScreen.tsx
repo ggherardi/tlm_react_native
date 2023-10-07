@@ -21,10 +21,12 @@ const RefundKmScreen = ({ navigation, route }: any) => {
   const [startingCity, setStartingCity] = useState(event.refundStartingCity);
   const [arrivalCity, setArrivalCity] = useState(event.refundArrivalCity);
   const [totalTravelledKms, setTotalTravelledKms] = useState(event.totalTravelledKms);
+  const [travelDate, setTravelDate] = useState<Date | undefined>();
   const [refundForfait, setRefundForfait] = useState(event.travelRefundForfait);
   const [isFormValid, setIsFormValid] = useState(true);
   const [validationErrors, setValidationErrors] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
 
   useEffect(() => {
     useCustomHeaderWithButtonAsync(navigation, Utility.GetEventHeaderTitle(event), () => saveEvent(), undefined, 'Rimborso chilometrico', !isFormValid, 'salva');
@@ -49,7 +51,7 @@ const RefundKmScreen = ({ navigation, route }: any) => {
       setIsLoading(false);
     }
   };
-  
+
   const validate = (): boolean => {
     let isValid = true;
     let validationErrorsTemp = {};
@@ -66,6 +68,10 @@ const RefundKmScreen = ({ navigation, route }: any) => {
       validationErrorsTemp = { ...validationErrorsTemp, totalTravelledKms: 'Campo obbligatorio' };
       isValid = false;
     }
+    if (!travelDate) {
+      validationErrorsTemp = { ...validationErrorsTemp, travelDate: 'Campo obbligatorio' };
+      isValid = false;
+    }
     if (!refundForfait || refundForfait == 0) {
       validationErrorsTemp = { ...validationErrorsTemp, refundForfait: 'Campo obbligatorio' };
       isValid = false;
@@ -74,7 +80,7 @@ const RefundKmScreen = ({ navigation, route }: any) => {
     setValidationErrors(validationErrorsTemp);
     return isValid;
   }
-  
+
   return (
     <NativeBaseProvider>
       <ModalLoaderComponent isLoading={isLoading} text='Modifica evento in corso..' />
@@ -99,6 +105,35 @@ const RefundKmScreen = ({ navigation, route }: any) => {
               <InputNumber defaultValue={event.totalTravelledKms} placeholder="es. 35.8" onChange={(e: any) => setTotalTravelledKms(e.nativeEvent.text)}></InputNumber>
               <FormErrorMessageComponent text='Campo obbligatorio' field='totalTravelledKms' validationArray={validationErrors} />
             </FormControl>
+            <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'travelDate' in validationErrors}>
+              <FormControl.Label>Data della spesa</FormControl.Label>
+              <Input
+                placeholder="gg/mm/aaaa"
+                value={travelDate ? Utility.FormatDateDDMMYYYY(travelDate.toString()) : ""}
+                InputLeftElement={
+                  <InputSideButton
+                    icon="calendar-day"
+                    iconStyle={GlobalStyles.iconPrimary}
+                    pressFunction={() => {
+                      setShowDateTimePicker(true);
+                    }}
+                  />
+                }
+              />
+              <FormErrorMessageComponent text='Campo obbligatorio' field='travelDate' validationArray={validationErrors} />
+            </FormControl>
+
+            {showDateTimePicker && (
+              <DateTimePicker
+                mode="date"
+                display="spinner"
+                value={travelDate ? travelDate : new Date()}
+                onChange={(event, date) => {
+                  setShowDateTimePicker(false);
+                  setTravelDate(date as Date);
+                }}
+              />
+            )}
             <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'refundForfait' in validationErrors}>
               <FormControl.Label>Importo rimborso forfetario (€)</FormControl.Label>
               <InputNumber defaultValue={event.travelRefundForfait} placeholder="es. 0.20" onChange={(e: any) => { console.log("Setting: ", e.nativeEvent.text); setRefundForfait(e.nativeEvent.text) }}></InputNumber>

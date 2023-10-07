@@ -32,10 +32,15 @@ export const StatusTextComponent = (props: IStatusTextProps) => {
       text = 'nota spese da inviare';
       backgroundColor = ThemeColors.danger;
     }
+    if (new Date(props.event.startDate) > todayDate) {
+      text = 'evento non iniziato';
+      textColor = ThemeColors.black;
+      backgroundColor = ThemeColors.white;
+    }
   }
   return (
     <>
-      <Text style={[styles.container, { backgroundColor: backgroundColor, color: textColor }]}>{text.toUpperCase()}</Text>
+      <Text style={[styles.container, { backgroundColor: backgroundColor, color: textColor, borderWidth: backgroundColor == ThemeColors.white ? 0.5 : 0 }]}>{text.toUpperCase()}</Text>
       {!props.event.sentToCompany ? (
         <Text style={[styles.remaingDaysText]}>{daysToEventEnd >= 0 ? daysToEventEnd : 0} {remainingDaysText}</Text>) 
         : (<></>)}

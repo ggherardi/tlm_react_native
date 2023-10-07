@@ -15,9 +15,15 @@ import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import { LinkHelper } from '../lib/Linking';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
-const AllEventsScreen = ({ navigation }: any) => {
+const AllEventsScreen = ({ navigation, route }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData());
   const [appHeight, setAppHeight] = useState(Dimensions.get('window').height);
+
+  let shouldHintSwipable: boolean = route?.params?.createdNewEvent;
+  if (route && route.params) {
+    route.params.createdNewEvent = false;
+  }  
+  console.log("shouldHintSwipable: ", shouldHintSwipable);
 
   // @ts-ignore
   const Context = React.createContext();

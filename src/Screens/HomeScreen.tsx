@@ -21,9 +21,9 @@ const HomeScreen = ({ navigation, route }: any) => {
             try {
                 const result = await FileManager.checkStoragePermissions();
                 if (result.success) {
-                    console.log("Permissions where granted in home screen");
+                    console.log("Permissions were granted in home screen");
                 } else {
-                    console.log("Permissions where NOT granted in home screen");
+                    console.log("Permissions were NOT granted in home screen");
                 }
             } catch (err) {
                 console.log("Permissions exception in home screen", err);

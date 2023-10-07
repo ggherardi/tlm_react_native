@@ -82,13 +82,13 @@ OK - Testo da inserire sopra gli eventi e sotto la scritta "Tutti gli eventi": S
 
 OK - Testo email: Mail inviata dall'APP "Nota spese TLM"
 
-- In nuova spesa, lasciare di default vuota la data della spesa, ma sempre obbligatoria
+OK - In nuova spesa, lasciare di default vuota la data della spesa, ma sempre obbligatoria
 
-- Aggiungere data rimborso chilometrico
+OK - Aggiungere data rimborso chilometrico
 
 - Cliccando su whatsapp, su alcuni dispositivi, da la scritta "Link alla chat non valido"
 
-- Hint swipe solo dopo creazione evento e creazione spesa
+OK (DA TESTARE SU DEVICE PIU' PERFORMANTE) - Hint swipe solo dopo creazione evento e creazione spesa
 
 BUG
 
@@ -99,6 +99,11 @@ verificare che lo scontrino non abbia l'iva con la virgola
 testare con schermo zoomato (accessibilità)
 
 OK - le foto non vengono aggiunte correttamente al PDF (controllare anche la chiusura del pdf, errore su android studio)
+
+
+DA CHIEDERE
+
+che ordinamento vogliamo per gli eventi?
 
 
 npm i @react-navigation/native

@@ -96,6 +96,8 @@ const NewEventScreen = ({ navigation, route }: any) => {
       console.log("Scheduling notifications for event..");
       BusinessEvent.scheduleNotifications(event);
       
+      userProfile.swipeTutorialSeen = false;
+      dataContext.UserProfile.saveData([userProfile]);      
       NavigationHelper.getHomeTabNavigation().navigate(Constants.Navigation.AllEvents);
     } else {
       console.log("Errore");

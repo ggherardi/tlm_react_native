@@ -28,15 +28,15 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
     tempExpenses.push(ExpenseReport.generateKmRefund(event));
     const totalAmount = Utility.CalculateTotalAmount(tempExpenses, 'amount') - event.cashFund;
     const swipableRef = useRef<Swipeable>(null);
-
+    
     const goToEvent = () => {
         navigation.navigate(Constants.Navigation.EventHome, { event: event });
     };
 
     useEffect(() => {        
         const userProfile = Utility.GetUserProfile();
-        if (index == 0) {
-            setTimeout(() => Utility.SwipableHint(swipableRef), 100);
+        if (!userProfile.swipeTutorialSeen && index == 0) {
+            setTimeout(() => Utility.SwipableHint(swipableRef), 200);
             userProfile.swipeTutorialSeen = true;
             dataContext.UserProfile.saveData([userProfile]);
         }

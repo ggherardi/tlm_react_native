@@ -25,7 +25,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
     const [expenseName, setExpenseName] = useState('');
     const [expenseDescription, setExpenseDescription] = useState('');
-    const [expenseDate, setExpenseDate] = useState(new Date());
+    const [expenseDate, setExpenseDate] = useState<Date | undefined>();
     const [expenseAmount, setExpenseAmount] = useState('');
     const [showDateTimePicker, setShowDateTimePicker] = useState(false);
     const [photo, setPhoto] = useState<any>();
@@ -168,7 +168,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 expense.name = expenseName.trim();
                 expense.description = expenseDescription.trim();
                 expense.amount = Number(expenseAmount);
-                expense.date = expenseDate.toString();
+                expense.date = (expenseDate as Date).toString();
                 expense.timeStamp = new Date().toString();
                 const photoFileName = `${Utility.SanitizeString(event.name)}-${Utility.SanitizeString(expense.name)}-${Utility.FormatDateDDMMYYYY(expense.date, '-')}-${Utility.GenerateRandomGuid("")}.${Utility.GetExtensionFromType(photo.type)}`;
                 const photoFileFullPath = `${event.directoryPath}/${photoFileName}`;
@@ -203,6 +203,11 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                     dataContext.ExpenseReports.saveData(expenses);
                     setExpenses(dataContext.ExpenseReports.getAllData());
                     Utility.ShowSuccessMessage("Nota spesa creata correttamente");
+
+                    const userProfile = Utility.GetUserProfile();
+                    userProfile.swipeExpenseTutorialSeen = false;
+                    dataContext.UserProfile.saveData([userProfile]);
+
                     NavigationHelper.getEventTabNavigation().navigate(Constants.Navigation.Event);
                 } else {
                     console.log("Cannot save the expense report because the photo could not be added to external storage");
@@ -287,7 +292,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                             <FormControl.Label>Data della spesa</FormControl.Label>
                             <Input
                                 placeholder="gg/mm/aaaa"
-                                value={Utility.FormatDateDDMMYYYYhhmm(expenseDate.toString())}
+                                value={expenseDate ? Utility.FormatDateDDMMYYYY(expenseDate.toString()) : ""}
                                 InputLeftElement={
                                     <InputSideButton
                                         icon="calendar-day"
@@ -305,7 +310,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                             <DateTimePicker
                                 mode="date"
                                 display="spinner"
-                                value={expenseDate}
+                                value={expenseDate ? expenseDate : new Date()}
                                 onChange={(event, date) => {
                                     setShowDateTimePicker(false);
                                     setExpenseDate(date as Date);
