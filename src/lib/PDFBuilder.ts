@@ -8,10 +8,10 @@ import dataContext from './models/DataContext';
 import { Images } from '../assets/Images';
 
 export const PDFBuilder = {
-  createExpensesPdfAsync: async (event: BusinessEvent, directoryName: string, fileName: string): Promise<RNHTMLtoPDF.Pdf> => {    
-    return new Promise(async (resolve, reject) => {      
+  createExpensesPdfAsync: async (event: BusinessEvent, directoryName: string, fileName: string): Promise<RNHTMLtoPDF.Pdf> => {
+    return new Promise(async (resolve, reject) => {
       const directory = `Documents/${directoryName}`;
-      const expenses = dataContext.ExpenseReports ? dataContext.ExpenseReports.getAllData() : []      
+      const expenses = dataContext.ExpenseReports ? dataContext.ExpenseReports.getAllData() : []
       const options = {
         html: PDFBuilder.generateHtml(event, expenses),
         fileName: fileName,
@@ -27,13 +27,13 @@ export const PDFBuilder = {
     });
   },
 
-  generateHtml: (event: BusinessEvent, expenses: ExpenseReport[]): string => {    
+  generateHtml: (event: BusinessEvent, expenses: ExpenseReport[]): string => {
     const userProfile = Utility.GetUserProfile();
     let travelledKmsRefund = 0;
     const refundExpense = ExpenseReport.generateKmRefund(event);
     if (refundExpense.name == Constants.Generic.TravelRefundExpenseName) {
       expenses.push(refundExpense);
-    }    
+    }
     Utility.SortByDate(expenses, 'date', false);
     const totalAmount: number = Utility.CalculateTotalAmount(expenses, 'amount')
     let html = `
@@ -163,7 +163,7 @@ export const PDFBuilder = {
           </table>   
         </div>
       </div>`;
-    
+
     html += `
     </div>
     `;
@@ -172,43 +172,28 @@ export const PDFBuilder = {
     if (expenses.length && expenses[0].name == Constants.Generic.TravelRefundExpenseName) {
       expenses.shift();
     }
-    for (let i = 0; i < expenses.length; i++) {      
-      if (i == 0) {
-        html += 
-      `<div class="pagebreak"></div>`;
-      }
+    for (let i = 0; i < expenses.length; i++) {
       const expense = expenses[i];
-      const expense_right_col = expenses[i + 1];
       const isEven = i % 2 == 0;
-      html += `
-      <div ${isEven ? '' : 'class="my-5"'}>
-        <div class="mb-5">`;
+      const shouldPageBreak = i % 4 == 0;
+
+      html += shouldPageBreak ? `
+      <div class="pagebreak"></div>
+      <div style="margin-top: 150">` : ``;
       html += isEven ? `
-          <div class="row">` : ``;     
+        <div class="row my-5 py-5">` : ``;
       html += `
-            <div class="col-6 text-center">
-              <span>Scontrino per la spesa:</span>
-              <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
-              <div>
-                <img src="file:///${expense.photoFilePath}" height="680">
-              </div>              
-            </div>`;
-      if (expense_right_col) {
-        html += `
-            <div class="col-6 text-center">
-              <span>Scontrino per la spesa:</span>
-              <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense_right_col.date)} - ${expense_right_col.amount} ${event.mainCurrency.symbol}</span>
-              <div>
-                <img src="file:///${expense_right_col.photoFilePath}" height="680">
-              </div>
-            </div>`;
-      }      
-      html += isEven ? `
-          </div>` : ``;
-      html += `
-        </div>        
-      </div>          
-      `;
+          <div class="col-6 text-center">
+            <span>Scontrino per la spesa:</span>
+            <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
+            <div>
+              <img src="file:///${expense.photoFilePath}" height="800">
+            </div>              
+          </div>`;
+      html += !isEven ? `
+        </div>` : ``;
+      html += i > 0 && i % 3 == 0 ? `
+      </div>` : ``;
     }
     return html;
   },

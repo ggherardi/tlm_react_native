@@ -22,8 +22,7 @@ const AllEventsScreen = ({ navigation, route }: any) => {
   let shouldHintSwipable: boolean = route?.params?.createdNewEvent;
   if (route && route.params) {
     route.params.createdNewEvent = false;
-  }  
-  console.log("shouldHintSwipable: ", shouldHintSwipable);
+  }    
 
   // @ts-ignore
   const Context = React.createContext();

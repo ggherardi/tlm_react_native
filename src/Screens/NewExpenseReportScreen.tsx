@@ -193,6 +193,10 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                     }
                 }
                 if (operationResult) {                    
+                    const userProfile = Utility.GetUserProfile();
+                    userProfile.swipeExpenseTutorialSeen = false;
+                    dataContext.UserProfile.saveData([userProfile]);
+                    
                     expense.photoFilePath = photoFileFullPath;
                     expenses.push(expense);
                     PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);                                                         
@@ -203,10 +207,6 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                     dataContext.ExpenseReports.saveData(expenses);
                     setExpenses(dataContext.ExpenseReports.getAllData());
                     Utility.ShowSuccessMessage("Nota spesa creata correttamente");
-
-                    const userProfile = Utility.GetUserProfile();
-                    userProfile.swipeExpenseTutorialSeen = false;
-                    dataContext.UserProfile.saveData([userProfile]);
 
                     NavigationHelper.getEventTabNavigation().navigate(Constants.Navigation.Event);
                 } else {
