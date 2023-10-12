@@ -100,6 +100,9 @@ testare con schermo zoomato (accessibilità)
 
 OK - le foto non vengono aggiunte correttamente al PDF (controllare anche la chiusura del pdf, errore su android studio)
 
+- bug Notifiche dopo creazione evento (solo su alcuni dispositivi)
+
+- bug su permessi (provare altri permessi)
 
 DA CHIEDERE
 
@@ -141,8 +144,8 @@ npm i --save react-native-push-notification
 npm i --save @types/react-native-push-notification
 npm i --save react-native-document-scanner-plugin
 yarn add @bam.tech/react-native-image-resizer (FROM CMD)
-npm i --save @react-native-firebase/app
-npm i --save @react-native-firebase/ml => TO DELETE
+npm i --save @react-native-firebase/app => DELETED
+npm i --save @react-native-firebase/ml => DELETED
 npm i --save react-native-ml-kit 
 npm i --save @react-native-ml-kit/text-recognition
 npm i --save react-native-mlkit-ocr

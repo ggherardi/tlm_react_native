@@ -3,6 +3,6 @@ import { Linking } from 'react-native';
 
 export const LinkHelper = {
   OpenWhatsapp: () => {
-    Linking.openURL(`whatsapp://send`);
+    Linking.openURL(`https://wa.me`);
   },
 }

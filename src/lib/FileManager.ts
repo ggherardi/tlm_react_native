@@ -6,6 +6,7 @@ import ImageResizer, { Response } from '@bam.tech/react-native-image-resizer';
 export const FileManager = {
   checkStoragePermissions: async (): Promise<PromiseResult> => {
     return new Promise<PromiseResult>(async (resolve, reject) => {
+      // resolve(new PromiseResult(true, ''));
       try {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,

@@ -178,23 +178,20 @@ export const PDFBuilder = {
       const shouldPageBreak = i % 4 == 0;
 
       html += shouldPageBreak ? `
-      <div class="pagebreak"></div>
-      <div style="margin-top: 150">` : ``;
+      <div class="pagebreak"></div>` : ``;
       html += isEven ? `
-        <div class="row my-5 py-5">` : ``;
+        <div class="row my-5">` : ``;
       html += `
           <div class="col-6 text-center">
             <span>Scontrino per la spesa:</span>
             <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
             <div>
-              <img src="file:///${expense.photoFilePath}" height="800">
+              <img src="file:///${expense.photoFilePath}" height="680">
             </div>              
           </div>`;
       html += !isEven ? `
         </div>` : ``;
-      html += i > 0 && i % 3 == 0 ? `
-      </div>` : ``;
-    }
+    }  
     return html;
   },
 }
