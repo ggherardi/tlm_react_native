@@ -86,7 +86,7 @@ OK - In nuova spesa, lasciare di default vuota la data della spesa, ma sempre ob
 
 OK - Aggiungere data rimborso chilometrico
 
-- Cliccando su whatsapp, su alcuni dispositivi, da la scritta "Link alla chat non valido"
+TESTARE - Cliccando su whatsapp, su alcuni dispositivi, da la scritta "Link alla chat non valido"
 
 OK (DA TESTARE SU DEVICE PIU' PERFORMANTE) - Hint swipe solo dopo creazione evento e creazione spesa
 

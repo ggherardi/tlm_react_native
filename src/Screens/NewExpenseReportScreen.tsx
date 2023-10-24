@@ -155,11 +155,11 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         } catch (err) {
             hasPermissions = false;
         }
-        if (!hasPermissions) {
-            Alert.alert("Impossibile creare la nota spesa", "Per il salvataggio della nota spesa, è necessario garantire permessi di scrittura sul dispositivo");
-            setIsLoading(false);
-            return;
-        }
+        // if (!hasPermissions) {
+        //     Alert.alert("Impossibile creare la nota spesa", "Per il salvataggio della nota spesa, è necessario garantire permessi di scrittura sul dispositivo");
+        //     setIsLoading(false);
+        //     return;
+        // }
         let expense: ExpenseReport = new ExpenseReport();
         if (expenses && expenses.map) {
             try {
