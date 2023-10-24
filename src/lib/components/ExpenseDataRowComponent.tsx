@@ -70,7 +70,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
                         <View style={[styles.expenseNameContainer]}>
                             {expense.description != undefined && expense.description.length ? (
                                 <VStack style={styles.expenseNameContainer}>
-                                    <Text style={[styles.expenseName]}>{event.name}</Text>
+                                    <Text style={[styles.expenseName]}>{expense.name}</Text>
                                     <Text style={[styles.expenseDescription]} numberOfLines={1}>{expense.description}</Text>
                                 </VStack>
                             ) : (
