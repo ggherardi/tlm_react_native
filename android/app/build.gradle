@@ -82,9 +82,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.tlm"
+    namespace "com.tlmexpenses"
     defaultConfig {
-        applicationId "com.tlm"
+        applicationId "com.tlmexpenses"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
