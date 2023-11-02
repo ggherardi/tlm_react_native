@@ -48,6 +48,13 @@ export const PDFBuilder = {
         background-color: #969696;
       }
 
+      .tlm-image {
+        max-width: 600px;
+        max-heigth: 680px;
+        align-self: center;
+        justify-content: center;
+      }
+
       @media print {
         .pagebreak { page-break-before: always; }
       }      
@@ -185,8 +192,8 @@ export const PDFBuilder = {
           <div class="col-6 text-center">
             <span>Scontrino per la spesa:</span>
             <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
-            <div>
-              <img src="file:///${expense.photoFilePath}" height="680">
+            <div class="d-flex" style="height: 750px; justify-content: center;">
+              <img class="tlm-image mt-5" src="file:///${expense.photoFilePath}">
             </div>              
           </div>`;
       html += !isEven ? `
