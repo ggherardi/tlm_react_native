@@ -292,6 +292,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                             <FormControl.Label>Data della spesa</FormControl.Label>
                             <Input
                                 placeholder="gg/mm/aaaa"
+                                onPressIn={() => setShowDateTimePicker(true)}
                                 value={expenseDate ? Utility.FormatDateDDMMYYYY(expenseDate.toString()) : ""}
                                 InputLeftElement={
                                     <InputSideButton

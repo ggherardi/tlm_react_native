@@ -21,7 +21,8 @@ const RefundKmScreen = ({ navigation, route }: any) => {
   const [startingCity, setStartingCity] = useState(event.refundStartingCity);
   const [arrivalCity, setArrivalCity] = useState(event.refundArrivalCity);
   const [totalTravelledKms, setTotalTravelledKms] = useState(event.totalTravelledKms);
-  const [travelDate, setTravelDate] = useState<Date | undefined>();
+  const [travelDate, setTravelDate] = useState<Date | undefined>(new Date(event.travelDate));
+  const [travelDateString, setTravelDateString] = useState<string>(event.travelDate);
   const [refundForfait, setRefundForfait] = useState(event.travelRefundForfait);
   const [isFormValid, setIsFormValid] = useState(true);
   const [validationErrors, setValidationErrors] = useState<any>({});
@@ -31,7 +32,7 @@ const RefundKmScreen = ({ navigation, route }: any) => {
   useEffect(() => {
     useCustomHeaderWithButtonAsync(navigation, Utility.GetEventHeaderTitle(event), () => saveEvent(), undefined, 'Rimborso chilometrico', !isFormValid, 'salva');
   });
-
+console.log("TravelDateString: ", travelDateString);
   const saveEvent = async () => {
     setIsLoading(true);
     if (!validate()) {
@@ -44,6 +45,7 @@ const RefundKmScreen = ({ navigation, route }: any) => {
       eventToEdit.refundStartingCity = startingCity;
       eventToEdit.refundArrivalCity = arrivalCity;
       eventToEdit.totalTravelledKms = totalTravelledKms;
+      eventToEdit.travelDate = (travelDate as Date).toString();
       eventToEdit.travelRefundForfait = refundForfait;
       dataContext.Events.saveData(events);
       Utility.ShowSuccessMessage("Rimborso chilometrico modificato correttamente");
@@ -109,7 +111,9 @@ const RefundKmScreen = ({ navigation, route }: any) => {
               <FormControl.Label>Data della spesa</FormControl.Label>
               <Input
                 placeholder="gg/mm/aaaa"
-                value={travelDate ? Utility.FormatDateDDMMYYYY(travelDate.toString()) : ""}
+                
+                onPressIn={() => setShowDateTimePicker(true)}
+                value={travelDateString ? Utility.FormatDateDDMMYYYY(travelDateString) : ''}
                 InputLeftElement={
                   <InputSideButton
                     icon="calendar-day"

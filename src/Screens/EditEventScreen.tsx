@@ -102,6 +102,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
           <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
           <Input
             placeholder="gg/mm/aaaa"
+            onPressIn={() => setShowDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventStartDate.toString())}
             InputLeftElement={
               <InputSideButton
@@ -121,6 +122,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
           <FormControl.Label>Data di fine dell'evento</FormControl.Label>
           <Input
             placeholder="gg/mm/aaaa"
+            onPressIn={() => setShowDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventEndDate.toString())}
             InputLeftElement={
               <InputSideButton

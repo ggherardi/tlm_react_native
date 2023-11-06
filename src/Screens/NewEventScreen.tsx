@@ -57,11 +57,11 @@ const NewEventScreen = ({ navigation, route }: any) => {
     } catch (err) {
       hasPermissions = false;
     }
-    // if (!hasPermissions) {      
-    //   Alert.alert("Impossibile creare un nuovo evento", "Per il salvataggio dell'evento, è necessario garantire permessi di scrittura sul dispositivo");
-    //   setIsLoading(false);
-    //   return;
-    // }
+    if (!hasPermissions) {      
+      Alert.alert("Impossibile creare un nuovo evento", "Per il salvataggio dell'evento, è necessario garantire permessi di scrittura sul dispositivo");
+      setIsLoading(false);
+      return;
+    }
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
@@ -156,6 +156,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
           <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
           <Input
             placeholder="gg/mm/aaaa"
+            onPressIn={() => setShowDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventStartDate.toString())}
             InputLeftElement={
               <InputSideButton
@@ -175,6 +176,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
           <FormControl.Label>Data di fine dell'evento</FormControl.Label>
           <Input
             placeholder="gg/mm/aaaa"
+            onPressIn={() => setShowDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventEndDate.toString())}
             InputLeftElement={
               <InputSideButton

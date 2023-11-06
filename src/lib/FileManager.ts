@@ -9,7 +9,7 @@ export const FileManager = {
       // resolve(new PromiseResult(true, ''));
       try {
         const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
           {
             title: "Consenso utilizzo memoria",
             message: "Per consentire il funzionamento dell'applicazione, è necessario garantire permessi di scrittura e lettura sulla memoria del dispositivo",
@@ -47,7 +47,7 @@ export const FileManager = {
   checkStorageReadPermissions: async(): Promise<PromiseResult> => {
     return new Promise<PromiseResult>(async (resolve, reject) => {
       try {
-        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES);
 
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           resolve(new PromiseResult(true, 'Permissions granted'));
@@ -65,7 +65,7 @@ export const FileManager = {
       try {
         const checkStoragePermissionsResult = await FileManager.checkStoragePermissions();
         const checkCameraPermissionsResult = await FileManager.checkCameraPermissions();
-        
+        // const checkStoragePermissionsResult = { success: true };
         if (checkStoragePermissionsResult.success && checkCameraPermissionsResult.success) {
           resolve(new PromiseResult(true, 'Permissions granted'));
         } else {
