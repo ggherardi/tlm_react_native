@@ -1,4 +1,4 @@
-import { PermissionsAndroid } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 import { PromiseResult } from './models/PromiseResult';
 import ImageResizer, { Response } from '@bam.tech/react-native-image-resizer';
@@ -8,8 +8,11 @@ export const FileManager = {
     return new Promise<PromiseResult>(async (resolve, reject) => {
       // resolve(new PromiseResult(true, ''));
       try {
+        // @ts-ignore
+        const OsVer = Platform.constants['Release'];        
+        const permissionsToRequest = OsVer >= 13 ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES : PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
         const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+          permissionsToRequest,
           {
             title: "Consenso utilizzo memoria",
             message: "Per consentire il funzionamento dell'applicazione, è necessario garantire permessi di scrittura e lettura sulla memoria del dispositivo",
@@ -47,6 +50,9 @@ export const FileManager = {
   checkStorageReadPermissions: async(): Promise<PromiseResult> => {
     return new Promise<PromiseResult>(async (resolve, reject) => {
       try {
+        // @ts-ignore
+        const OsVer = Platform.constants['Release'];        
+        const permissionsToRequest = OsVer >= 13 ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
         const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES);
 
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
