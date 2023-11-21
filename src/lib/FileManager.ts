@@ -53,7 +53,7 @@ export const FileManager = {
         // @ts-ignore
         const OsVer = Platform.constants['Release'];        
         const permissionsToRequest = OsVer >= 13 ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
-        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES);
+        const granted = await PermissionsAndroid.request(permissionsToRequest);
 
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           resolve(new PromiseResult(true, 'Permissions granted'));
