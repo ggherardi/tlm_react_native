@@ -165,6 +165,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
                 pressFunction={() => {
                   setShowDateTimePicker(true);
                   setSetDateFunction('setEventStartDate');
+                  console.log("DATE: ", eventStartDate, eventEndDate);
                 }}
               />
             }

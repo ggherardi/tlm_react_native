@@ -1,3 +1,9 @@
+Build:
+- increase version code and version name in build.gradle
+- gradlew /clean
+- npx react-native build-android --mode=release
+
+
 OK - Data = Data corrente solo data
 OK - Gruppo = Nome Evento
 OK - Data Evento = dal data inizio evento al data fine evento

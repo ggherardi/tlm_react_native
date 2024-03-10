@@ -92,6 +92,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         } catch (err) {
             hasPermissions = false;
             Alert.alert("Impossibile creare la nota spesa", "Per poter proseguire, è necessario fornire all'applicazione i permessi di accesso alla fotocamera e di scrittura sulla memoria del dispositivo");
+            console.log(hasPermissions);
         }
         if (!hasPermissions) {
             return;
