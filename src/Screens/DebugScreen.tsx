@@ -3,7 +3,6 @@ import React, { Button, Image, ScrollView } from 'react-native';
 import DocumentScanner, { ResponseType } from 'react-native-document-scanner-plugin'
 import { FileManager } from '../lib/FileManager';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import ml from '@react-native-firebase/ml';
 import TextRecognition from '@react-native-ml-kit/text-recognition';
 import MlkitOcr from 'react-native-mlkit-ocr';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';

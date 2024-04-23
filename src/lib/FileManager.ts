@@ -9,7 +9,7 @@ export const FileManager = {
       // resolve(new PromiseResult(true, ''));
       try {
         // @ts-ignore
-        const OsVer = Platform.constants['Release'];        
+        const OsVer = Platform.constants['Release'];
         const permissionsToRequest = OsVer >= 13 ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES : PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
         const granted = await PermissionsAndroid.request(
           permissionsToRequest,
@@ -47,11 +47,11 @@ export const FileManager = {
     });
   },
 
-  checkStorageReadPermissions: async(): Promise<PromiseResult> => {
+  checkStorageReadPermissions: async (): Promise<PromiseResult> => {
     return new Promise<PromiseResult>(async (resolve, reject) => {
       try {
         // @ts-ignore
-        const OsVer = Platform.constants['Release'];        
+        const OsVer = Platform.constants['Release'];
         const permissionsToRequest = OsVer >= 13 ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
         const granted = await PermissionsAndroid.request(permissionsToRequest);
 
@@ -62,6 +62,25 @@ export const FileManager = {
         }
       } catch (err) {
         reject(new PromiseResult(false, 'Exception'));
+      }
+    });
+  },
+
+  checkNotificationPermissions: async (): Promise<PromiseResult> => {
+    return new Promise<PromiseResult>(async (resolve, reject) => {
+      if (Platform.OS == "android" && Platform.Version >= 33) {
+        try {
+          const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            resolve(new PromiseResult(true, 'Permissions granted'));
+          } else {
+            reject(new PromiseResult(false, 'Permissions not granted'));
+          }
+        } catch (err) {
+          reject(new PromiseResult(false, 'Exception'));
+        }
+      } else {
+        resolve(new PromiseResult(true, 'Permissions granted'));
       }
     });
   },
@@ -101,7 +120,7 @@ export const FileManager = {
           console.log(`Error while moving ${sourcePath} to ${destinationPath} (${err})`)
           reject(false);
         })
-    })    
+    })
   },
 
   saveFromBase64: async (path: string, base64: string): Promise<boolean> => {

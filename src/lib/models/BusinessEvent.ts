@@ -59,7 +59,7 @@ export class BusinessEvent extends BusinessDataTypeBase {
       today.setHours(10, 0, 0);
       const daysUntilEventEnd = Utility.GetNumberOfDaysBetweenDates(today.toString(), endDate.toString());
       console.log("daysUntilEventEnd: ", daysUntilEventEnd);
-      console.log(event.notificationIds);
+      console.log(event.notificationIds);      
       for (let i = 0; i < 3 && i < daysUntilEventEnd; i++) {       
         const notificationId = event.notificationIds[i];
         NotificationManager.scheduleNotification({

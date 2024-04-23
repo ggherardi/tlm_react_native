@@ -23,7 +23,8 @@ const NewEventScreen = ({ navigation, route }: any) => {
   const [events, setEvents] = useState<BusinessEvent[]>(dataContext.Events.getAllData());
   const [eventName, setEventName] = useState('');
   const [eventDescription, setEventDescription] = useState('');
-  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
+  const [showStartDateTimePicker, setShowStartDateTimePicker] = useState(false);
+  const [showEndDateTimePicker, setShowEndDateTimePicker] = useState(false);
   const [eventStartDate, setEventStartDate] = useState(new Date());
   const [eventEndDate, setEventEndDate] = useState(new Date());
   const [setDateFunction, setSetDateFunction] = useState('');
@@ -52,16 +53,25 @@ const NewEventScreen = ({ navigation, route }: any) => {
     }
     let hasPermissions;
     try {
-      const promiseResult = await FileManager.checkStoragePermissions();      
+      const promiseResult = await FileManager.checkStoragePermissions();
       hasPermissions = promiseResult.success;
     } catch (err) {
       hasPermissions = false;
     }
-    if (!hasPermissions) {      
+    if (!hasPermissions) {
       Alert.alert("Impossibile creare un nuovo evento", "Per il salvataggio dell'evento, è necessario garantire permessi di scrittura sul dispositivo");
       setIsLoading(false);
       return;
     }
+
+    let hasNotificationPermissions;
+    try {
+      const promiseResult = await FileManager.checkNotificationPermissions();
+      hasNotificationPermissions = promiseResult.success;
+    } catch (err) {
+      hasNotificationPermissions = false;
+    }
+
     let event: BusinessEvent = new BusinessEvent();
     let id = Math.max(...events.map((e: BusinessEvent) => e.id));
     event.id = id >= 0 ? id + 1 : 0;
@@ -84,7 +94,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
     console.log("Creating event pdf..");
     const createdFile = await PDFBuilder.createExpensesPdfAsync(event, directoryName, pdfFileName);
     event.reportFileName = pdfFileName;
-    if (createdFile) {      
+    if (createdFile) {
       const filePath = createdFile.filePath as string;
       event.directoryName = directoryName;
       event.fullFilePath = filePath;
@@ -92,12 +102,14 @@ const NewEventScreen = ({ navigation, route }: any) => {
       console.log("Saving all events to memory..");
       dataContext.Events.saveData(events);
       Utility.ShowSuccessMessage("Evento creato correttamente");
-      
-      console.log("Scheduling notifications for event..");
-      BusinessEvent.scheduleNotifications(event);
-      
+
+      if (hasNotificationPermissions) {
+        console.log("Scheduling notifications for event..");
+        BusinessEvent.scheduleNotifications(event);
+      }      
+
       userProfile.swipeTutorialSeen = false;
-      dataContext.UserProfile.saveData([userProfile]);      
+      dataContext.UserProfile.saveData([userProfile]);
       NavigationHelper.getHomeTabNavigation().navigate(Constants.Navigation.AllEvents);
     } else {
       console.log("Errore");
@@ -156,16 +168,14 @@ const NewEventScreen = ({ navigation, route }: any) => {
           <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
           <Input
             placeholder="gg/mm/aaaa"
-            onPressIn={() => setShowDateTimePicker(true)}
+            onPressIn={() => setShowStartDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventStartDate.toString())}
             InputLeftElement={
               <InputSideButton
                 icon="calendar-day"
                 iconStyle={GlobalStyles.iconPrimary}
                 pressFunction={() => {
-                  setShowDateTimePicker(true);
-                  setSetDateFunction('setEventStartDate');
-                  console.log("DATE: ", eventStartDate, eventEndDate);
+                  setShowStartDateTimePicker(true);
                 }}
               />
             }
@@ -177,15 +187,14 @@ const NewEventScreen = ({ navigation, route }: any) => {
           <FormControl.Label>Data di fine dell'evento</FormControl.Label>
           <Input
             placeholder="gg/mm/aaaa"
-            onPressIn={() => setShowDateTimePicker(true)}
+            onPressIn={() => setShowEndDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventEndDate.toString())}
             InputLeftElement={
               <InputSideButton
                 icon="calendar-day"
                 iconStyle={GlobalStyles.iconPrimary}
                 pressFunction={() => {
-                  setShowDateTimePicker(true);
-                  setSetDateFunction('setEventEndDate');
+                  setShowEndDateTimePicker(true);
                 }}
               />
             }
@@ -193,15 +202,25 @@ const NewEventScreen = ({ navigation, route }: any) => {
           <FormErrorMessageComponent text={validationErrors.eventEndDate} field='eventEndDate' validationArray={validationErrors} />
         </FormControl>
 
-        {showDateTimePicker && (
+        {showStartDateTimePicker && (
           <DateTimePicker
             mode="date"
             display="spinner"
-            value={new Date()}
+            value={eventStartDate}
             onChange={(event, date) => {
-              setShowDateTimePicker(false);
-              const func = setDateFunction == 'setEventEndDate' ? setEventEndDate : setEventStartDate;
-              func(date as Date);
+              setShowStartDateTimePicker(false);
+              setEventStartDate(date as Date);
+            }}
+          />
+        )}
+        {showEndDateTimePicker && (
+          <DateTimePicker
+            mode="date"
+            display="spinner"
+            value={eventEndDate}
+            onChange={(event, date) => {
+              setShowEndDateTimePicker(false);
+              setEventEndDate(date as Date);
             }}
           />
         )}
