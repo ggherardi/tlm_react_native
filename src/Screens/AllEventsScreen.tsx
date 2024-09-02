@@ -14,6 +14,7 @@ import { Images } from '../assets/Images';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import { LinkHelper } from '../lib/Linking';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+import SplashScreen from 'react-native-splash-screen';
 
 const AllEventsScreen = ({ navigation, route }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData());

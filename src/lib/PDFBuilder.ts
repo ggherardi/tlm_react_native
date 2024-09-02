@@ -162,7 +162,7 @@ export const PDFBuilder = {
                 <td>=</td>
               </tr>
               <tr class="border-bottom">
-                <td>Totale dovuto al Tour Leader</td>
+                <td>Totale dovuto</td>
                 <td class="text-right">${(totalAmount - Number(event.cashFund)).toFixed(2)} ${event.mainCurrency.symbol}</td>
                 <td />
               </tr>
