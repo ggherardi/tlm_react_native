@@ -9,6 +9,10 @@ import LoginInputComponent from '../lib/components/LoginInputComponent';
 import { Images } from '../assets/Images';
 import { Constants } from '../lib/Constants';
 import LoaderComponent, { LoaderSize } from '../lib/components/LoaderComponent';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { VersionFile } from '../lib/models/VersionFile';
+
+const appVersion: string = require('../../package.json').version;
 
 const LoginScreen = ({ navigation, route }: any) => {
   const [userProfile, setUserProfile] = useState<UserProfile>(Utility.GetUserProfile());
@@ -19,14 +23,60 @@ const LoginScreen = ({ navigation, route }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
-    if (userProfile && userProfile.name && userProfile.surname && userProfile.email) {
-      setIsLoading(true);
-      Utility.ShowSuccessMessage(`Bentornato, ${userProfile.name}`);
-      navigation.replace(Constants.Navigation.Home);
-      setIsLoading(false);
-    }
+    (async () => {
+      let doesAppNeedUpdate = false;
+      let versionFileJson: VersionFile = {
+        version_schema: 1,
+        global_message: null,
+        maintenance: { enabled: false, message: '' },
+        ios: {
+          latest_version: appVersion,
+          min_supported_version: appVersion,
+          force_update: false,
+          store_url: '',
+          message: '',
+          changelog: [],
+        },
+        android: {
+          latest_version: appVersion,
+          min_supported_version: appVersion,
+          force_update: false,
+          store_url: '',
+          message: '',
+          changelog: [],
+        },
+      };
+      try {
+        const versionFileUrl = !__DEV__ ? Constants.VersionCheck.VersionFileUrl : Constants.VersionCheck.VersionFileUrlDebug;
+        console.log("VersionFileUrl: ", versionFileUrl);
+        const jsonPromise = await fetch(versionFileUrl, {
+          method: 'GET',
+          headers: { Accept: 'application/json' }, 
+        });
+        versionFileJson = await jsonPromise.json();
+        console.log(versionFileJson);
+        console.log(`${appVersion} < ${versionFileJson.ios.min_supported_version}? ${appVersion < versionFileJson.ios.min_supported_version}`);
+        doesAppNeedUpdate = appVersion < versionFileJson.ios.min_supported_version;
+        console.log("Does app need updated? ", doesAppNeedUpdate);
+      } catch (err) {
+        console.log("Errore while fetching", err);
+      }
+      if (doesAppNeedUpdate) {
+        console.log("navigating with ", versionFileJson.version_schema);
+        navigation.replace(Constants.Navigation.UpdateApp, { versionFile: versionFileJson });
+        return;
+      }
+      if (userProfile && userProfile.name && userProfile.surname) {
+        console.log("Logging in..");
+        setIsLoading(true);
+        Utility.ShowSuccessMessage(`Bentornato, ${userProfile.name}`);
+        navigation.replace(Constants.Navigation.Home);
+        setIsLoading(false);
+      }
+    })();
   }, []);
 
   const login = () => {
@@ -41,7 +91,7 @@ const LoginScreen = ({ navigation, route }: any) => {
     const profile = new UserProfile();
     profile.name = name ? name.trim() : '';
     profile.surname = surname ? surname.trim() : '';
-    profile.email = email ? email.trim() : '';
+    profile.email = email ? email.trim() : 'nota-spese@tourleadermanagement.ch';
     dataContext.UserProfile.saveData([profile]);
     Utility.ShowSuccessMessage(`Bentornato, ${profile.name}`);
     navigation.replace(Constants.Navigation.Home);
@@ -60,10 +110,10 @@ const LoginScreen = ({ navigation, route }: any) => {
       validationErrorsTemp = { ...validationErrorsTemp, surname: 'Campo obbligatorio' };
       isValid = false;
     }
-    if (!email) {
-      validationErrorsTemp = { ...validationErrorsTemp, email: 'Campo obbligatorio' };
-      isValid = false;
-    }
+    // if (!email) {
+    //   validationErrorsTemp = { ...validationErrorsTemp, email: 'Campo obbligatorio' };
+    //   isValid = false;
+    // }
     setValidationErrors(validationErrorsTemp);
     return isValid;
   }
@@ -73,18 +123,24 @@ const LoginScreen = ({ navigation, route }: any) => {
       <View style={[styles.container]} onLayout={(e) => setAppHeight(e.nativeEvent.layout.height)}>
         <Image source={Images.tlm_logo.rnSource} style={[styles.image]} />
         <View>
+          <Text style={[{ display: showInfo ? 'flex' : 'none' }, styles.descriptionText]}>Inserire nome e cognome che verranno visualizzati da TLM quando verrà inviata la nota spese. Sarà sempre possibile cambiarli dalle impostazioni.</Text>
           <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"name" in validationErrors}>
             <LoginInputComponent defaultValue={name} placeholder='nome*' onChange={(e: any) => setName(e.nativeEvent.text)} borderColor={"name" in validationErrors ? 'red.500' : 'gray.300'} />
           </FormControl>
           <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"surname" in validationErrors}>
             <LoginInputComponent defaultValue={surname} placeholder='cognome*' onChange={(e: any) => setSurname(e.nativeEvent.text)} borderColor={"surname" in validationErrors ? 'red.500' : 'gray.300'} />
           </FormControl>
-          <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"email" in validationErrors}>
+          {/* <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"email" in validationErrors}>
             <LoginInputComponent defaultValue={email} placeholder='email*' onChange={(e: any) => setEmail(e.nativeEvent.text)} keyboardType='email-address' borderColor={"email" in validationErrors ? 'red.500' : 'gray.300'} />
-          </FormControl>
-          <Pressable style={({ pressed }) => [{ opacity: pressed ? 0.2 : 1 }, GlobalStyles.mt15]} onPress={() => login()}>
-            <Text style={[styles.button]}>{isLoading ? (<LoaderComponent color={ThemeColors.white} size={LoaderSize.small} />) : ('ACCEDI')}</Text>
-          </Pressable>
+          </FormControl> */}
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', gap: 10 }}>
+            <Pressable style={({ pressed }) => [{ opacity: pressed ? 0.2 : 1, flex: 1 }, styles.buttonContainer, GlobalStyles.mt15]} onPress={() => setShowInfo(!showInfo)}>
+            <FontAwesomeIcon style={{ color: 'white', alignSelf: 'center' }} icon={'info'} />
+            </Pressable>
+            <Pressable style={({ pressed }) => [{ opacity: pressed ? 0.2 : 1, flex: 6 }, styles.buttonContainer, GlobalStyles.mt15]} onPress={() => login()}>
+              <Text style={[styles.buttonText]}>{isLoading ? (<LoaderComponent color={ThemeColors.white} size={LoaderSize.small} />) : ('SALVA')}</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </NativeBaseProvider>
@@ -99,20 +155,25 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center'
   },
+  descriptionText: {
+    textAlign: 'center',
+    color: ThemeColors.primary
+  },
   image: {
-    width: 200,
+    width: 250,
     alignSelf: 'center',
     resizeMode: 'contain'
   },
-  button: {
-    alignSelf: 'center',
-    textAlign: 'center',
+  buttonText: {
+    color: ThemeColors.white,
+    lineHeight: 40,
+    alignSelf: 'center'
+  },
+  buttonContainer: {
+    justifyContent: 'center',
     height: 40,
-    verticalAlign: 'middle',
     backgroundColor: ThemeColors.primary,
-    borderRadius: 50,
-    width: '100%',
-    color: ThemeColors.white
+    borderRadius: 50
   }
 });
 
